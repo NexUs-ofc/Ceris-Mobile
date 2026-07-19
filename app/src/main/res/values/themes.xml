@@ -49,5 +49,7 @@
 
         <item name="fontFamily">@font/huninn</item>
         <item name="android:fontFamily">@font/huninn</item>
+
+        <item name="android:statusBarColor">@color/design_default_color_primary</item>
     </style>
 </resources>
