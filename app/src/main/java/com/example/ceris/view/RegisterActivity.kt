@@ -1,24 +1,27 @@
 package com.example.ceris.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.ceris.R
+import com.example.ceris.local.SessionManager
+import com.example.ceris.viewmodel.RegisterViewModel
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity(), RegisterViewModel.Listener {
 
     private lateinit var familyNameInput: EditText
     private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
 
-    private lateinit var registerBtn: Button
-    private lateinit var enterBtn: Button
-    private lateinit var googleIcon: ImageView
+    private lateinit var continueButton: Button
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,26 +32,40 @@ class RegisterActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val sessionManager = SessionManager(this)
+        viewModel.init(sessionManager)
+        viewModel.listener = this
 
         familyNameInput = findViewById(R.id.familyNameInput)
         emailInput = findViewById(R.id.emailInput)
         passwordInput = findViewById(R.id.passwordInput)
 
-        registerBtn = findViewById(R.id.registerButton)
-        enterBtn = findViewById(R.id.enterButton)
-        googleIcon = findViewById(R.id.googleIcon)
+        continueButton = findViewById(R.id.registerBtn)
 
-        registerBtn.setOnClickListener {
-            TODO()
-        }
+        continueButton.setOnClickListener {
+            val isValid = viewModel.setPersonalData(
+                familyName = familyNameInput.text.toString(),
+                email = emailInput.text.toString(),
+                password = passwordInput.text.toString()
+            )
+            if (!isValid) return@setOnClickListener
 
-        enterBtn.setOnClickListener {
-            TODO()
+            val intent = Intent(this, SetAddressActivity::class.java)
+            intent.apply {
+                putExtra(SetAddressActivity.EXTRA_FAMILY_NAME, familyNameInput.text.toString())
+                putExtra(SetAddressActivity.EXTRA_EMAIL, emailInput.text.toString())
+                putExtra(SetAddressActivity.EXTRA_PASSWORD, passwordInput.text.toString())
+            }
+            startActivity(intent)
         }
+    }
 
-        googleIcon.setOnClickListener {
-            TODO()
-        }
+    override fun makeText(message: String) {
+        Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 }

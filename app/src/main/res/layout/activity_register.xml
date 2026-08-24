@@ -97,12 +97,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/registerButton"
+        android:id="@+id/registerBtn"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="390dp"
         android:backgroundTint="#4C1D95"
-        android:text="Cadastrar-se"
+        android:text="Continuar"
         android:textColor="#EEEEEE"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
