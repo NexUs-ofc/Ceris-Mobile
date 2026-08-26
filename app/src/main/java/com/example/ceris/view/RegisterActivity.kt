@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.ceris.R
+import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.local.SessionManager
 import com.example.ceris.viewmodel.RegisterViewModel
 
@@ -26,6 +27,7 @@ class RegisterActivity : AppCompatActivity(), RegisterViewModel.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        hideNavigationBar()
         setContentView(R.layout.activity_register)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

@@ -2,6 +2,7 @@ package com.example.ceris.view
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.ceris.R
+import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.local.SessionManager
 import com.example.ceris.view.utils.MaskTextWatcher
 import com.example.ceris.view.utils.Masks
@@ -24,7 +26,7 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
     private lateinit var estadoInput: TextInputEditText
     private lateinit var cidadeInput: TextInputEditText
     private lateinit var registerBtn: Button
-    private lateinit var backBtn: Button
+    private lateinit var voltarBtn: ImageView
     private val viewModel: RegisterViewModel by viewModels()
 
     companion object {
@@ -36,6 +38,7 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        hideNavigationBar()
         setContentView(R.layout.activity_set_address)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -61,7 +64,7 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
         estadoInput = findViewById(R.id.estadoInput)
         cidadeInput = findViewById(R.id.cidadeInput)
         registerBtn = findViewById(R.id.registerBtn)
-        backBtn = findViewById(R.id.backBtn)
+        voltarBtn = findViewById(R.id.voltarBtn)
 
         cepInput.addTextChangedListener(
             MaskTextWatcher(Masks.CEP)
@@ -81,7 +84,7 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
             viewModel.startRegistrationWithPassword()
         }
 
-        backBtn.setOnClickListener {
+        voltarBtn.setOnClickListener {
             finish()
         }
 

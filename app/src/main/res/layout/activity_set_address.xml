@@ -7,174 +7,218 @@
     android:layout_height="match_parent"
     tools:context=".view.SetAddressActivity">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:textColor="#333333"
-        android:text="Melhore sua experiência!"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etl_cep"
-        style="@style/InputStyle"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="171dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cepInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="CEP"
-            android:inputType="phone"
-            android:textColor="#333333"
-            android:textColorHint="#B2333333"
-            android:textSize="13sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etl_rua"
-        style="@style/InputStyle"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etl_cep"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ruaInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Rua"
-            android:inputType="text"
-            android:textColor="#333333"
-            android:textColorHint="#B2333333"
-            android:textSize="13sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etl_numero"
-        style="@style/InputStyle"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etl_rua"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/numeroInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Numero"
-            android:inputType="number"
-            android:textColor="#333333"
-            android:textColorHint="#B2333333"
-            android:textSize="13sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etl_bairro"
-        style="@style/InputStyle"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etl_numero"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/bairroInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Bairro"
-            android:textColor="#333333"
-            android:textColorHint="#B2333333"
-            android:textSize="13sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etl_estado"
-        style="@style/InputStyle"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etl_bairro"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/estadoInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Estado"
-            android:inputType="text"
-            android:maxLength="2"
-            android:textColor="#333333"
-            android:textColorHint="#B2333333"
-            android:textSize="13sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etl_cidade"
-        style="@style/InputStyle"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etl_estado"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cidadeInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Cidade"
-            android:inputType="text"
-            android:textColor="#333333"
-            android:textColorHint="#B2333333"
-            android:textSize="13sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
     <Button
         android:id="@+id/registerBtn"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="601dp"
+        android:layout_marginTop="482dp"
         android:backgroundTint="#4C1D95"
         android:text="Registrar"
         android:textColor="#EEEEEE"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/backBtn"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="651dp"
-        android:backgroundTint="#CCB592EB"
-        android:text="Voltar"
-        android:textColor="#000000"
-        android:textSize="14sp"
+
+    <ImageView
+        android:id="@+id/voltarBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="65dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back_button" />
+
+    <LinearLayout
+        android:layout_width="360dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="70dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seu endereço"
+            android:textAlignment="center"
+            android:textColor="#333333"
+            android:textSize="28sp" />
 
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vamos encontrar mercados perto de você"
+            android:textAlignment="center"
+            android:textColor="#B3333333"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="360dp"
+        android:layout_height="270dp"
+        android:layout_marginTop="162dp"
+        android:gravity="start"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etl_cep"
+            style="@style/InputStyle"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cepInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="CEP"
+                android:inputType="text"
+                android:textColor="#333333"
+                android:textColorHint="#B2333333"
+                android:textSize="13sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etl_rua"
+            style="@style/InputStyle"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ruaInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Rua"
+                android:inputType="text"
+                android:textColor="#333333"
+                android:textColorHint="#B2333333"
+                android:textSize="13sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etl_numero"
+                style="@style/InputStyle"
+                android:layout_width="170dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/numeroInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Número"
+                    android:inputType="number"
+                    android:textColor="#333333"
+                    android:textColorHint="#B2333333"
+                    android:textSize="13sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etl_bairro"
+                style="@style/InputStyle"
+                android:layout_width="170dp"
+                android:layout_marginLeft="10dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/bairroInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Bairro"
+                    android:inputType="text"
+                    android:textColor="#333333"
+                    android:textColorHint="#B2333333"
+                    android:textSize="13sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etl_cidade"
+                style="@style/InputStyle"
+                android:layout_width="170dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cidadeInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Cidade"
+                    android:inputType="text"
+                    android:textColor="#333333"
+                    android:textColorHint="#B2333333"
+                    android:textSize="13sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etl_estado"
+                style="@style/InputStyle"
+                android:layout_width="170dp"
+                android:layout_marginLeft="10dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/estadoInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Estado"
+                    android:maxLength="2"
+                    android:inputType="text"
+                    android:textColor="#333333"
+                    android:textColorHint="#B2333333"
+                    android:textSize="13sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="350dp"
+        android:layout_marginEnd="-25dp"
+        android:layout_marginBottom="-140dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/fundo_quadriculado" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
