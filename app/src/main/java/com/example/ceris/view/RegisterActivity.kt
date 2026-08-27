@@ -34,9 +34,10 @@ class RegisterActivity : AppCompatActivity(), RegisterViewModel.Listener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        viewModel.listener = this
+
         val sessionManager = SessionManager(this)
         viewModel.init(sessionManager)
-        viewModel.listener = this
 
         familyNameInput = findViewById(R.id.familyNameInput)
         emailInput = findViewById(R.id.emailInput)
@@ -45,20 +46,12 @@ class RegisterActivity : AppCompatActivity(), RegisterViewModel.Listener {
         continueButton = findViewById(R.id.registerBtn)
 
         continueButton.setOnClickListener {
-            val isValid = viewModel.setPersonalData(
+            viewModel.verifyPersonalData(
                 familyName = familyNameInput.text.toString(),
                 email = emailInput.text.toString(),
                 password = passwordInput.text.toString()
             )
-            if (!isValid) return@setOnClickListener
 
-            val intent = Intent(this, SetAddressActivity::class.java)
-            intent.apply {
-                putExtra(SetAddressActivity.EXTRA_FAMILY_NAME, familyNameInput.text.toString())
-                putExtra(SetAddressActivity.EXTRA_EMAIL, emailInput.text.toString())
-                putExtra(SetAddressActivity.EXTRA_PASSWORD, passwordInput.text.toString())
-            }
-            startActivity(intent)
         }
     }
 
@@ -68,6 +61,16 @@ class RegisterActivity : AppCompatActivity(), RegisterViewModel.Listener {
             message,
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    override fun operationCompleted() {
+        val intent = Intent(this, SetAddressActivity::class.java)
+        intent.apply {
+            putExtra(SetAddressActivity.EXTRA_FAMILY_NAME, familyNameInput.text.toString())
+            putExtra(SetAddressActivity.EXTRA_EMAIL, emailInput.text.toString())
+            putExtra(SetAddressActivity.EXTRA_PASSWORD, passwordInput.text.toString())
+        }
+        startActivity(intent)
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.ceris.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -27,6 +28,7 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
     private lateinit var cidadeInput: TextInputEditText
     private lateinit var registerBtn: Button
     private lateinit var voltarBtn: ImageView
+    private lateinit var email: String
     private val viewModel: RegisterViewModel by viewModels()
 
     companion object {
@@ -45,17 +47,17 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val sessionManager = SessionManager(this)
-        viewModel.init(sessionManager)
         viewModel.listener = this
 
+        val sessionManager = SessionManager(this)
+        viewModel.init(sessionManager)
+
         val familyName = intent.getStringExtra(EXTRA_FAMILY_NAME)
-        val email = intent.getStringExtra(EXTRA_EMAIL)
-        val password = intent.getStringExtra(EXTRA_PASSWORD)
-        if (!viewModel.setPersonalData(familyName, email, password)) {
+        email = intent.getStringExtra(EXTRA_EMAIL) ?: run {
             finish()
             return
         }
+        val password = intent.getStringExtra(EXTRA_PASSWORD)
 
         cepInput = findViewById(R.id.cepInput)
         ruaInput = findViewById(R.id.ruaInput)
@@ -71,7 +73,10 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
         )
 
         registerBtn.setOnClickListener {
-            val isValid = viewModel.setAddress(
+            val isValid = viewModel.setUserRegistrationData(
+                familyName = familyName,
+                email = email,
+                password = password,
                 cep = cepInput.text.toString().onlyNumbers(),
                 street = ruaInput.text.toString(),
                 number = numeroInput.text.toString(),
@@ -96,5 +101,11 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
             message,
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    override fun operationCompleted() {
+        val intent = Intent(this, EmailVerificationActivity::class.java)
+        intent.putExtra(EmailVerificationActivity.EXTRA_EMAIL, email )
+        startActivity(intent)
     }
 }

@@ -17,6 +17,7 @@ class RegisterViewModel: ViewModel() {
 
     interface Listener {
         fun makeText(message: String)
+        fun operationCompleted()
     }
     lateinit var listener: Listener
 
@@ -27,13 +28,36 @@ class RegisterViewModel: ViewModel() {
         )
     }
 
-    fun setPersonalData(
+    fun verifyPersonalData(
         familyName: String?,
         email: String?,
         password: String?,
 
-    ): Boolean {
+    ) {
         if (!isAllValid(familyName, email, password)) {
+            listener.makeText("Preencha todos os campos!")
+            return
+        }
+
+        passwordRegisterDTO.apply {
+            this.familyName = familyName
+            this.email = email
+            this.password = password
+        }
+        listener.operationCompleted()
+    }
+    fun setUserRegistrationData(
+        familyName: String?,
+        email: String?,
+        password: String?,
+        neighborhood: String?,
+        street: String?,
+        number: String?,
+        cep: String?,
+        city: String?,
+        state: String?
+    ): Boolean {
+        if (!isAllValid(familyName, email, password, neighborhood, street, number, cep, city, state)) {
             listener.makeText("Preencha todos os campos!")
             return false
         }
@@ -42,23 +66,6 @@ class RegisterViewModel: ViewModel() {
             this.familyName = familyName
             this.email = email
             this.password = password
-        }
-        return true
-    }
-    fun setAddress(
-        neighborhood: String?,
-        street: String?,
-        number: String?,
-        cep: String?,
-        city: String?,
-        state: String?
-    ): Boolean {
-        if (!isAllValid(neighborhood, street, number, cep, city, state)) {
-            listener.makeText("Preencha todos os campos!")
-            return false
-        }
-
-        passwordRegisterDTO.apply {
             this.neighborhood = neighborhood
             this.street = street
             this.number = number
@@ -82,6 +89,7 @@ class RegisterViewModel: ViewModel() {
             onSuccess = { response: PasswordRegisterResponse ->
                 this.authRepository.saveRegistrationId(response.registrationId)
                 listener.makeText("Cadastro concluído com sucesso: ${response.registrationId}")
+                listener.operationCompleted()
             },
             onError = { statusCode ->
                 val text = when(statusCode) {

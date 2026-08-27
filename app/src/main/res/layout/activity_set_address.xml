@@ -199,8 +199,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="Estado"
+                    android:inputType="text|textCapCharacters"
                     android:maxLength="2"
-                    android:inputType="text"
                     android:textColor="#333333"
                     android:textColorHint="#B2333333"
                     android:textSize="13sp" />

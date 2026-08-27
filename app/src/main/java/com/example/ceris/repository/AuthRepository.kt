@@ -1,5 +1,6 @@
 package com.example.ceris.repository
 
+import android.util.Log
 import com.example.ceris.BuildConfig
 import com.example.ceris.api.AuthAPI
 import com.example.ceris.local.SessionManager
@@ -36,7 +37,7 @@ class AuthRepository (
                 }
 
                 override fun onFailure(call: Call<PasswordRegisterResponse?>, t: Throwable) {
-                    onFailure(Exception("Algo inesperado aconteceu!"))
+                    onFailure(Exception(t.message))
                 }
             })
     }

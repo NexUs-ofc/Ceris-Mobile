@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9FAFB"
+    tools:context=".view.EmailVerificationActivity">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="392dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="174dp"
+        android:fontFamily="@font/huninn"
+        android:text="Verifique seu e-mail"
+        android:textAlignment="center"
+        android:textColor="#111827"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/subtitleText"
+        android:layout_width="357dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/huninn"
+        android:lineSpacingExtra="2dp"
+        android:tag="exemplo@email.com"
+        android:text="@string/otp_subtitle"
+        android:textAlignment="center"
+        android:textColor="#6B7280"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleText"
+        tools:text="Enviamos um código de verificação de 6 dígitos para o endereço exemplo@email.com" />
+
+    <LinearLayout
+        android:id="@+id/otpInputsRow"
+        android:layout_width="400dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="45dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subtitleText">
+
+        <EditText
+            android:id="@+id/otpDigitOne"
+            android:layout_width="52dp"
+            android:layout_height="37dp"
+            android:background="@drawable/bg_otp_digit_selector"
+            android:gravity="center"
+            android:hint="-"
+            android:inputType="number"
+            android:textColor="#111827"
+            android:textColorHint="#9CA3AF"
+            android:maxLength="1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/otpDigitTwo"
+            android:layout_width="52dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_otp_digit_selector"
+            android:gravity="center"
+            android:hint="-"
+            android:inputType="number"
+            android:textColor="#111827"
+            android:textColorHint="#9CA3AF"
+            android:maxLength="1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/otpDigitThree"
+            android:layout_width="52dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_otp_digit_selector"
+            android:gravity="center"
+            android:hint="-"
+            android:inputType="number"
+            android:textColor="#111827"
+            android:textColorHint="#9CA3AF"
+            android:maxLength="1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/otpDigitFour"
+            android:layout_width="52dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_otp_digit_selector"
+            android:gravity="center"
+            android:hint="-"
+            android:inputType="number"
+            android:textColor="#111827"
+            android:textColorHint="#9CA3AF"
+            android:maxLength="1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/otpDigitFive"
+            android:layout_width="52dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_otp_digit_selector"
+            android:gravity="center"
+            android:hint="-"
+            android:inputType="number"
+            android:textColor="#111827"
+            android:textColorHint="#9CA3AF"
+            android:maxLength="1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/otpDigitSix"
+            android:layout_width="52dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_otp_digit_selector"
+            android:gravity="center"
+            android:hint="-"
+            android:inputType="number"
+            android:textColor="#111827"
+            android:textColorHint="#9CA3AF"
+            android:maxLength="1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/confirmCodeBtn"
+        android:layout_width="350dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="45dp"
+        android:backgroundTint="#4C1D95"
+        android:fontFamily="@font/huninn"
+        android:text="Confirmar código"
+        android:textAllCaps="false"
+        android:textColor="#EEEEEE"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otpInputsRow" />
+
+    <LinearLayout
+        android:id="@+id/resendContainer"
+        android:layout_width="392dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirmCodeBtn">
+
+        <LinearLayout
+            android:id="@+id/resendRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/resendText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/huninn"
+                android:text="Não recebeu o código?"
+                android:textColor="#6B7280"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/resendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/huninn"
+                android:text="Reenviar"
+                android:textColor="#4C1D95"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/resendTimerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/huninn"
+            android:paddingStart="10dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="4dp"
+            android:text="Reenviar em 00:30"
+            android:textColor="#4C1D95"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
