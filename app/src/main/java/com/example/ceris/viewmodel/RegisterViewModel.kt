@@ -7,6 +7,7 @@ import com.example.ceris.api.RetrofitClient
 import com.example.ceris.local.SessionManager
 import com.example.ceris.model.PasswordRegisterDTO
 import com.example.ceris.model.PasswordRegisterResponse
+import com.example.ceris.model.VerifyRegistrationRequest
 import com.example.ceris.repository.AuthRepository
 
 class RegisterViewModel: ViewModel() {
@@ -106,11 +107,42 @@ class RegisterViewModel: ViewModel() {
 
     }
 
+    fun verifyRegistration(otpCode: String?) {
+        val registrationId = this.authRepository.getRegistrationId()
 
+        if (!isAllValid(otpCode, registrationId)) {
+            listener.makeText("O código deve ser preenchido corretamente")
+            return
+        }
 
+        val req = VerifyRegistrationRequest(
+            otp = otpCode!!,
+            registrationId = registrationId
+        )
+
+        this.authRepository.verifyRegistration(
+            request = req,
+            onSucces = { response ->
+                this.authRepository.saveTokens(response.accessToken, response.refreshToken)
+                listener.operationCompleted()
+            },
+            onError = { statusCode ->
+                val text = when (statusCode) {
+                    422 -> "Código inválido ou expirado!"
+                    401 -> "Acesso negado!"
+                    else -> "Erro: $statusCode Algo deu errado, tente novamente!"
+                }
+                listener.makeText(text)
+            },
+            onFailure = { throwable ->
+                listener.makeText("Um erro inesperado aconteceu: ${throwable.message}")
+            }
+        )
+    }
     fun isAllValid(vararg attributes: Any?): Boolean {
         return  attributes.all {
             it != null && it.toString() != ""
         }
     }
+
 }

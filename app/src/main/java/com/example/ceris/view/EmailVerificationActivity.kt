@@ -1,6 +1,8 @@
 package com.example.ceris.view
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -23,13 +25,17 @@ import kotlin.getValue
 class EmailVerificationActivity : AppCompatActivity(), RegisterViewModel.Listener {
     companion object {
         const val EXTRA_EMAIL = "extra_email"
+        private const val RESEND_TIMEOUT_MS = 30_000L
+        private const val RESEND_INTERVAL_MS = 1_000L
     }
     private lateinit var subtitleText: TextView
     private lateinit var otpInputsRow: LinearLayout
     private lateinit var confirmCodeBtn: Button
     private lateinit var resendButton: TextView
+    private lateinit var resendTimerText: TextView
 
     private lateinit var otpInputs: List<EditText>
+    private var resendTimer: CountDownTimer? = null
 
     private val viewModel: RegisterViewModel by viewModels()
 
@@ -51,6 +57,7 @@ class EmailVerificationActivity : AppCompatActivity(), RegisterViewModel.Listene
         subtitleText = findViewById(R.id.subtitleText)
         confirmCodeBtn = findViewById(R.id.confirmCodeBtn)
         resendButton = findViewById(R.id.resendButton)
+        resendTimerText = findViewById(R.id.resendTimerText)
 
         otpInputsRow = findViewById(R.id.otpInputsRow)
 
@@ -63,9 +70,48 @@ class EmailVerificationActivity : AppCompatActivity(), RegisterViewModel.Listene
             extraEmail?.maskEmail()
         )
 
+        confirmCodeBtn.setOnClickListener {
+            val otpCode = collectOtpCode()
+            viewModel.verifyRegistration(otpCode)
+        }
 
+        resendButton.setOnClickListener {
+            resendButton.isEnabled = false
+            resendTimerText.visibility = TextView.VISIBLE
+            startResendTimer()
+        }
+
+        startResendTimer()
     }
 
+    private fun collectOtpCode(): String {
+        return otpInputs.joinToString("") { it.text.toString() }
+    }
+
+    private fun startResendTimer() {
+        resendTimer?.cancel()
+        resendTimer = object : CountDownTimer(RESEND_TIMEOUT_MS, RESEND_INTERVAL_MS) {
+            override fun onTick(millisUntilFinished: Long) {
+                val secondsRemaining = millisUntilFinished / 1000
+                val minutes = secondsRemaining / 60
+                val seconds = secondsRemaining % 60
+                resendTimerText.text = getString(
+                    R.string.otp_timer,
+                    String.format("%02d:%02d", minutes, seconds)
+                )
+            }
+
+            override fun onFinish() {
+                resendButton.isEnabled = true
+                resendTimerText.visibility = TextView.GONE
+            }
+        }.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        resendTimer?.cancel()
+    }
 
     override fun makeText(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT)
@@ -73,7 +119,9 @@ class EmailVerificationActivity : AppCompatActivity(), RegisterViewModel.Listene
     }
 
     override fun operationCompleted() {
-        Toast.makeText(this, "VOCÊ FOI FINALMENTE CADASTRADO UHUUUUUL", Toast.LENGTH_SHORT)
-            .show()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }

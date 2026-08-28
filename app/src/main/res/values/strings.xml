@@ -3,4 +3,5 @@
     <string name="otp_subtitle">
         Enviamos um código de verificação de 6 dígitos para o endereço %1$s
     </string>
+    <string name="otp_timer">Reenviar em %1$s</string>
 </resources>
