@@ -4,17 +4,23 @@ import androidx.lifecycle.ViewModel
 import com.example.ceris.BuildConfig
 import com.example.ceris.api.AuthAPI
 import com.example.ceris.api.RetrofitClient
+import com.example.ceris.api.ViaCEPAPI
 import com.example.ceris.local.SessionManager
 import com.example.ceris.model.PasswordRegisterDTO
 import com.example.ceris.model.PasswordRegisterResponse
+import com.example.ceris.model.ViaCEPResponse
 import com.example.ceris.model.VerifyRegistrationRequest
 import com.example.ceris.repository.AuthRepository
+import com.example.ceris.repository.ViaCEPRepository
 
 class RegisterViewModel: ViewModel() {
     private val authURL = BuildConfig.AUTH_API_BASE_URL
     private val api = RetrofitClient.getApi(authURL, AuthAPI::class.java)
+    private val viaCEPURL = BuildConfig.VIA_CEP_URL
+    private val viaCEPApi = RetrofitClient.getApi(viaCEPURL, ViaCEPAPI::class.java)
     private var passwordRegisterDTO = PasswordRegisterDTO()
     private lateinit var authRepository: AuthRepository
+    private lateinit var viaCEPRepository: ViaCEPRepository
 
     interface Listener {
         fun makeText(message: String)
@@ -27,6 +33,7 @@ class RegisterViewModel: ViewModel() {
             api = api,
             sessionManager = sessionManager
         )
+        this.viaCEPRepository = ViaCEPRepository(api = viaCEPApi)
     }
 
     fun verifyPersonalData(
@@ -139,6 +146,25 @@ class RegisterViewModel: ViewModel() {
             }
         )
     }
+    fun fetchAddressByCEP(
+        cep: String,
+        onSuccess: (ViaCEPResponse) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        viaCEPRepository.getAddressByCEP(
+            cep = cep,
+            onSuccess = { response ->
+                onSuccess(response)
+            },
+            onError = { statusCode ->
+                onError(Exception("Status: $statusCode | CEP não encontrado"))
+            },
+            onFailure = { throwable ->
+                onError(throwable)
+            }
+        )
+    }
+
     fun isAllValid(vararg attributes: Any?): Boolean {
         return  attributes.all {
             it != null && it.toString() != ""

@@ -1,8 +1,10 @@
 package com.example.ceris.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -16,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.ceris.R
 import com.example.ceris.local.SessionManager
 import com.example.ceris.view.utils.getEditTexts
+import com.example.ceris.view.utils.hideKeyboard
 import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.view.utils.maskEmail
 import com.example.ceris.view.utils.setupOtpInputs
@@ -71,6 +74,9 @@ class EmailVerificationActivity : AppCompatActivity(), RegisterViewModel.Listene
         )
 
         confirmCodeBtn.setOnClickListener {
+
+           it.hideKeyboard()
+
             val otpCode = collectOtpCode()
             viewModel.verifyRegistration(otpCode)
         }

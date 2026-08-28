@@ -92,6 +92,7 @@
                 android:textColor="#333333"
                 android:textColorHint="#B2333333"
                 android:inputType="textPassword"
+                android:imeOptions="actionDone"
                 android:hint="Senha"
                 android:textSize="13sp" />
         </com.google.android.material.textfield.TextInputLayout>

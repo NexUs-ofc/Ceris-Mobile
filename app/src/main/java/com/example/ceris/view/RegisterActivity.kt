@@ -2,6 +2,8 @@ package com.example.ceris.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -13,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.ceris.R
 import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.local.SessionManager
+import com.example.ceris.view.utils.hideKeyboard
 import com.example.ceris.viewmodel.RegisterViewModel
 
 class RegisterActivity : AppCompatActivity(), RegisterViewModel.Listener {
@@ -46,12 +49,25 @@ class RegisterActivity : AppCompatActivity(), RegisterViewModel.Listener {
         continueButton = findViewById(R.id.registerBtn)
 
         continueButton.setOnClickListener {
+
+            it.hideKeyboard()
+
             viewModel.verifyPersonalData(
                 familyName = familyNameInput.text.toString(),
                 email = emailInput.text.toString(),
                 password = passwordInput.text.toString()
             )
 
+        }
+
+        passwordInput.setOnEditorActionListener { _, id, _ ->
+
+            if (id == EditorInfo.IME_ACTION_DONE) {
+                continueButton.performClick()
+                true
+            } else {
+                false
+            }
         }
     }
 

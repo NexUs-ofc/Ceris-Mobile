@@ -2,6 +2,8 @@ package com.example.ceris.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -11,10 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.ceris.R
-import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.local.SessionManager
 import com.example.ceris.view.utils.MaskTextWatcher
 import com.example.ceris.view.utils.Masks
+import com.example.ceris.view.utils.hideKeyboard
+import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.view.utils.onlyNumbers
 import com.example.ceris.viewmodel.RegisterViewModel
 import com.google.android.material.textfield.TextInputEditText
@@ -72,7 +75,31 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
             MaskTextWatcher(Masks.CEP)
         )
 
+        cepInput.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+            override fun afterTextChanged(s: android.text.Editable?) {
+                val cep = s.toString().onlyNumbers()
+                if (cep.length == 8) {
+                    fetchAddressByCEP(cep)
+                }
+            }
+        })
+
+        estadoInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                registerBtn.performClick()
+                true
+            } else {
+                false
+            }
+        }
+
         registerBtn.setOnClickListener {
+
+            it.hideKeyboard()
+
             val isValid = viewModel.setUserRegistrationData(
                 familyName = familyName,
                 email = email,
@@ -93,6 +120,21 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
             finish()
         }
 
+    }
+
+    private fun fetchAddressByCEP(cep: String) {
+        viewModel.fetchAddressByCEP(
+            cep = cep,
+            onSuccess = { response ->
+                ruaInput.setText(response.logradouro)
+                bairroInput.setText(response.bairro)
+                cidadeInput.setText(response.localidade)
+                estadoInput.setText(response.uf)
+            },
+            onError = { throwable ->
+                Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     override fun makeText(message: String) {
