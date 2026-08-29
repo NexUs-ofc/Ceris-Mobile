@@ -3,7 +3,6 @@ package com.example.ceris.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -113,7 +112,19 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
             )
             if (!isValid) return@setOnClickListener
 
-            viewModel.startRegistrationWithPassword()
+            val intent = Intent(this, AddressLoadingActivity::class.java)
+            intent.apply {
+                putExtra(AddressLoadingActivity.EXTRA_FAMILY_NAME, familyName)
+                putExtra(AddressLoadingActivity.EXTRA_EMAIL, email)
+                putExtra(AddressLoadingActivity.EXTRA_PASSWORD, password)
+                putExtra(AddressLoadingActivity.EXTRA_CEP, cepInput.text.toString().onlyNumbers())
+                putExtra(AddressLoadingActivity.EXTRA_STREET, ruaInput.text.toString())
+                putExtra(AddressLoadingActivity.EXTRA_NUMBER, numeroInput.text.toString())
+                putExtra(AddressLoadingActivity.EXTRA_NEIGHBORHOOD, bairroInput.text.toString())
+                putExtra(AddressLoadingActivity.EXTRA_CITY, cidadeInput.text.toString())
+                putExtra(AddressLoadingActivity.EXTRA_STATE, estadoInput.text.toString())
+            }
+            startActivity(intent)
         }
 
         voltarBtn.setOnClickListener {

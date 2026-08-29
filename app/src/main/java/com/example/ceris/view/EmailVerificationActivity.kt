@@ -1,10 +1,8 @@
 package com.example.ceris.view
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -78,7 +76,9 @@ class EmailVerificationActivity : AppCompatActivity(), RegisterViewModel.Listene
            it.hideKeyboard()
 
             val otpCode = collectOtpCode()
-            viewModel.verifyRegistration(otpCode)
+            val intent = Intent(this, OtpLoadingActivity::class.java)
+            intent.putExtra(OtpLoadingActivity.EXTRA_OTP, otpCode)
+            startActivity(intent)
         }
 
         resendButton.setOnClickListener {

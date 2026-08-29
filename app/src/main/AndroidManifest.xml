@@ -34,9 +34,15 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".view.OtpLoadingActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.SetAddressActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.AddressLoadingActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
