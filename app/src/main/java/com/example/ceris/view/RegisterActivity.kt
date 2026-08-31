@@ -6,6 +6,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -25,6 +26,7 @@ class RegisterActivity : AppCompatActivity(), RegisterViewModel.Listener {
     private lateinit var passwordInput: EditText
 
     private lateinit var continueButton: Button
+    private lateinit var enterButton: TextView
     private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +49,11 @@ class RegisterActivity : AppCompatActivity(), RegisterViewModel.Listener {
         passwordInput = findViewById(R.id.passwordInput)
 
         continueButton = findViewById(R.id.registerBtn)
+        enterButton = findViewById(R.id.enterButton)
+
+        enterButton.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
 
         continueButton.setOnClickListener {
 
