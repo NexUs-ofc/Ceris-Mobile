@@ -3,7 +3,7 @@ import java.util.Properties
 val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
 
-if (localPropertiesFile.exists()){
+if (localPropertiesFile.exists()) {
     localPropertiesFile.inputStream().use {
         localProperties.load(it)
     }
@@ -11,6 +11,7 @@ if (localPropertiesFile.exists()){
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.ktlint)
 }
 
 android {
@@ -29,11 +30,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         localProperties.forEach { (key, value) ->
-            if (key.toString() != "sdk.dir"){
+            if (key.toString() != "sdk.dir") {
                 buildConfigField(
                     "String",
                     key.toString(),
-                    "\"${value}\""
+                    "\"${value}\"",
                 )
             }
         }
@@ -44,7 +45,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -68,7 +69,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    //RETROFIT e GSON
+    // RETROFIT e GSON
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }
