@@ -36,6 +36,9 @@ jobs:
           echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
           echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
 
+      - name: Grant permission to Gradle
+        run: chmod +x gradlew
+
       - name: Run unit tests
         run: ./gradlew test
 
@@ -65,6 +68,9 @@ jobs:
           echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
           echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
 
+      - name: Grant permission to Gradle
+        run: chmod +x gradlew
+
       - name: Run lint
         run: ./gradlew lint
 
@@ -93,6 +99,9 @@ jobs:
           echo "AUTH_API_BASE_URL=${{ secrets.AUTH_API_BASE_URL }}" >> local.properties
           echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
           echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
+
+      - name: Grant permission to Gradle
+        run: chmod +x gradlew
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug
