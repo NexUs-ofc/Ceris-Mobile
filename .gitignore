@@ -11,3 +11,5 @@ local.properties
 
 ### project
 .env
+
+*/libs.versions.toml
