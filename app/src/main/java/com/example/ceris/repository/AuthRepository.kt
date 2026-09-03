@@ -5,6 +5,8 @@ import com.example.ceris.BuildConfig
 import com.example.ceris.api.AuthAPI
 import com.example.ceris.local.SessionKeys
 import com.example.ceris.local.SessionManager
+import com.example.ceris.model.dto.PasswordLoginRequest
+import com.example.ceris.model.dto.PasswordLoginResponse
 import com.example.ceris.model.dto.PasswordRegisterRequest
 import com.example.ceris.model.dto.PasswordRegisterResponse
 import com.example.ceris.model.SessionAttribute
@@ -56,6 +58,33 @@ class AuthRepository (
 
                 override fun onFailure(call: Call<PasswordRegisterResponse?>, t: Throwable) {
                     Log.e(TAG, "startRegistrationWithPassword falhou", t)
+                    onFailure(Exception(t.message))
+                }
+            })
+    }
+
+    fun loginWithPassword(
+        request: PasswordLoginRequest,
+        onSuccess: (PasswordLoginResponse) -> Unit,
+        onError: (statusCode: Int, errorBody: String?) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        api.loginWithPassword(API_KEY, request)
+            .enqueue(object : Callback<PasswordLoginResponse> {
+                override fun onResponse(
+                    call: Call<PasswordLoginResponse>,
+                    response: Response<PasswordLoginResponse>
+                ) {
+                    val body = response.body()
+                    if (response.isSuccessful && body != null) {
+                        onSuccess(body)
+                    } else {
+                        onError(response.code(), readError(response))
+                    }
+                }
+
+                override fun onFailure(call: Call<PasswordLoginResponse?>, t: Throwable) {
+                    Log.e(TAG, "loginWithPassword falhou", t)
                     onFailure(Exception(t.message))
                 }
             })
