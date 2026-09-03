@@ -50,6 +50,20 @@
         <activity
             android:name=".view.AddressLoadingActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.ForgotPasswordActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.ForgotPasswordLoadingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ResetPasswordActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.ResetPasswordLoadingActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
