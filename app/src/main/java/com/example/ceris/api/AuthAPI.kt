@@ -1,5 +1,7 @@
 package com.example.ceris.api
 
+import com.example.ceris.model.dto.PasswordLoginRequest
+import com.example.ceris.model.dto.PasswordLoginResponse
 import com.example.ceris.model.dto.PasswordRegisterRequest
 import com.example.ceris.model.dto.PasswordRegisterResponse
 import com.example.ceris.model.dto.VerifyRegistrationRequest
@@ -25,8 +27,9 @@ interface AuthAPI {
 
     @POST("/api/auth/login/password")
     fun loginWithPassword(
-        @Header("X-API-Key") apiKey: String
-    )
+        @Header("X-API-Key") apiKey: String,
+        @Body req: PasswordLoginRequest
+    ): Call<PasswordLoginResponse>
 
 
 }
