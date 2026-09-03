@@ -1,6 +1,6 @@
 package com.example.ceris.api
 
-import com.example.ceris.model.ViaCEPResponse
+import com.example.ceris.model.dto.ViaCEPResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
