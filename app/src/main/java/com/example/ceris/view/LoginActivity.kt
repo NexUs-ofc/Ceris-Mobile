@@ -24,6 +24,7 @@ class LoginActivity : AppCompatActivity(), LoginViewModel.Listener {
     private lateinit var passwordInput: EditText
     private lateinit var loginButton: Button
     private lateinit var registerButton: TextView
+    private lateinit var forgotPasswordButton: TextView
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +46,7 @@ class LoginActivity : AppCompatActivity(), LoginViewModel.Listener {
         passwordInput = findViewById(R.id.passwordInput)
         loginButton = findViewById(R.id.loginBtn)
         registerButton = findViewById(R.id.registerButton)
+        forgotPasswordButton = findViewById(R.id.forgotPasswordButton)
 
         loginButton.setOnClickListener {
 
@@ -68,6 +70,10 @@ class LoginActivity : AppCompatActivity(), LoginViewModel.Listener {
 
         registerButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+        }
+
+        forgotPasswordButton.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
     }
 
