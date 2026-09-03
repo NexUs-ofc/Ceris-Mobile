@@ -1,15 +1,17 @@
 package com.example.ceris.viewmodel
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import com.example.ceris.BuildConfig
 import com.example.ceris.api.AuthAPI
 import com.example.ceris.api.RetrofitClient
 import com.example.ceris.api.ViaCEPAPI
 import com.example.ceris.local.SessionManager
-import com.example.ceris.model.PasswordRegisterDTO
-import com.example.ceris.model.PasswordRegisterResponse
-import com.example.ceris.model.ViaCEPResponse
-import com.example.ceris.model.VerifyRegistrationRequest
+import com.example.ceris.model.dto.ApiError
+import com.example.ceris.model.dto.PasswordRegisterDTO
+import com.example.ceris.model.dto.PasswordRegisterResponse
+import com.example.ceris.model.dto.ViaCEPResponse
+import com.example.ceris.model.dto.VerifyRegistrationRequest
 import com.example.ceris.repository.AuthRepository
 import com.example.ceris.repository.ViaCEPRepository
 
@@ -21,6 +23,12 @@ class RegisterViewModel: ViewModel() {
     private var passwordRegisterDTO = PasswordRegisterDTO()
     private lateinit var authRepository: AuthRepository
     private lateinit var viaCEPRepository: ViaCEPRepository
+
+    companion object {
+        private const val MIN_PASSWORD_LENGTH = 8
+        private const val MAX_PASSWORD_LENGTH = 72
+        private val CEP_REGEX = Regex("^\\d{8}$")
+    }
 
     interface Listener {
         fun makeText(message: String)
@@ -47,6 +55,12 @@ class RegisterViewModel: ViewModel() {
             return
         }
 
+        val validationError = validatePersonalData(email, password)
+        if (validationError != null) {
+            listener.makeText(validationError)
+            return
+        }
+
         passwordRegisterDTO.apply {
             this.familyName = familyName
             this.email = email
@@ -70,6 +84,17 @@ class RegisterViewModel: ViewModel() {
             return false
         }
 
+        val personalError = validatePersonalData(email, password)
+        if (personalError != null) {
+            listener.makeText(personalError)
+            return false
+        }
+
+        if (cep == null || !CEP_REGEX.matches(cep)) {
+            listener.makeText("CEP inválido. Digite os 8 números do CEP.")
+            return false
+        }
+
         passwordRegisterDTO.apply {
             this.familyName = familyName
             this.email = email
@@ -83,6 +108,16 @@ class RegisterViewModel: ViewModel() {
         }
         return true
 
+    }
+
+    private fun validatePersonalData(email: String?, password: String?): String? {
+        if (email == null || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            return "E-mail inválido."
+        }
+        if (password == null || password.length < MIN_PASSWORD_LENGTH || password.length > MAX_PASSWORD_LENGTH) {
+            return "A senha deve ter entre $MIN_PASSWORD_LENGTH e $MAX_PASSWORD_LENGTH caracteres."
+        }
+        return null
     }
 
     fun startRegistrationWithPassword() {
@@ -99,13 +134,8 @@ class RegisterViewModel: ViewModel() {
                 listener.makeText("Cadastro concluído com sucesso: ${response.registrationId}")
                 listener.operationCompleted()
             },
-            onError = { statusCode ->
-                val text = when(statusCode) {
-                    422 -> "Os campos devem ser preenchidos corretamente!"
-                    401 ->  "Acesso negado!"
-                    else -> "Erro: $statusCode Algo deu errado, tente novamente!"
-                }
-                listener.makeText(text)
+            onError = { statusCode, errorBody ->
+                listener.makeText(errorMessageFor(statusCode, errorBody))
             },
             onFailure = { throwable ->
                 listener.makeText("Um erro inesperado aconteceu: ${throwable.message}")
@@ -133,11 +163,11 @@ class RegisterViewModel: ViewModel() {
                 this.authRepository.saveTokens(response.accessToken, response.refreshToken)
                 listener.operationCompleted()
             },
-            onError = { statusCode ->
+            onError = { statusCode, errorBody ->
                 val text = when (statusCode) {
                     422 -> "Código inválido ou expirado!"
                     401 -> "Acesso negado!"
-                    else -> "Erro: $statusCode Algo deu errado, tente novamente!"
+                    else -> errorMessageFor(statusCode, errorBody)
                 }
                 listener.makeText(text)
             },
@@ -146,6 +176,20 @@ class RegisterViewModel: ViewModel() {
             }
         )
     }
+
+    private fun errorMessageFor(statusCode: Int, errorBody: String?): String {
+        val serverMessage = ApiError.parse(errorBody)?.readableMessage()
+        return when (statusCode) {
+            400 -> serverMessage?.let { "Dados inválidos:\n$it" }
+                ?: "Dados inválidos. Confira os campos e tente novamente."
+            401 -> "Acesso negado!"
+            409 -> serverMessage ?: "E-mail já cadastrado. Faça login."
+            422 -> serverMessage?.let { "Os campos devem ser preenchidos corretamente!\n$it" }
+                ?: "Os campos devem ser preenchidos corretamente!"
+            else -> "Erro: $statusCode Algo deu errado, tente novamente!"
+        }
+    }
+
     fun fetchAddressByCEP(
         cep: String,
         onSuccess: (ViaCEPResponse) -> Unit,

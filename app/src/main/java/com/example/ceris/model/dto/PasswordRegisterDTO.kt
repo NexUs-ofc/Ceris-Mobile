@@ -1,5 +1,7 @@
-package com.example.ceris.model
+package com.example.ceris.model.dto
 
+import com.example.ceris.model.Address
+import com.example.ceris.model.dto.PasswordRegisterRequest
 
 data class PasswordRegisterDTO(
 
