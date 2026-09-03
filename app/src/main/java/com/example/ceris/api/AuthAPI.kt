@@ -1,9 +1,12 @@
 package com.example.ceris.api
 
+import com.example.ceris.model.dto.ForgotPasswordRequest
+import com.example.ceris.model.dto.ForgotPasswordResponse
 import com.example.ceris.model.dto.PasswordLoginRequest
 import com.example.ceris.model.dto.PasswordLoginResponse
 import com.example.ceris.model.dto.PasswordRegisterRequest
 import com.example.ceris.model.dto.PasswordRegisterResponse
+import com.example.ceris.model.dto.ResetPasswordRequest
 import com.example.ceris.model.dto.VerifyRegistrationRequest
 import com.example.ceris.model.dto.VerifyRegistrationResponse
 import retrofit2.Call
@@ -30,6 +33,18 @@ interface AuthAPI {
         @Header("X-API-Key") apiKey: String,
         @Body req: PasswordLoginRequest
     ): Call<PasswordLoginResponse>
+
+    @POST("/api/auth/password/forgot")
+    fun forgotPassword(
+        @Header("X-API-Key") apiKey: String,
+        @Body req: ForgotPasswordRequest
+    ): Call<ForgotPasswordResponse>
+
+    @POST("/api/auth/password/reset")
+    fun resetPassword(
+        @Header("X-API-Key") apiKey: String,
+        @Body req: ResetPasswordRequest
+    ): Call<Void>
 
 
 }
