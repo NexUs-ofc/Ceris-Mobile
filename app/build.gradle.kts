@@ -2,8 +2,10 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.ktlint)
 }
 
+// Carrega o local.properties
 val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
 
@@ -15,6 +17,7 @@ if (localPropertiesFile.exists()) {
 
 android {
     namespace = "com.example.ceris"
+
     compileSdk = 36
 
     defaultConfig {
@@ -26,9 +29,9 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner =
-            "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        // Adiciona as propriedades do local.properties ao BuildConfig
         localProperties.forEach { (key, value) ->
             val propertyName = key.toString()
 
@@ -36,7 +39,7 @@ android {
                 buildConfigField(
                     "String",
                     propertyName,
-                    "\"${value.toString().replace("\"", "\\\"")}\""
+                    "\"${value.toString().replace("\"", "\\\"")}\"",
                 )
             }
         }
@@ -48,7 +51,7 @@ android {
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -64,7 +67,6 @@ android {
 }
 
 dependencies {
-
     // AndroidX
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.ktx)
