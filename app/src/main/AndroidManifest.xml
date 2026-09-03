@@ -15,6 +15,10 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.LoginLoadingActivity"
             android:exported="false" />
         <activity
             android:name=".view.MainActivity"
