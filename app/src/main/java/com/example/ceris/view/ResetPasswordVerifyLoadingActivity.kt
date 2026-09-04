@@ -14,20 +14,19 @@ import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.viewmodel.RecoverPasswordViewModel
 
 
-class ForgotPasswordLoadingActivity : AppCompatActivity(), RecoverPasswordViewModel.Listener {
+class ResetPasswordVerifyLoadingActivity : AppCompatActivity(), RecoverPasswordViewModel.Listener {
 
     companion object {
-        const val EXTRA_EMAIL = "extra_email"
+        const val EXTRA_OTP = "extra_otp"
     }
 
     private val viewModel: RecoverPasswordViewModel by viewModels()
-    private var email: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         hideNavigationBar()
-        setContentView(R.layout.activity_forgot_password_loading)
+        setContentView(R.layout.activity_reset_password_verify_loading)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -36,12 +35,8 @@ class ForgotPasswordLoadingActivity : AppCompatActivity(), RecoverPasswordViewMo
         viewModel.listener = this
         viewModel.init(SessionManager(this))
 
-        email = intent.getStringExtra(EXTRA_EMAIL) ?: run {
-            finish()
-            return
-        }
-
-        viewModel.forgotPassword(email)
+        val otp = intent.getStringExtra(EXTRA_OTP)
+        viewModel.verifyPasswordReset(otp)
     }
 
     override fun makeText(message: String) {
@@ -50,8 +45,7 @@ class ForgotPasswordLoadingActivity : AppCompatActivity(), RecoverPasswordViewMo
     }
 
     override fun operationCompleted() {
-        val intent = Intent(this, ResetPasswordOtpActivity::class.java)
-        intent.putExtra(ResetPasswordOtpActivity.EXTRA_EMAIL, email)
+        val intent = Intent(this, ResetPasswordActivity::class.java)
         startActivity(intent)
         finish()
     }

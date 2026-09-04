@@ -13,15 +13,10 @@ import com.example.ceris.local.SessionManager
 import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.viewmodel.RecoverPasswordViewModel
 
-/**
- * Chama `POST /api/auth/password/reset` com o `resetId` guardado pelo passo
- * anterior. Em caso de 204 (sucesso) volta para o [LoginActivity] limpando a
- * pilha — a API revoga todas as sessões, então o usuário entra de novo.
- */
+
 class ResetPasswordLoadingActivity : AppCompatActivity(), RecoverPasswordViewModel.Listener {
 
     companion object {
-        const val EXTRA_OTP = "extra_otp"
         const val EXTRA_NEW_PASSWORD = "extra_new_password"
         const val EXTRA_CONFIRM_PASSWORD = "extra_confirm_password"
     }
@@ -41,11 +36,10 @@ class ResetPasswordLoadingActivity : AppCompatActivity(), RecoverPasswordViewMod
         viewModel.listener = this
         viewModel.init(SessionManager(this))
 
-        val otp = intent.getStringExtra(EXTRA_OTP)
         val newPassword = intent.getStringExtra(EXTRA_NEW_PASSWORD)
         val confirmPassword = intent.getStringExtra(EXTRA_CONFIRM_PASSWORD)
 
-        viewModel.resetPassword(otp, newPassword, confirmPassword)
+        viewModel.resetPassword(newPassword, confirmPassword)
     }
 
     override fun makeText(message: String) {
