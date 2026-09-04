@@ -5,10 +5,13 @@ import com.example.ceris.BuildConfig
 import com.example.ceris.api.AuthAPI
 import com.example.ceris.local.SessionKeys
 import com.example.ceris.local.SessionManager
+import com.example.ceris.model.dto.ForgotPasswordRequest
+import com.example.ceris.model.dto.ForgotPasswordResponse
 import com.example.ceris.model.dto.PasswordLoginRequest
 import com.example.ceris.model.dto.PasswordLoginResponse
 import com.example.ceris.model.dto.PasswordRegisterRequest
 import com.example.ceris.model.dto.PasswordRegisterResponse
+import com.example.ceris.model.dto.ResetPasswordRequest
 import com.example.ceris.model.SessionAttribute
 import com.example.ceris.model.dto.VerifyRegistrationRequest
 import com.example.ceris.model.dto.VerifyRegistrationResponse
@@ -90,6 +93,66 @@ class AuthRepository (
             })
     }
 
+    fun forgotPassword(
+        request: ForgotPasswordRequest,
+        onSuccess: (ForgotPasswordResponse) -> Unit,
+        onError: (statusCode: Int, errorBody: String?) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        api.forgotPassword(API_KEY, request)
+            .enqueue(object : Callback<ForgotPasswordResponse> {
+                override fun onResponse(
+                    call: Call<ForgotPasswordResponse>,
+                    response: Response<ForgotPasswordResponse>
+                ) {
+                    val body = response.body()
+                    if (response.isSuccessful && body != null) {
+                        onSuccess(body)
+                    } else {
+                        onError(response.code(), readError(response))
+                    }
+                }
+
+                override fun onFailure(call: Call<ForgotPasswordResponse?>, t: Throwable) {
+                    Log.e(TAG, "forgotPassword falhou", t)
+                    onFailure(Exception(t.message))
+                }
+            })
+    }
+
+    fun resetPassword(
+        request: ResetPasswordRequest,
+        onSuccess: () -> Unit,
+        onError: (statusCode: Int, errorBody: String?) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        api.resetPassword(API_KEY, request)
+            .enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        onSuccess()
+                    } else {
+                        onError(response.code(), readError(response))
+                    }
+                }
+
+                override fun onFailure(call: Call<Void?>, t: Throwable) {
+                    Log.e(TAG, "resetPassword falhou", t)
+                    onFailure(Exception(t.message))
+                }
+            })
+    }
+
+    fun saveResetId(resetId: String) {
+        sessionManager.set(
+            SessionAttribute(SessionKeys.RESET_ID, resetId)
+        )
+    }
+
+    fun getResetId(): String {
+        return sessionManager.getString(SessionKeys.RESET_ID, "")
+    }
+
     fun saveRegistrationId(registrationId: String) {
         sessionManager.set(
             SessionAttribute(SessionKeys.REGISTRATION_ID, registrationId)
@@ -133,4 +196,5 @@ class AuthRepository (
                 }
             })
     }
+
 }
