@@ -13,6 +13,8 @@ import com.example.ceris.model.dto.PasswordRegisterRequest
 import com.example.ceris.model.dto.PasswordRegisterResponse
 import com.example.ceris.model.dto.ResetPasswordRequest
 import com.example.ceris.model.SessionAttribute
+import com.example.ceris.model.dto.VerifyPasswordResetRequest
+import com.example.ceris.model.dto.VerifyPasswordResetResponse
 import com.example.ceris.model.dto.VerifyRegistrationRequest
 import com.example.ceris.model.dto.VerifyRegistrationResponse
 import retrofit2.Call
@@ -120,6 +122,33 @@ class AuthRepository (
             })
     }
 
+    fun verifyPasswordReset(
+        request: VerifyPasswordResetRequest,
+        onSuccess: (VerifyPasswordResetResponse) -> Unit,
+        onError: (statusCode: Int, errorBody: String?) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        api.verifyPasswordReset(API_KEY, request)
+            .enqueue(object : Callback<VerifyPasswordResetResponse> {
+                override fun onResponse(
+                    call: Call<VerifyPasswordResetResponse>,
+                    response: Response<VerifyPasswordResetResponse>
+                ) {
+                    val body = response.body()
+                    if (response.isSuccessful && body != null) {
+                        onSuccess(body)
+                    } else {
+                        onError(response.code(), readError(response))
+                    }
+                }
+
+                override fun onFailure(call: Call<VerifyPasswordResetResponse?>, t: Throwable) {
+                    Log.e(TAG, "verifyPasswordReset falhou", t)
+                    onFailure(Exception(t.message))
+                }
+            })
+    }
+
     fun resetPassword(
         request: ResetPasswordRequest,
         onSuccess: () -> Unit,
@@ -151,6 +180,16 @@ class AuthRepository (
 
     fun getResetId(): String {
         return sessionManager.getString(SessionKeys.RESET_ID, "")
+    }
+
+    fun saveResetTicket(resetTicket: String) {
+        sessionManager.set(
+            SessionAttribute(SessionKeys.RESET_TICKET, resetTicket)
+        )
+    }
+
+    fun getResetTicket(): String {
+        return sessionManager.getString(SessionKeys.RESET_TICKET, "")
     }
 
     fun saveRegistrationId(registrationId: String) {
