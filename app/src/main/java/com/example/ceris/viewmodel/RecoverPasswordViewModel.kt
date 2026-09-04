@@ -9,13 +9,10 @@ import com.example.ceris.local.SessionManager
 import com.example.ceris.model.dto.ApiError
 import com.example.ceris.model.dto.ForgotPasswordRequest
 import com.example.ceris.model.dto.ResetPasswordRequest
+import com.example.ceris.model.dto.VerifyPasswordResetRequest
 import com.example.ceris.repository.AuthRepository
 
-/**
- * Fluxo de recuperação de senha (API seção 7.5):
- *  1. [forgotPassword] → `POST /api/auth/password/forgot` → guarda o `resetId`.
- *  2. [resetPassword]  → `POST /api/auth/password/reset` com o `resetId` guardado.
- */
+
 class RecoverPasswordViewModel : ViewModel() {
     private val authURL = BuildConfig.AUTH_API_BASE_URL
     private val api = RetrofitClient.getApi(authURL, AuthAPI::class.java)
@@ -40,7 +37,6 @@ class RecoverPasswordViewModel : ViewModel() {
         )
     }
 
-    /** Validação local antes de sair da tela de formulário. */
     fun verifyEmail(email: String?) {
         val error = validateEmail(email)
         if (error != null) {
@@ -50,9 +46,17 @@ class RecoverPasswordViewModel : ViewModel() {
         listener.operationCompleted()
     }
 
-    /** Validação local antes de sair da tela de formulário. */
-    fun verifyResetData(otp: String?, newPassword: String?, confirmPassword: String?) {
-        val error = validateResetData(otp, newPassword, confirmPassword)
+    fun verifyOtp(otp: String?) {
+        val error = validateOtp(otp)
+        if (error != null) {
+            listener.makeText(error)
+            return
+        }
+        listener.operationCompleted()
+    }
+
+    fun verifyNewPassword(newPassword: String?, confirmPassword: String?) {
+        val error = validatePasswords(newPassword, confirmPassword)
         if (error != null) {
             listener.makeText(error)
             return
@@ -82,8 +86,8 @@ class RecoverPasswordViewModel : ViewModel() {
         )
     }
 
-    fun resetPassword(otp: String?, newPassword: String?, confirmPassword: String?) {
-        val error = validateResetData(otp, newPassword, confirmPassword)
+    fun verifyPasswordReset(otp: String?) {
+        val error = validateOtp(otp)
         if (error != null) {
             listener.makeText(error)
             return
@@ -95,10 +99,37 @@ class RecoverPasswordViewModel : ViewModel() {
             return
         }
 
+        this.authRepository.verifyPasswordReset(
+            request = VerifyPasswordResetRequest(resetId = resetId, otp = otp!!),
+            onSuccess = { response ->
+                this.authRepository.saveResetTicket(response.resetTicket)
+                listener.operationCompleted()
+            },
+            onError = { statusCode, errorBody ->
+                listener.makeText(errorMessageFor(statusCode, errorBody))
+            },
+            onFailure = { throwable ->
+                listener.makeText("Um erro inesperado aconteceu: ${throwable.message}")
+            }
+        )
+    }
+
+    fun resetPassword(newPassword: String?, confirmPassword: String?) {
+        val error = validatePasswords(newPassword, confirmPassword)
+        if (error != null) {
+            listener.makeText(error)
+            return
+        }
+
+        val resetTicket = this.authRepository.getResetTicket()
+        if (resetTicket.isEmpty()) {
+            listener.makeText("Sessão de recuperação expirada. Solicite um novo código.")
+            return
+        }
+
         this.authRepository.resetPassword(
             request = ResetPasswordRequest(
-                resetId = resetId,
-                otp = otp!!,
+                resetTicket = resetTicket,
                 newPassword = newPassword!!
             ),
             onSuccess = {
@@ -119,14 +150,14 @@ class RecoverPasswordViewModel : ViewModel() {
         return null
     }
 
-    private fun validateResetData(
-        otp: String?,
-        newPassword: String?,
-        confirmPassword: String?
-    ): String? {
+    private fun validateOtp(otp: String?): String? {
         if (otp == null || !OTP_REGEX.matches(otp)) {
             return "Digite os 6 dígitos do código."
         }
+        return null
+    }
+
+    private fun validatePasswords(newPassword: String?, confirmPassword: String?): String? {
         if (newPassword == null || newPassword.length !in MIN_PASSWORD_LENGTH..MAX_PASSWORD_LENGTH) {
             return "A senha deve ter entre $MIN_PASSWORD_LENGTH e $MAX_PASSWORD_LENGTH caracteres."
         }
