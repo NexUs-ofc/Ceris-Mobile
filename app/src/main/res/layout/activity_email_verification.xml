@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9FAFB"
+    android:background="@color/md_theme_background"
     tools:context=".view.EmailVerificationActivity">
 
     <TextView
@@ -16,7 +16,7 @@
         android:fontFamily="@font/huninn"
         android:text="Verifique seu e-mail"
         android:textAlignment="center"
-        android:textColor="#111827"
+        android:textColor="@color/md_theme_onBackground"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
         android:tag="exemplo@email.com"
         android:text="@string/otp_subtitle"
         android:textAlignment="center"
-        android:textColor="#6B7280"
+        android:textColor="@color/md_secundary_text"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,8 +58,8 @@
             android:gravity="center"
             android:hint="-"
             android:inputType="number"
-            android:textColor="#111827"
-            android:textColorHint="#9CA3AF"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/md_theme_hint"
             android:maxLength="1"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -73,8 +73,8 @@
             android:gravity="center"
             android:hint="-"
             android:inputType="number"
-            android:textColor="#111827"
-            android:textColorHint="#9CA3AF"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/md_theme_hint"
             android:maxLength="1"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -88,8 +88,8 @@
             android:gravity="center"
             android:hint="-"
             android:inputType="number"
-            android:textColor="#111827"
-            android:textColorHint="#9CA3AF"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/md_theme_hint"
             android:maxLength="1"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -103,8 +103,8 @@
             android:gravity="center"
             android:hint="-"
             android:inputType="number"
-            android:textColor="#111827"
-            android:textColorHint="#9CA3AF"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/md_theme_hint"
             android:maxLength="1"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -118,8 +118,8 @@
             android:gravity="center"
             android:hint="-"
             android:inputType="number"
-            android:textColor="#111827"
-            android:textColorHint="#9CA3AF"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/md_theme_hint"
             android:maxLength="1"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -133,8 +133,8 @@
             android:gravity="center"
             android:hint="-"
             android:inputType="number"
-            android:textColor="#111827"
-            android:textColorHint="#9CA3AF"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/md_theme_hint"
             android:maxLength="1"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -145,11 +145,11 @@
         android:layout_width="350dp"
         android:layout_height="51dp"
         android:layout_marginTop="45dp"
-        android:backgroundTint="#4C1D95"
+        android:backgroundTint="@color/md_theme_primary"
         android:fontFamily="@font/huninn"
         android:text="Confirmar código"
         android:textAllCaps="false"
-        android:textColor="#EEEEEE"
+        android:textColor="@color/md_theme_onPrimary"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -179,7 +179,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/huninn"
                 android:text="Não recebeu o código?"
-                android:textColor="#6B7280"
+                android:textColor="@color/md_secundary_text"
                 android:textSize="14sp" />
 
             <TextView
@@ -191,7 +191,7 @@
                 android:focusable="true"
                 android:fontFamily="@font/huninn"
                 android:text="Reenviar"
-                android:textColor="#4C1D95"
+                android:textColor="@color/md_theme_primary"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -206,7 +206,7 @@
             android:paddingEnd="10dp"
             android:paddingBottom="4dp"
             android:text="Reenviar em 00:30"
-            android:textColor="#4C1D95"
+            android:textColor="@color/md_theme_primary"
             android:textSize="13sp" />
     </LinearLayout>
 

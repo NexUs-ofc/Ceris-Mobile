@@ -6,7 +6,7 @@
         <item name="boxCornerRadiusBottomStart">30dp</item>
         <item name="boxCornerRadiusTopEnd">30dp</item>
         <item name="boxCornerRadiusTopStart">30dp</item>
-        <item name="boxStrokeColor">#C1C1C1</item>
+        <item name="boxStrokeColor">@color/md_theme_outline</item>
         <item name="hintEnabled">false</item>
     </style>
 

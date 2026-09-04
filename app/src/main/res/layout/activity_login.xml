@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="Bem-Vindo(a)!"
-        android:textColor="#333333"
+        android:textColor="@color/md_theme_onBackground"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="125dp"
-        android:textColor="#333333"
+        android:textColor="@color/md_theme_onBackground"
         android:text="Acesse sua conta"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,8 +48,8 @@
             android:layout_height="wrap_content"
             android:hint="Endereço de e-mail"
             android:inputType="textEmailAddress"
-            android:textColor="#333333"
-            android:textColorHint="#B2333333"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/md_theme_hint"
             android:textSize="13sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,8 +70,8 @@
             android:hint="Senha"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
-            android:textColor="#333333"
-            android:textColorHint="#B2333333"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/md_theme_hint"
             android:textSize="13sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,7 +84,7 @@
         android:clickable="true"
         android:focusable="true"
         android:text="Esqueci minha senha"
-        android:textColor="#CC4C1D95"
+        android:textColor="@color/md_theme_primary_translucent"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="@id/etl_senha"
         app:layout_constraintTop_toBottomOf="@id/etl_senha" />
@@ -94,9 +94,9 @@
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="390dp"
-        android:backgroundTint="#4C1D95"
+        android:backgroundTint="@color/md_theme_primary"
         android:text="Entrar"
-        android:textColor="#EEEEEE"
+        android:textColor="@color/md_theme_onPrimary"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -115,7 +115,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
+            android:textColor="@color/md_theme_onBackground"
             android:text="Não tem conta? " />
 
         <TextView
@@ -125,7 +125,7 @@
             android:clickable="true"
             android:focusable="true"
             android:text="Cadastre-se"
-            android:textColor="#CC4C1D95" />
+            android:textColor="@color/md_theme_primary_translucent" />
     </LinearLayout>
 
     <LinearLayout
@@ -146,13 +146,13 @@
             android:layout_height="2dp"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
-            android:background="#4C1D95" />
+            android:background="@color/md_theme_primary" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#4C1D95"
+            android:textColor="@color/md_theme_primary"
             android:text="Ou"
             android:textSize="15sp" />
 
@@ -162,7 +162,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="8dp"
             android:layout_weight="1"
-            android:background="#4C1D95" />
+            android:background="@color/md_theme_primary" />
 
     </LinearLayout>
 
@@ -173,7 +173,7 @@
         android:layout_marginTop="524dp"
         android:text="Entrar com:"
         android:textSize="15sp"
-        android:textColor="#333333"
+        android:textColor="@color/md_theme_onBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
