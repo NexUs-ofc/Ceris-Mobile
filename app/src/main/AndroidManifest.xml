@@ -58,6 +58,13 @@
             android:name=".view.ForgotPasswordLoadingActivity"
             android:exported="false" />
         <activity
+            android:name=".view.ResetPasswordOtpActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.ResetPasswordVerifyLoadingActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.ResetPasswordActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
