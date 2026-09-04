@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="Bem-Vindo(a)!"
-        android:textColor="#333333"
+        android:textColor="@color/md_theme_onBackground"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="125dp"
-        android:textColor="#333333"
+        android:textColor="@color/md_theme_onBackground"
         android:text="Cadastre sua família!"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,8 +49,8 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:hint="Nome da família"
-            android:textColor="#333333"
-            android:textColorHint="#B2333333"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/md_theme_hint"
             android:textSize="13sp" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
@@ -68,8 +68,8 @@
             android:id="@+id/emailInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
-            android:textColorHint="#B2333333"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/md_theme_hint"
             android:inputType="textEmailAddress"
             android:hint="Endereço de e-mail"
             android:textSize="13sp" />
@@ -80,6 +80,7 @@
             android:layout_width="350dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
+            app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etl_email"
@@ -89,8 +90,8 @@
                 android:id="@+id/passwordInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#333333"
-                android:textColorHint="#B2333333"
+                android:textColor="@color/md_theme_onBackground"
+                android:textColorHint="@color/md_theme_hint"
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
                 android:hint="Senha"
@@ -102,9 +103,9 @@
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="390dp"
-        android:backgroundTint="#4C1D95"
+        android:backgroundTint="@color/md_theme_primary"
         android:text="Continuar"
-        android:textColor="#EEEEEE"
+        android:textColor="@color/md_theme_onPrimary"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +124,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
+            android:textColor="@color/md_theme_onBackground"
             android:text="Já é cadastrado? " />
 
         <TextView
@@ -133,7 +134,7 @@
             android:clickable="true"
             android:focusable="true"
             android:text="Entrar"
-            android:textColor="#CC4C1D95" />
+            android:textColor="@color/md_theme_primary_translucent" />
     </LinearLayout>
 
     <LinearLayout
@@ -154,13 +155,13 @@
             android:layout_height="2dp"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
-            android:background="#4C1D95" />
+            android:background="@color/md_theme_primary" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#4C1D95"
+            android:textColor="@color/md_theme_primary"
             android:text="Ou"
            android:textSize="15sp" />
 
@@ -170,7 +171,7 @@
             android:layout_height="2dp"
             android:layout_marginLeft="8dp"
             android:layout_weight="1"
-            android:background="#4C1D95" />
+            android:background="@color/md_theme_primary" />
 
     </LinearLayout>
 
@@ -181,7 +182,7 @@
         android:layout_marginTop="524dp"
         android:text="Cadastrar com:"
         android:textSize="15sp"
-        android:textColor="#333333"
+        android:textColor="@color/md_theme_onBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -207,6 +208,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/fundo_quadriculado" />
+        app:srcCompat="@drawable/background_details" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

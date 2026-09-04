@@ -9,23 +9,55 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="147dp"
-        android:layout_height="196dp"
-        android:layout_marginTop="264dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="120dp"
+        android:alpha="0"
         android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/legends"
-        android:layout_width="202dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="10dp"
-        android:text="Monitorar seu estoque nunca ficou tão fácil"
+        android:id="@+id/title"
+        android:layout_width="148dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="5dp"
+        android:alpha="0"
+        android:text="Ceris"
+        android:textColor="@color/md_theme_primary"
+        android:textSize="64sp"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <TextView
+        android:id="@+id/legends"
+        android:layout_width="202dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="35dp"
+        android:text="Monitorar seu estoque nunca ficou tão fácil"
+        android:textAlignment="center"
+        android:textColor="@color/md_secundary_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="350dp"
+        android:layout_marginEnd="-50dp"
+        android:layout_marginBottom="-80dp"
+        android:alpha="0"
+        android:translationX="140dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/background_details" />
 </androidx.constraintlayout.widget.ConstraintLayout>

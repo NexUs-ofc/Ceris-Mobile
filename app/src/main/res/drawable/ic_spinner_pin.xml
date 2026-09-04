@@ -7,18 +7,19 @@
 
     <path
         android:pathData="M95,48 a48,48 0 1,0 -94,0 a48,48 0 1,0 94,0 Z"
-        android:fillColor="#66F2EDFA" />
+        android:fillColor="@color/md_theme_primaryContainer"
+        android:fillAlpha="0.4" />
 
     <path
         android:pathData="M95,48 a47,47 0 1,0 -94,0 a47,47 0 1,0 94,0 Z"
         android:fillColor="#00000000"
-        android:strokeColor="#E2E2E9"
+        android:strokeColor="@color/md_theme_outlineVariant"
         android:strokeWidth="2" />
 
     <path
         android:pathData="M48.6009 57.8001C50.4608 56.1939 55.9992 50.9934 55.9992 46C55.9992 43.878 55.1564 41.843 53.6563 40.3426C52.1561 38.8422 50.1215 37.9992 48 37.9992C45.8785 37.9992 43.8439 38.8422 42.3437 40.3426C40.8436 41.843 40.0008 43.878 40.0008 46C40.0008 50.9934 45.5392 56.1939 47.3991 57.8001C47.5723 57.9304 47.7832 58.0008 48 58.0008C48.2168 58.0008 48.4277 57.9304 48.6009 57.8001Z"
         android:fillColor="#00000000"
-        android:strokeColor="#4C1D95"
+        android:strokeColor="@color/md_theme_primary"
         android:strokeWidth="2"
         android:strokeLineCap="round" />
 </vector>

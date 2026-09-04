@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9FAFB"
+    android:background="@color/md_theme_background"
     tools:context=".view.OtpLoadingActivity">
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_marginTop="129dp"
         android:fontFamily="@font/huninn"
         android:text="Verificando o código..."
-        android:textColor="#1E1B4B"
+        android:textColor="@color/md_theme_onBackground"
         android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:layout_marginTop="6dp"
         android:fontFamily="@font/huninn"
         android:text="Estamos validando seus dados de segurança"
-        android:textColor="#737380"
+        android:textColor="@color/md_secundary_text"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleText" />
@@ -65,7 +65,7 @@
                 android:layout_height="115dp"
                 android:indeterminate="true"
                 android:visibility="visible"
-                android:indeterminateTint="#4C1D95"
+                android:indeterminateTint="@color/md_theme_primary"
                 android:layout_gravity="center"
             />
         </FrameLayout>
@@ -77,7 +77,7 @@
             android:layout_marginTop="24dp"
             android:fontFamily="@font/huninn"
             android:text="Quase lá!"
-            android:textColor="#1A1A1A"
+            android:textColor="@color/md_theme_onBackground"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -91,7 +91,7 @@
             android:lineSpacingExtra="4dp"
             android:text="Isso deve levar apenas alguns segundos. Por favor, não feche o aplicativo."
             android:textAlignment="center"
-            android:textColor="#737380"
+            android:textColor="@color/md_secundary_text"
             android:textSize="15sp" />
     </LinearLayout>
 
