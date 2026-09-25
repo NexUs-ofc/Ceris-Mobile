@@ -7,6 +7,10 @@ import com.example.ceris.local.SessionKeys
 import com.example.ceris.local.SessionManager
 import com.example.ceris.model.dto.ForgotPasswordRequest
 import com.example.ceris.model.dto.ForgotPasswordResponse
+import com.example.ceris.model.dto.GoogleAuthenticateRequest
+import com.example.ceris.model.dto.GoogleAuthenticateResponse
+import com.example.ceris.model.dto.GoogleRegistrationRequest
+import com.example.ceris.model.dto.GoogleSessionResponse
 import com.example.ceris.model.dto.PasswordLoginRequest
 import com.example.ceris.model.dto.PasswordLoginResponse
 import com.example.ceris.model.dto.PasswordRegisterRequest
@@ -93,6 +97,70 @@ class AuthRepository (
                     onFailure(Exception(t.message))
                 }
             })
+    }
+
+    fun authenticateWithGoogle(
+        request: GoogleAuthenticateRequest,
+        onSuccess: (GoogleAuthenticateResponse) -> Unit,
+        onError: (statusCode: Int, errorBody: String?) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        api.authenticateWithGoogle(API_KEY, request)
+            .enqueue(object: Callback<GoogleAuthenticateResponse> {
+                override fun onResponse(
+                    call: Call<GoogleAuthenticateResponse>,
+                    response: Response<GoogleAuthenticateResponse>
+                ) {
+                    val body = response.body()
+                    if (response.isSuccessful && body != null) {
+                        onSuccess(body)
+                    } else {
+                        onError(response.code(), readError(response))
+                    }
+                }
+
+                override fun onFailure(call: Call<GoogleAuthenticateResponse?>, t: Throwable) {
+                    Log.e(TAG, "authenticateWithGoogle falhou", t)
+                    onFailure(Exception(t.message))
+                }
+            })
+    }
+
+    fun registerWithGoogle(
+        request: GoogleRegistrationRequest,
+        onSuccess: (GoogleSessionResponse) -> Unit,
+        onError: (statusCode: Int, errorBody: String?) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        api.registerWithGoogle(API_KEY, request)
+            .enqueue(object: Callback<GoogleSessionResponse> {
+                override fun onResponse(
+                    call: Call<GoogleSessionResponse>,
+                    response: Response<GoogleSessionResponse>
+                ) {
+                    val body = response.body()
+                    if (response.isSuccessful && body != null) {
+                        onSuccess(body)
+                    } else {
+                        onError(response.code(), readError(response))
+                    }
+                }
+
+                override fun onFailure(call: Call<GoogleSessionResponse?>, t: Throwable) {
+                    Log.e(TAG, "registerWithGoogle falhou", t)
+                    onFailure(Exception(t.message))
+                }
+            })
+    }
+
+    fun saveGoogleTicket(googleTicket: String) {
+        sessionManager.set(
+            SessionAttribute(SessionKeys.GOOGLE_TICKET, googleTicket)
+        )
+    }
+
+    fun getGoogleTicket(): String {
+        return sessionManager.getString(SessionKeys.GOOGLE_TICKET, "")
     }
 
     fun forgotPassword(
