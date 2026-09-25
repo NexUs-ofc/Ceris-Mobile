@@ -14,12 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.ListsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.ChatbotActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.LoginActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

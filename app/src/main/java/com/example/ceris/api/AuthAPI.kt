@@ -2,10 +2,6 @@ package com.example.ceris.api
 
 import com.example.ceris.model.dto.ForgotPasswordRequest
 import com.example.ceris.model.dto.ForgotPasswordResponse
-import com.example.ceris.model.dto.GoogleAuthenticateRequest
-import com.example.ceris.model.dto.GoogleAuthenticateResponse
-import com.example.ceris.model.dto.GoogleRegistrationRequest
-import com.example.ceris.model.dto.GoogleSessionResponse
 import com.example.ceris.model.dto.PasswordLoginRequest
 import com.example.ceris.model.dto.PasswordLoginResponse
 import com.example.ceris.model.dto.PasswordRegisterRequest
@@ -39,18 +35,6 @@ interface AuthAPI {
         @Header("X-API-Key") apiKey: String,
         @Body req: PasswordLoginRequest
     ): Call<PasswordLoginResponse>
-
-    @POST("/api/auth/google/authenticate")
-    fun authenticateWithGoogle(
-        @Header("X-API-Key") apiKey: String,
-        @Body req: GoogleAuthenticateRequest
-    ): Call<GoogleAuthenticateResponse>
-
-    @POST("/api/auth/registrations/google")
-    fun registerWithGoogle(
-        @Header("X-API-Key") apiKey: String,
-        @Body req: GoogleRegistrationRequest
-    ): Call<GoogleSessionResponse>
 
     @POST("/api/auth/password/forgot")
     fun forgotPassword(
