@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_stock"
+        android:icon="@drawable/stock_icon"
+        android:title="@string/mn_stock" />
+
+    <item
+        android:id="@+id/nav_local"
+        android:icon="@drawable/local_icon"
+        android:title="@string/mn_local" />
+
+    <item
+        android:id="@+id/nav_scan"
+        android:icon="@drawable/scan_icon"
+        android:title="" />
+
+    <item
+        android:id="@+id/nav_list"
+        android:icon="@drawable/list_icon"
+        android:title="@string/mn_list" />
+
+    <item
+        android:id="@+id/nav_recipe"
+        android:icon="@drawable/recipe_icon"
+        android:title="@string/mn_recipe" />
+
+</menu>

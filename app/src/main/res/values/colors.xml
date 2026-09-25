@@ -9,6 +9,7 @@
     <color name="ceris_deep_400">#322340</color>
     <color name="ceris_white">#FFFFFF</color>
     <color name="ceris_black">#000000</color>
+    <color name="ceris_black_title">#333333</color>
     <color name="md_theme_onBackground">@color/ceris_deep_400</color>
     <color name="md_theme_onSurface">@color/ceris_deep_400</color>
     <color name="md_secundary_text">@color/ceris_deep_200</color>

@@ -4,4 +4,8 @@
         Enviamos um código de verificação de 6 dígitos para o endereço %1$s
     </string>
     <string name="otp_timer">Reenviar em %1$s</string>
+    <string name="mn_stock">Estoque</string>
+    <string name="mn_local">Locai</string>
+    <string name="mn_list">Lista</string>
+    <string name="mn_recipe">Receitas</string>
 </resources>
