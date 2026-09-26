@@ -71,6 +71,24 @@
         <activity
             android:name=".view.ResetPasswordLoadingActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.ChatbotActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.QrCodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.DetalheProdutoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.DetalheReceitaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ListaComprasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.DetalheLocalActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
