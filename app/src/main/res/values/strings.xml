@@ -4,4 +4,53 @@
         Enviamos um código de verificação de 6 dígitos para o endereço %1$s
     </string>
     <string name="otp_timer">Reenviar em %1$s</string>
+
+    <!-- Barra de navegacao -->
+    <string name="nav_estoque">Estoque</string>
+    <string name="nav_locais">Locais</string>
+    <string name="nav_lista">Lista</string>
+    <string name="nav_receitas">Receitas</string>
+    <string name="nav_scan">Escanear produto</string>
+
+    <!-- Tela Inicial (estoque) -->
+    <string name="estoque_titulo">Monitore seu estoque!</string>
+    <string name="estoque_perfil">Abrir perfil</string>
+    <string name="estoque_busca_hint">Buscar no seu estoque...</string>
+    <string name="estoque_filtro_todos">Todos</string>
+    <string name="estoque_filtro_vencendo">Vencendo</string>
+    <string name="estoque_filtro_carnes">Carnes</string>
+    <string name="estoque_filtro_congelados">Congelados</string>
+    <string name="estoque_vazio">Sua despensa está vazia...</string>
+    <string name="estoque_assistente">Abrir assistente</string>
+
+    <!-- Card de produto -->
+    <string name="produto_imagem">Foto do produto</string>
+    <string name="produto_quantidade">%1$d un</string>
+    <string name="produto_validade">Vence em %1$s</string>
+    <string name="produto_fresco">Fresco</string>
+    <string name="produto_vencendo">Vencendo</string>
+    <string name="produto_vencido">Vencido</string>
+
+    <!-- Tela de Locais -->
+    <string name="locais_endereco_atual">Seu endereço atual</string>
+    <string name="locais_alterar">Alterar</string>
+    <string name="locais_proximos">Supermercados próximos</string>
+    <string name="locais_distancia">%1$s km</string>
+    <string name="locais_imagem">Foto do estabelecimento</string>
+    <string name="locais_endereco_icone">Endereço atual</string>
+
+    <!-- Receitas -->
+    <string name="receitas_titulo">Receitas salvas</string>
+    <string name="receita_imagem">Foto da receita</string>
+    <string name="receita_tempo_icone">Tempo de preparo</string>
+
+    <!-- Minhas listas -->
+    <string name="listas_titulo">Minhas listas</string>
+    <string name="listas_subtitulo">Escolha uma lista ou crie uma nova</string>
+    <string name="listas_vazia">Você não tem nenhuma lista ainda...</string>
+    <string name="listas_criar">Criar nova lista</string>
+    <string name="lista_progresso">Progresso</string>
+    <string name="lista_itens">%1$d itens</string>
+    <string name="lista_categoria">" · %1$s"</string>
+    <string name="lista_percentual">%1$d%%</string>
 </resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Tipografia das telas.
+
+    O título é o único texto em Huninn; todo o resto herda Montserrat do tema.
+-->
+<resources>
+
+    <style name="TituloTela">
+        <item name="android:fontFamily">@font/huninn</item>
+        <item name="fontFamily">@font/huninn</item>
+        <item name="android:textColor">@color/md_theme_onBackground</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+    </style>
+
+    <!--
+        Rótulos da barra de navegação. O destino ativo fica em semi bold; a cor
+        não entra aqui porque vem do seletor em @color/nav_item_tint.
+    -->
+    <style name="RotuloNavInativo" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">@dimen/nav_label_text</item>
+    </style>
+
+    <style name="RotuloNavAtivo" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textSize">@dimen/nav_label_text</item>
+    </style>
+
+    <!-- Texto dos chips de filtro: semi bold nos dois estados. -->
+    <style name="TextoFiltroChip" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+
+</resources>

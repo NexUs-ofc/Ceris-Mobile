@@ -30,8 +30,10 @@
         <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
 
-        <item name="fontFamily">@font/huninn</item>
-        <item name="android:fontFamily">@font/huninn</item>
+        <!-- Corpo da interface em Montserrat. O titulo de tela usa Huninn,
+             aplicado pelo estilo TituloTela. -->
+        <item name="fontFamily">@font/montserrat</item>
+        <item name="android:fontFamily">@font/montserrat</item>
 
         <item name="android:statusBarColor">@color/design_default_color_primary</item>
     </style>
