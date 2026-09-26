@@ -22,7 +22,9 @@ import com.example.ceris.view.utils.iniciarLoginGoogle
 import com.example.ceris.viewmodel.GoogleAuthViewModel
 import com.example.ceris.viewmodel.LoginViewModel
 
-class LoginActivity : AppCompatActivity(), LoginViewModel.Listener,
+class LoginActivity :
+    AppCompatActivity(),
+    LoginViewModel.Listener,
     GoogleAuthViewModel.Listener {
 
     private lateinit var emailInput: EditText

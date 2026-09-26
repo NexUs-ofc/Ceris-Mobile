@@ -23,7 +23,9 @@ import com.example.ceris.view.utils.iniciarLoginGoogle
 import com.example.ceris.viewmodel.GoogleAuthViewModel
 import com.example.ceris.viewmodel.RegisterViewModel
 
-class RegisterActivity : AppCompatActivity(), RegisterViewModel.Listener,
+class RegisterActivity :
+    AppCompatActivity(),
+    RegisterViewModel.Listener,
     GoogleAuthViewModel.Listener {
 
     private lateinit var familyNameInput: EditText
