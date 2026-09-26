@@ -37,6 +37,13 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
         const val EXTRA_FAMILY_NAME = "extra_family_name"
         const val EXTRA_EMAIL = "extra_email"
         const val EXTRA_PASSWORD = "extra_password"
+
+        /**
+         * Marca que o cadastro veio do Google: nao ha senha, e a
+         * conclusao usa o ticket guardado em SessionKeys.GOOGLE_TICKET
+         * em vez do fluxo por senha.
+         */
+        const val EXTRA_DO_GOOGLE = "extra_do_google"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
