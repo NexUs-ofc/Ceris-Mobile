@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Card de produto do estoque (Figma > Protótipos > V1 > Tela Inicial com produto).
+
+    Cartão plano: fundo branco, contorno de 1dp e cantos arredondados — sem
+    sombra, como no design.
+
+    O nome ocupa o espaço que sobra entre a imagem e a coluna da direita, e
+    trunca com reticências. Assim a quantidade e o selo nunca são empurrados
+    para fora, por mais longo que o nome seja.
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_produto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_s"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/md_theme_surface"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/card_contorno"
+    app:strokeWidth="@dimen/card_stroke_width">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/card_produto_padding">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/moldura_imagem"
+            android:layout_width="@dimen/card_produto_imagem"
+            android:layout_height="@dimen/card_produto_imagem"
+            app:cardBackgroundColor="@color/md_theme_surface"
+            app:cardCornerRadius="@dimen/card_produto_imagem_radius"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/card_contorno"
+            app:strokeWidth="@dimen/card_stroke_width">
+
+            <ImageView
+                android:id="@+id/img_produto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/spacing_xs"
+                android:contentDescription="@string/produto_imagem"
+                android:scaleType="fitCenter"
+                tools:src="@drawable/ic_menu_image" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/txt_nome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_bold"
+            android:maxLines="1"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toStartOf="@id/txt_quantidade"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/moldura_imagem"
+            app:layout_constraintTop_toTopOf="@id/moldura_imagem"
+            tools:text="Leite integral Piracanjuba 1L" />
+
+        <TextView
+            android:id="@+id/txt_validade"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintBottom_toBottomOf="@id/moldura_imagem"
+            app:layout_constraintEnd_toStartOf="@id/selo_situacao"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/moldura_imagem"
+            tools:text="Vence em 25/07" />
+
+        <TextView
+            android:id="@+id/txt_quantidade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_s"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/txt_nome"
+            tools:text="1 un" />
+
+        <TextView
+            android:id="@+id/selo_situacao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_s"
+            android:background="@drawable/bg_selo_produto"
+            android:backgroundTint="@color/selo_fresco_fundo"
+            android:fontFamily="@font/montserrat_bold"
+            android:paddingStart="@dimen/selo_padding_h"
+            android:paddingTop="@dimen/selo_padding_v"
+            android:paddingEnd="@dimen/selo_padding_h"
+            android:paddingBottom="@dimen/selo_padding_v"
+            android:textAllCaps="true"
+            android:textColor="@color/selo_fresco_texto"
+            android:textSize="@dimen/text_size_10"
+            app:layout_constraintBottom_toBottomOf="@id/moldura_imagem"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Fresco" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

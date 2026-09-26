@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Card de estabelecimento próximo (Figma > Protótipos > V1 > Screen - Locais).
+
+    Mesma anatomia do card de produto: foto à esquerda, duas linhas de texto no
+    meio e uma pílula à direita. O nome e o endereço têm largura `0dp` entre a
+    foto e a pílula, então truncam em vez de empurrar a distância para fora.
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_local"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_s"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/md_theme_surface"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/card_contorno"
+    app:strokeWidth="@dimen/card_stroke_width">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/card_produto_padding">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_local"
+            android:layout_width="@dimen/local_imagem_size"
+            android:layout_height="@dimen/local_imagem_size"
+            android:background="@color/md_theme_surfaceVariant"
+            android:contentDescription="@string/locais_imagem"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/FormaImagemLocal"
+            tools:src="@color/ceris_purple_200" />
+
+        <TextView
+            android:id="@+id/txt_nome_local"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_semibold"
+            android:maxLines="1"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_15"
+            app:layout_constraintBottom_toTopOf="@id/txt_endereco_local"
+            app:layout_constraintEnd_toStartOf="@id/selo_distancia"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/img_local"
+            app:layout_constraintTop_toTopOf="@id/img_local"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Supermercado Extra" />
+
+        <TextView
+            android:id="@+id/txt_endereco_local"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/md_secundary_text"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintBottom_toBottomOf="@id/img_local"
+            app:layout_constraintEnd_toStartOf="@id/selo_distancia"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/img_local"
+            app:layout_constraintTop_toBottomOf="@id/txt_nome_local"
+            tools:text="Av. Paulista, 1500" />
+
+        <TextView
+            android:id="@+id/selo_distancia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_s"
+            android:background="@drawable/bg_selo_produto"
+            android:backgroundTint="@color/local_distancia_fundo"
+            android:fontFamily="@font/montserrat_semibold"
+            android:paddingStart="@dimen/selo_padding_h"
+            android:paddingTop="@dimen/selo_padding_v"
+            android:paddingEnd="@dimen/selo_padding_h"
+            android:paddingBottom="@dimen/selo_padding_v"
+            android:textColor="@color/local_distancia_texto"
+            android:textSize="@dimen/text_size_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/img_local"
+            tools:text="0.8 km" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

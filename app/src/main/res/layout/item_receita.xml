@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Card de receita salva (Figma > Protótipos > V1 > Screen - Receitas).
+
+    Foto à esquerda, nome e tempo de preparo empilhados. Sem pílula à direita,
+    diferente dos cards de produto e de local: aqui o nome pode usar a largura
+    restante inteira.
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_receita"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_s"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/md_theme_surface"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/card_contorno"
+    app:strokeWidth="@dimen/card_stroke_width">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/card_produto_padding">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_receita"
+            android:layout_width="@dimen/receita_imagem_size"
+            android:layout_height="@dimen/receita_imagem_size"
+            android:background="@color/md_theme_surfaceVariant"
+            android:contentDescription="@string/receita_imagem"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/FormaImagemLocal"
+            tools:src="@color/ceris_purple_200" />
+
+        <TextView
+            android:id="@+id/txt_nome_receita"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_semibold"
+            android:maxLines="1"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintBottom_toTopOf="@id/grupo_tempo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/img_receita"
+            app:layout_constraintTop_toTopOf="@id/img_receita"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Frango ao molho" />
+
+        <LinearLayout
+            android:id="@+id/grupo_tempo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/img_receita"
+            app:layout_constraintStart_toEndOf="@id/img_receita"
+            app:layout_constraintTop_toBottomOf="@id/txt_nome_receita">
+
+            <ImageView
+                android:id="@+id/icone_tempo"
+                android:layout_width="@dimen/text_size_16"
+                android:layout_height="@dimen/text_size_16"
+                android:contentDescription="@string/receita_tempo_icone"
+                android:src="@drawable/ic_menu_clock"
+                app:tint="@color/md_theme_primary" />
+
+            <TextView
+                android:id="@+id/txt_tempo_receita"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xs"
+                android:textColor="@color/md_theme_primary"
+                android:textSize="@dimen/text_size_13"
+                tools:text="45 min" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

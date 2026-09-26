@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Forma da barra de navegação inferior.
+
+    Só os cantos de cima são arredondados: a barra encosta no fim da tela, então
+    os de baixo ficam retos. O encaixe em volta do botão de scan não vem daqui —
+    é o cradle do BottomAppBar, controlado por fabCradleMargin no layout.
+-->
+<resources>
+
+    <style name="FormaBarraNavegacao">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/nav_bar_corner_radius</item>
+        <item name="cornerSizeTopRight">@dimen/nav_bar_corner_radius</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+
+    <!--
+        Circulo perfeito. Necessario porque o Theme.Material3 da a FloatingActionButton
+        um canto de 16dp, entao sem isto os botoes saem quadrados arredondados.
+        cornerSize em 50% acompanha qualquer tamanho - serve para o de 70dp e o de 48dp.
+    -->
+    <style name="FormaCirculo">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+
+    <!-- Foto do estabelecimento: cantos arredondados nos quatro lados. -->
+    <style name="FormaImagemLocal">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/local_imagem_radius</item>
+    </style>
+
+</resources>

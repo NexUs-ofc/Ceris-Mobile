@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Barra de Navegacao (Figma > Prototipos > Barra de Navegacao).
+
+    O item do meio e um vao desabilitado: ele reserva o espaco do botao de
+    scan, que flutua acima da barra. Sem ele a BottomNavigationView
+    distribuiria os quatro destinos por igual e o botao cobriria um deles.
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_estoque"
+        android:icon="@drawable/ic_menu_package"
+        android:title="@string/nav_estoque" />
+
+    <item
+        android:id="@+id/nav_locais"
+        android:icon="@drawable/ic_menu_map_pin"
+        android:title="@string/nav_locais" />
+
+    <item
+        android:id="@+id/nav_vao_scan"
+        android:enabled="false"
+        android:title="" />
+
+    <item
+        android:id="@+id/nav_lista"
+        android:icon="@drawable/ic_menu_clipboard"
+        android:title="@string/nav_lista" />
+
+    <item
+        android:id="@+id/nav_receitas"
+        android:icon="@drawable/ic_menu_chef_hat"
+        android:title="@string/nav_receitas" />
+
+</menu>
