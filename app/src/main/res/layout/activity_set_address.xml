@@ -9,13 +9,13 @@
 
     <Button
         android:id="@+id/registerBtn"
-        android:layout_width="350dp"
+        android:layout_width="@dimen/field_width"
         android:layout_height="50dp"
         android:layout_marginTop="482dp"
         android:backgroundTint="@color/md_theme_primary"
         android:text="Registrar"
         android:textColor="@color/md_theme_onPrimary"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_18"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
 
     <LinearLayout
         android:layout_width="360dp"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/field_height"
         android:layout_marginTop="70dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
             android:text="Seu endereço"
             android:textAlignment="center"
             android:textColor="@color/md_theme_onBackground"
-            android:textSize="28sp" />
+            android:textSize="@dimen/text_size_28" />
 
         <TextView
             android:id="@+id/textView6"
@@ -57,7 +57,7 @@
             android:text="Vamos encontrar mercados perto de você"
             android:textAlignment="center"
             android:textColor="@color/md_theme_hint"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_size_16" />
 
     </LinearLayout>
 
@@ -75,7 +75,7 @@
             android:id="@+id/etl_cep"
             style="@style/InputStyle"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/field_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -89,13 +89,13 @@
                 android:textColor="@color/md_theme_onBackground"
                 android:imeOptions="actionNext"
                 android:textColorHint="@color/md_theme_hint"
-                android:textSize="13sp" />
+                android:textSize="@dimen/text_size_13" />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etl_rua"
             style="@style/InputStyle"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/field_height"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -110,19 +110,19 @@
                 android:imeOptions="actionNext"
                 android:textColor="@color/md_theme_onBackground"
                 android:textColorHint="@color/md_theme_hint"
-                android:textSize="13sp" />
+                android:textSize="@dimen/text_size_13" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/field_height"
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etl_numero"
                 style="@style/InputStyle"
                 android:layout_width="170dp"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/field_height"
                 android:layout_marginRight="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -137,14 +137,14 @@
                     android:imeOptions="actionNext"
                     android:textColor="@color/md_theme_onBackground"
                     android:textColorHint="@color/md_theme_hint"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/text_size_13" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etl_bairro"
                 style="@style/InputStyle"
                 android:layout_width="170dp"
                 android:layout_marginLeft="10dp"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/field_height"
                 android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -159,19 +159,19 @@
                     android:textColor="@color/md_theme_onBackground"
                     android:imeOptions="actionNext"
                     android:textColorHint="@color/md_theme_hint"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/text_size_13" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/field_height"
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etl_cidade"
                 style="@style/InputStyle"
                 android:layout_width="170dp"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/field_height"
                 android:layout_marginRight="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -186,14 +186,14 @@
                     android:textColor="@color/md_theme_onBackground"
                     android:imeOptions="actionNext"
                     android:textColorHint="@color/md_theme_hint"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/text_size_13" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etl_estado"
                 style="@style/InputStyle"
                 android:layout_width="170dp"
                 android:layout_marginLeft="10dp"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/field_height"
                 android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -209,7 +209,7 @@
                     android:textColor="@color/md_theme_onBackground"
                     android:imeOptions="actionDone"
                     android:textColorHint="@color/md_theme_hint"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/text_size_13" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -217,7 +217,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
-        android:layout_height="350dp"
+        android:layout_height="@dimen/hero_image_height"
         android:layout_marginEnd="-25dp"
         android:layout_marginBottom="-140dp"
         android:scaleType="centerCrop"

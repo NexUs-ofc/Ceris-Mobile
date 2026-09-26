@@ -1,19 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    Casca das telas que têm barra de navegação.
+
+    A barra vive aqui, não nos fragments: ela não é recriada a cada troca de
+    destino, então não há animação interrompida nem item ativo fora de sincronia.
+    O que muda é só o conteúdo do container.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
     tools:context=".view.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/navegacao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.ceris.view.utils.BarraNavegacaoView
+        android:id="@+id/navegacao"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/nav_area_height"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav_destinos"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/nav_bar_height"
+            android:layout_gravity="bottom"
+            android:background="@android:color/transparent"
+            app:elevation="0dp"
+            app:itemIconSize="@dimen/nav_icon_size"
+            app:itemIconTint="@color/nav_item_tint"
+            app:itemTextAppearanceActive="@style/RotuloNavAtivo"
+            app:itemTextAppearanceInactive="@style/RotuloNavInativo"
+            app:itemTextColor="@color/nav_item_tint"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/nav_menu" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/nav_scan"
+            android:layout_width="@dimen/nav_scan_size"
+            android:layout_height="@dimen/nav_scan_size"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="@dimen/nav_cradle_margin"
+            android:contentDescription="@string/nav_scan"
+            app:backgroundTint="@color/md_theme_primary"
+            app:borderWidth="0dp"
+            app:elevation="0dp"
+            app:fabCustomSize="@dimen/nav_scan_size"
+            app:maxImageSize="@dimen/nav_scan_icon_size"
+            app:shapeAppearanceOverlay="@style/FormaCirculo"
+            app:srcCompat="@drawable/ic_menu_scan_qr_code"
+            app:tint="@color/md_theme_onPrimary" />
+
+    </com.example.ceris.view.utils.BarraNavegacaoView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
