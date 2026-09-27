@@ -51,9 +51,10 @@ android {
         //
         // O valor de reserva e a sentinela que o GoogleSignInHelper reconhece:
         // com ela o app avisa que falta configurar, em vez de falhar sozinho.
-        val camposObrigatorios = mapOf(
-            "GOOGLE_WEB_CLIENT_ID" to "PREENCHER",
-        )
+        val camposObrigatorios =
+            mapOf(
+                "GOOGLE_WEB_CLIENT_ID" to "PREENCHER",
+            )
 
         camposObrigatorios.forEach { (nome, reserva) ->
             if (!localProperties.containsKey(nome)) {
