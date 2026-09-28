@@ -6,4 +6,5 @@ object SessionKeys {
     const val RESET_TICKET = "reset_ticket"
     const val ACCESS_TOKEN = "access_token"
     const val REFRESH_TOKEN = "refresh_token"
+    const val GOOGLE_TICKET = "google_ticket"
 }

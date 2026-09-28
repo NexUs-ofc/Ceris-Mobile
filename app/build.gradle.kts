@@ -43,6 +43,24 @@ android {
                 )
             }
         }
+
+        // Campos que o codigo referencia e por isso precisam existir sempre.
+        // O bloco acima so cria o que estiver no local.properties, e o CI
+        // escreve apenas um subconjunto das chaves - sem isto, a compilacao
+        // quebra la com "Unresolved reference".
+        //
+        // O valor de reserva e a sentinela que o GoogleSignInHelper reconhece:
+        // com ela o app avisa que falta configurar, em vez de falhar sozinho.
+        val camposObrigatorios =
+            mapOf(
+                "GOOGLE_WEB_CLIENT_ID" to "PREENCHER",
+            )
+
+        camposObrigatorios.forEach { (nome, reserva) ->
+            if (!localProperties.containsKey(nome)) {
+                buildConfigField("String", nome, "\"$reserva\"")
+            }
+        }
     }
 
     buildTypes {
@@ -83,6 +101,15 @@ dependencies {
 
     // OkHttp
     implementation("com.squareup.okhttp3:logging-interceptor:3.14.9")
+
+    // Google Sign-In via Credential Manager
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+    // Coroutines (necessarias para o Credential Manager)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 
     // Testes
     testImplementation(libs.junit)
