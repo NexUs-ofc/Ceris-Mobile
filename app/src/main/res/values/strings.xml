@@ -53,4 +53,42 @@
     <string name="lista_itens">%1$d itens</string>
     <string name="lista_categoria">" · %1$s"</string>
     <string name="lista_percentual">%1$d%%</string>
+
+    <!-- Detalhe da lista de compras -->
+    <string name="lista_detalhe_subtitulo">Organize o que falta para sua casa</string>
+    <string name="lista_nova_nome">Nova Lista</string>
+    <string name="lista_concluidos">%1$d de %2$d itens concluídos</string>
+    <string name="lista_sem_itens">Você não tem nenhum produto na lista</string>
+    <string name="lista_total_estimado">Total estimado</string>
+    <string name="lista_adicionar_item">Adicionar item</string>
+    <string name="lista_voltar">Voltar</string>
+    <string name="lista_renomear">Renomear lista</string>
+    <string name="lista_ilustracao_vazia">Lista sem produtos</string>
+
+    <!-- Formulário de item -->
+    <string name="item_form_titulo">Adicionar item</string>
+    <string name="item_form_nome">NOME DO ITEM</string>
+    <string name="item_form_nome_hint">Ex: Tomate</string>
+    <string name="item_form_quantidade">QUANTIDADE</string>
+    <string name="item_form_unidade">UNIDADE</string>
+    <string name="item_form_categoria">CATEGORIA</string>
+    <string name="item_form_valor">VALOR (R$)</string>
+    <string name="item_form_valor_hint">Ex: 12,90</string>
+    <string name="item_form_confirmar">Adicionar à lista</string>
+    <string name="item_form_cancelar"><u>Cancelar</u></string>
+    <string name="item_form_diminuir">Diminuir quantidade</string>
+    <string name="item_form_aumentar">Aumentar quantidade</string>
+
+    <!-- Formulário de nome da lista -->
+    <string name="lista_nome_rotulo">NOME DA LISTA</string>
+    <string name="lista_nome_hint">Ex: Compras da semana</string>
+    <string name="lista_nome_criar_titulo">Nova lista</string>
+    <string name="lista_nome_criar_confirmar">Criar lista</string>
+    <string name="lista_nome_renomear_titulo">Renomear lista</string>
+    <string name="lista_nome_renomear_confirmar">Salvar</string>
+    <string name="lista_nome_cancelar">Cancelar</string>
+    <string name="lista_excluir">Excluir lista</string>
+    <string name="lista_excluir_pergunta">Excluir \"%1$s\"? Os itens dela serão perdidos.</string>
+    <string name="lista_excluir_confirmar">Excluir</string>
+    <string name="lista_item_remover_pergunta">Remover este item da lista?</string>
 </resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Estilos do formulário de item e do bottom sheet da lista de compras. -->
+<resources>
+
+    <!-- Rótulo miúdo acima de cada campo: NOME DO ITEM, QUANTIDADE... -->
+    <style name="RotuloCampo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textColor">@color/md_theme_primary</item>
+        <item name="android:textSize">@dimen/campo_rotulo_text</item>
+    </style>
+
+    <style name="CampoFormulario">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/campo_altura</item>
+        <item name="android:layout_marginTop">@dimen/spacing_s</item>
+        <item name="android:background">@drawable/bg_campo_outline</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">@dimen/campo_padding_h</item>
+        <item name="android:paddingEnd">@dimen/campo_padding_h</item>
+        <item name="android:textColor">@color/md_theme_onBackground</item>
+        <item name="android:textColorHint">@color/md_theme_hint</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+    </style>
+
+    <!-- Cantos arredondados só no topo, como no design. -->
+    <style name="FormaBottomSheet" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/sheet_corner_radius</item>
+        <item name="cornerSizeTopRight">@dimen/sheet_corner_radius</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="FundoBottomSheet" parent="Widget.Material3.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/FormaBottomSheet</item>
+        <item name="backgroundTint">@color/md_theme_surface</item>
+    </style>
+
+    <style name="TemaBottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/FundoBottomSheet</item>
+    </style>
+
+</resources>

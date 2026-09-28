@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Criar ou renomear lista. Mesmo desenho do sheet de adicionar item. -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/md_theme_surface"
+    android:paddingStart="@dimen/sheet_padding"
+    android:paddingTop="@dimen/spacing_s"
+    android:paddingEnd="@dimen/sheet_padding"
+    android:paddingBottom="@dimen/sheet_padding">
+
+    <View
+        android:id="@+id/alca"
+        android:layout_width="@dimen/sheet_alca_largura"
+        android:layout_height="@dimen/sheet_alca_altura"
+        android:background="@drawable/bg_sheet_alca"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titulo_sheet"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="@color/md_theme_onBackground"
+        android:textSize="@dimen/text_size_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/alca"
+        tools:text="Nova lista" />
+
+    <TextView
+        android:id="@+id/rotulo_nome_lista"
+        style="@style/RotuloCampo"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:text="@string/lista_nome_rotulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titulo_sheet" />
+
+    <EditText
+        android:id="@+id/campo_nome_lista"
+        style="@style/CampoFormulario"
+        android:autofillHints="name"
+        android:hint="@string/lista_nome_hint"
+        android:imeOptions="actionDone"
+        android:inputType="textCapSentences"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rotulo_nome_lista" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_confirmar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:fontFamily="@font/montserrat_semibold"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:textSize="@dimen/text_size_15"
+        app:backgroundTint="@color/md_theme_primary"
+        app:cornerRadius="@dimen/botao_radius"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/campo_nome_lista"
+        tools:text="Criar lista" />
+
+    <TextView
+        android:id="@+id/btn_cancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_m"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/spacing_s"
+        android:text="@string/item_form_cancelar"
+        android:textColor="@color/md_theme_primary"
+        android:textSize="@dimen/text_size_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_confirmar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
