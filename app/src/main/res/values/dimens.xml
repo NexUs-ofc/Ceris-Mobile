@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Medidas do celular padrao.
+    O tablet sobrescreve estes valores em values-sw480dp/dimens.xml.
+    Nenhum layout deve voltar a fixar dp direto: sempre referenciar daqui.
+-->
+<resources>
+
+    <!-- Largura maxima do conteudo. No tablet o conteudo centraliza em vez de esticar. -->
+    <dimen name="content_max_width">420dp</dimen>
+
+    <!-- Campos de formulario -->
+    <dimen name="field_width">350dp</dimen>
+    <dimen name="field_height">60dp</dimen>
+    <dimen name="field_corner_radius">30dp</dimen>
+
+    <!-- Botoes -->
+    <dimen name="button_height">56dp</dimen>
+
+    <!-- Margens e espacamentos -->
+    <dimen name="screen_margin_horizontal">24dp</dimen>
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_s">8dp</dimen>
+    <dimen name="spacing_m">16dp</dimen>
+    <dimen name="spacing_l">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+    <dimen name="spacing_xxl">50dp</dimen>
+
+    <!-- Tipografia: escala numerica, o nome guarda o valor do celular -->
+    <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_13">13sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_15">15sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_28">28sp</dimen>
+    <dimen name="text_size_32">32sp</dimen>
+    <dimen name="text_size_36">36sp</dimen>
+    <dimen name="text_size_64">64sp</dimen>
+
+    <!-- Barra de navegacao -->
+    <!--
+        Navegacao inferior. As quatro medidas abaixo tem uma regra entre si;
+        mexer numa sem as outras desalinha a barra:
+
+            nav_saliencia_raio = nav_scan_size / 2 + nav_cradle_margin
+            nav_area_height    = nav_bar_height + nav_saliencia_raio
+            (a margem de topo do botao e o proprio nav_cradle_margin)
+
+        nav_bar_height e a faixa dos destinos; nav_area_height e ela mais o
+        espaco que a saliencia ocupa acima.
+    -->
+    <dimen name="nav_bar_height">100dp</dimen>
+    <dimen name="nav_icon_size">22dp</dimen>
+    <dimen name="nav_label_text">11sp</dimen>
+    <dimen name="nav_scan_size">70dp</dimen>
+    <dimen name="nav_scan_icon_size">22dp</dimen>
+
+    <!-- Cartoes e listas -->
+    <dimen name="card_corner_radius">16dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_image_height">140dp</dimen>
+    <dimen name="hero_image_height">350dp</dimen>
+    <dimen name="list_item_height">72dp</dimen>
+    <dimen name="avatar_size">96dp</dimen>
+
+    <!-- Grades: no celular uma coluna, no tablet duas -->
+    <integer name="grid_columns">1</integer>
+
+    <!-- Ilustracoes de estado vazio e botao flutuante secundario -->
+    <dimen name="ilustracao_size">160dp</dimen>
+    <dimen name="fab_secundario_size">48dp</dimen>
+
+    <dimen name="chip_height">34dp</dimen>
+
+    <dimen name="nav_bar_corner_radius">24dp</dimen>
+
+    <dimen name="nav_cradle_margin">6dp</dimen>
+
+    <dimen name="nav_stroke_width">1dp</dimen>
+
+    <dimen name="fab_secundario_icon">24dp</dimen>
+
+
+    <!-- Barra mais a parte do botao de scan que sobe: o conteudo para aqui -->
+    <dimen name="nav_area_height">141dp</dimen>
+
+    <!-- Card de produto -->
+    <dimen name="card_produto_imagem">56dp</dimen>
+    <dimen name="card_produto_padding">12dp</dimen>
+    <dimen name="card_produto_imagem_radius">12dp</dimen>
+    <dimen name="selo_padding_h">10dp</dimen>
+    <dimen name="selo_padding_v">4dp</dimen>
+    <dimen name="card_stroke_width">1dp</dimen>
+
+    <dimen name="nav_saliencia_raio">41dp</dimen>
+
+    <!-- Tela de Locais -->
+    <dimen name="local_imagem_size">56dp</dimen>
+    <dimen name="local_imagem_radius">10dp</dimen>
+    <dimen name="header_padding_v">12dp</dimen>
+    <dimen name="divisor_altura">1dp</dimen>
+
+    <!-- Receitas e listas -->
+    <dimen name="receita_imagem_size">48dp</dimen>
+    <dimen name="botao_radius">28dp</dimen>
+    <dimen name="progresso_altura">6dp</dimen>
+
+</resources>

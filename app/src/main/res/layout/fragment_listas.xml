@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Minhas listas (Figma > Protótipos > V1 > Minhas Listas, nodes 625:1317 e 937:811).
+
+    Os dois estados do design convivem no mesmo layout: a lista e o aviso de
+    vazio ocupam a mesma região e se alternam por visibilidade. O botão de criar
+    fica ancorado no fim nos dois casos.
+
+    A barra de navegação não está aqui: ela pertence à MainActivity.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/raiz_listas"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
+    tools:context=".view.fragment.ListasFragment">
+
+    <TextView
+        android:id="@+id/titulo_listas"
+        style="@style/TituloTela"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xl"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:text="@string/listas_titulo"
+        android:textSize="@dimen/text_size_28"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+    <TextView
+        android:id="@+id/subtitulo_listas"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xs"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:text="@string/listas_subtitulo"
+        android:textColor="@color/md_secundary_text"
+        android:textSize="@dimen/text_size_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titulo_listas"
+        app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lista_listas"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:paddingBottom="@dimen/spacing_m"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/btn_criar_lista"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subtitulo_listas"
+        app:layout_constraintWidth_max="@dimen/content_max_width"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_lista" />
+
+    <TextView
+        android:id="@+id/txt_listas_vazia"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:text="@string/listas_vazia"
+        android:textColor="@color/md_secundary_text"
+        android:textSize="@dimen/text_size_14"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/lista_listas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/lista_listas"
+        app:layout_constraintWidth_max="@dimen/content_max_width"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_criar_lista"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:layout_marginBottom="@dimen/spacing_l"
+        android:fontFamily="@font/montserrat_semibold"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/listas_criar"
+        android:textSize="@dimen/text_size_15"
+        app:backgroundTint="@color/md_theme_primary"
+        app:cornerRadius="@dimen/botao_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

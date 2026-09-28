@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Receitas salvas (Figma > Protótipos > V1 > Screen - Receitas, node 625:1757).
+
+    A barra de navegação não está aqui: ela pertence à MainActivity.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/raiz_receitas"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
+    tools:context=".view.fragment.ReceitasFragment">
+
+    <TextView
+        android:id="@+id/titulo_receitas"
+        style="@style/TituloTela"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xl"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:text="@string/receitas_titulo"
+        android:textSize="@dimen/text_size_28"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lista_receitas"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:paddingBottom="@dimen/spacing_m"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titulo_receitas"
+        app:layout_constraintWidth_max="@dimen/content_max_width"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_receita" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,7 @@
         android:fontFamily="@font/huninn"
         android:text="Verificando o código..."
         android:textColor="@color/md_theme_onBackground"
-        android:textSize="28sp"
+        android:textSize="@dimen/text_size_28"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,7 +30,7 @@
         android:fontFamily="@font/huninn"
         android:text="Estamos validando seus dados de segurança"
         android:textColor="@color/md_secundary_text"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_size_15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
@@ -78,7 +78,7 @@
             android:fontFamily="@font/huninn"
             android:text="Quase lá!"
             android:textColor="@color/md_theme_onBackground"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_16"
             android:textStyle="bold" />
 
         <TextView
@@ -92,7 +92,7 @@
             android:text="Isso deve levar apenas alguns segundos. Por favor, não feche o aplicativo."
             android:textAlignment="center"
             android:textColor="@color/md_secundary_text"
-            android:textSize="15sp" />
+            android:textSize="@dimen/text_size_15" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

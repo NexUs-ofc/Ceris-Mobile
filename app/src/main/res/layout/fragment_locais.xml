@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Locais (Figma > Protótipos > V1 > Screen - Locais, node 625:1373).
+
+    Três faixas: o cabeçalho do endereço atual, a lista de estabelecimentos
+    próximos e a barra de navegação.
+
+    O cabeçalho ocupa a largura toda de propósito - ele é uma faixa, com fundo
+    e divisor próprios. É a lista que respeita content_max_width e centraliza
+    no tablet.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/raiz_locais"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
+    tools:context=".view.fragment.LocaisFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cabecalho"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/header_fundo"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingTop="@dimen/header_padding_v"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:paddingBottom="@dimen/header_padding_v"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/rotulo_endereco"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.08"
+            android:text="@string/locais_endereco_atual"
+            android:textAllCaps="true"
+            android:textColor="@color/md_secundary_text"
+            android:textSize="@dimen/text_size_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/icone_endereco"
+            android:layout_width="@dimen/nav_icon_size"
+            android:layout_height="@dimen/nav_icon_size"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:contentDescription="@string/locais_endereco_icone"
+            android:src="@drawable/ic_menu_map_pin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rotulo_endereco"
+            app:tint="@color/md_theme_primary" />
+
+        <TextView
+            android:id="@+id/txt_endereco_atual"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_s"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_semibold"
+            android:maxLines="1"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintBottom_toBottomOf="@id/icone_endereco"
+            app:layout_constraintEnd_toStartOf="@id/btn_alterar"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/icone_endereco"
+            app:layout_constraintTop_toTopOf="@id/icone_endereco"
+            tools:text="Rua das Flores, 123 - Centro" />
+
+        <TextView
+            android:id="@+id/btn_alterar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_s"
+            android:background="@drawable/bg_selo_produto"
+            android:backgroundTint="@color/ceris_purple_100"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/montserrat_semibold"
+            android:paddingStart="@dimen/selo_padding_h"
+            android:paddingTop="@dimen/selo_padding_v"
+            android:paddingEnd="@dimen/selo_padding_h"
+            android:paddingBottom="@dimen/selo_padding_v"
+            android:text="@string/locais_alterar"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintBottom_toBottomOf="@id/icone_endereco"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/icone_endereco" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divisor_cabecalho"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/divisor_altura"
+        android:background="@color/header_divisor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cabecalho" />
+
+    <TextView
+        android:id="@+id/titulo_proximos"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:text="@string/locais_proximos"
+        android:textColor="@color/md_theme_onBackground"
+        android:textSize="@dimen/text_size_18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divisor_cabecalho"
+        app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lista_locais"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_m"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:paddingBottom="@dimen/spacing_m"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titulo_proximos"
+        app:layout_constraintWidth_max="@dimen/content_max_width"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_local" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

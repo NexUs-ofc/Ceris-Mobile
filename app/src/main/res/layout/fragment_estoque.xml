@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Tela Inicial - estoque (Figma > Protótipos > V1 > Tela Inicial, node 625:1236).
+
+    A navegação é um bloco único no fim da tela: o botão de scan é filho dela,
+    não um elemento ancorado por cima.
+
+    Adaptação: o conteúdo cresce até content_max_width e centraliza, e a grade
+    de produtos passa de 1 para 2 colunas no tablet. A barra segue de largura
+    total nos dois, como no design.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/raiz_estoque"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
+    tools:context=".view.fragment.EstoqueFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/conteudo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal">
+
+        <TextView
+            android:id="@+id/titulo"
+            style="@style/TituloTela"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:text="@string/estoque_titulo"
+            app:layout_constraintEnd_toStartOf="@id/btn_perfil"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_perfil"
+            android:layout_width="@dimen/nav_icon_size"
+            android:layout_height="@dimen/nav_icon_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/estoque_perfil"
+            android:src="@drawable/ic_menu_user"
+            app:layout_constraintBottom_toBottomOf="@id/titulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/titulo"
+            app:tint="@color/md_theme_primary" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campo_busca"
+            style="@style/InputStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/field_height"
+            android:layout_marginTop="@dimen/spacing_m"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titulo"
+            app:layout_constraintWidth_max="@dimen/content_max_width"
+            app:startIconDrawable="@drawable/ic_menu_search"
+            app:startIconTint="@color/md_theme_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_busca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/estoque_busca_hint"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:textColor="@color/md_theme_onBackground"
+                android:textColorHint="@color/md_theme_hint"
+                android:textSize="@dimen/text_size_14" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/filtros"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/campo_busca"
+            app:layout_constraintWidth_max="@dimen/content_max_width">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/grupo_filtros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/filtro_todos"
+                    style="@style/FiltroChip"
+                    android:checked="true"
+                    android:text="@string/estoque_filtro_todos" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/filtro_vencendo"
+                    style="@style/FiltroChip"
+                    android:text="@string/estoque_filtro_vencendo" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/filtro_carnes"
+                    style="@style/FiltroChip"
+                    android:text="@string/estoque_filtro_carnes" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/filtro_congelados"
+                    style="@style/FiltroChip"
+                    android:text="@string/estoque_filtro_congelados" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lista_produtos"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:clipToPadding="false"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filtros"
+            app:layout_constraintWidth_max="@dimen/content_max_width"
+            app:spanCount="@integer/grid_columns"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_produto"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/estado_vazio"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filtros">
+
+            <ImageView
+                android:id="@+id/img_vazio"
+                android:layout_width="@dimen/ilustracao_size"
+                android:layout_height="@dimen/ilustracao_size"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/estoque_vazio"
+                android:scaleType="fitCenter"
+                android:src="@drawable/img_despensa_vazia" />
+
+            <TextView
+                android:id="@+id/txt_vazio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_m"
+                android:text="@string/estoque_vazio"
+                android:textColor="@color/md_secundary_text"
+                android:textSize="@dimen/text_size_14" />
+
+        </LinearLayout>
+
+        <!-- Assistente: 48dp, círculo, ícone 24dp centralizado. -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_assistente"
+            android:layout_width="@dimen/fab_secundario_size"
+            android:layout_height="@dimen/fab_secundario_size"
+            android:layout_marginBottom="@dimen/spacing_m"
+            android:contentDescription="@string/estoque_assistente"
+            app:backgroundTint="@color/md_theme_primary"
+            app:borderWidth="0dp"
+            app:fabCustomSize="@dimen/fab_secundario_size"
+            app:shapeAppearanceOverlay="@style/FormaCirculo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="@dimen/fab_secundario_icon"
+            app:srcCompat="@drawable/ic_menu_wand_sparkles"
+            app:tint="@color/md_theme_onPrimary" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

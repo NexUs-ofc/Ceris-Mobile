@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Chips de filtro (Figma > Protótipos > V1 > Tela Inicial).
+
+    Inativo: fundo branco, contorno e texto roxos.
+    Ativo: preenchido com o roxo da identidade e texto branco.
+
+    O contorno e o texto trocam pelo mesmo seletor, então basta marcar o chip
+    para ele inverter — não há estilo separado para o selecionado.
+-->
+<resources>
+
+    <style name="FiltroChip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextoFiltroChip</item>
+        <item name="android:checkable">true</item>
+        <item name="android:textColor">@color/chip_texto</item>
+        <item name="chipBackgroundColor">@color/chip_fundo</item>
+        <item name="chipStrokeColor">@color/md_theme_primary</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipCornerRadius">@dimen/field_corner_radius</item>
+        <item name="chipMinHeight">@dimen/chip_height</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="closeIconVisible">false</item>
+        <item name="rippleColor">@color/ceris_purple_200</item>
+    </style>
+
+</resources>

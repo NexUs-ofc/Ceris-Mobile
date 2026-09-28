@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fundo do chip: roxo solido quando marcado, branco quando nao. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/md_theme_primary" android:state_checked="true" />
+    <item android:color="@color/md_theme_surface" />
+</selector>

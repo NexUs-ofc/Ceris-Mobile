@@ -41,4 +41,26 @@
     <color name="md_theme_onError">@color/ceris_white</color>
     <color name="md_theme_errorContainer">#FFDAD5</color>
     <color name="md_theme_onErrorContainer">#73342D</color>
+    <!-- Card de produto -->
+    <color name="card_contorno">#EDEDF2</color>
+
+    <!-- Selos de situacao do produto -->
+    <color name="selo_fresco_fundo">#D6F5E3</color>
+    <color name="selo_fresco_texto">#0E8A4F</color>
+    <color name="selo_vencendo_fundo">#FDEBD3</color>
+    <color name="selo_vencendo_texto">#A5610B</color>
+    <color name="selo_vencido_fundo">#FFDAD5</color>
+    <color name="selo_vencido_texto">#73342D</color>
+    <!-- Icone e rotulo inativos da barra: o mesmo cinza dos icones do Figma -->
+    <color name="nav_contorno">#737380</color>
+
+    <!-- Traco do topo da barra: cinza claro, bem mais fraco que o texto -->
+    <color name="nav_traco">#E2E2E9</color>
+    <!-- Tela de Locais -->
+    <color name="header_fundo">#FAFAFA</color>
+    <color name="header_divisor">#EDEDF2</color>
+    <color name="local_distancia_fundo">#E3EDFB</color>
+    <color name="local_distancia_texto">#1F4B8E</color>
+    <!-- Barra de progresso das listas -->
+    <color name="progresso_trilho">#EDE3FA</color>
 </resources>

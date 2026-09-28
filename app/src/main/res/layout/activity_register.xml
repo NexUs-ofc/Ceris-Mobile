@@ -15,7 +15,7 @@
         android:layout_marginTop="50dp"
         android:text="Bem-Vindo(a)!"
         android:textColor="@color/md_theme_onBackground"
-        android:textSize="36sp"
+        android:textSize="@dimen/text_size_36"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
         android:layout_marginTop="125dp"
         android:textColor="@color/md_theme_onBackground"
         android:text="Cadastre sua família!"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_size_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,8 +35,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/etl_nome"
         style="@style/InputStyle"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/field_width"
+        android:layout_height="@dimen/field_height"
         android:layout_marginTop="165dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,13 +51,13 @@
             android:hint="Nome da família"
             android:textColor="@color/md_theme_onBackground"
             android:textColorHint="@color/md_theme_hint"
-            android:textSize="13sp" />
+            android:textSize="@dimen/text_size_13" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/etl_email"
         style="@style/InputStyle"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/field_width"
+        android:layout_height="@dimen/field_height"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,13 +72,13 @@
             android:textColorHint="@color/md_theme_hint"
             android:inputType="textEmailAddress"
             android:hint="Endereço de e-mail"
-            android:textSize="13sp" />
+            android:textSize="@dimen/text_size_13" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etl_senha"
             style="@style/InputStyle"
-            android:layout_width="350dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/field_width"
+            android:layout_height="@dimen/field_height"
             android:layout_marginTop="8dp"
             app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,18 +95,18 @@
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
                 android:hint="Senha"
-                android:textSize="13sp" />
+                android:textSize="@dimen/text_size_13" />
         </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/registerBtn"
-        android:layout_width="350dp"
+        android:layout_width="@dimen/field_width"
         android:layout_height="50dp"
         android:layout_marginTop="390dp"
         android:backgroundTint="@color/md_theme_primary"
         android:text="Continuar"
         android:textColor="@color/md_theme_onPrimary"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_18"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -139,7 +139,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="350dp"
+        android:layout_width="@dimen/field_width"
         android:layout_height="wrap_content"
         android:layout_marginTop="491dp"
         android:gravity="center"
@@ -163,7 +163,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/md_theme_primary"
             android:text="Ou"
-           android:textSize="15sp" />
+           android:textSize="@dimen/text_size_15" />
 
         <View
             android:id="@+id/divider3"
@@ -181,7 +181,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="524dp"
         android:text="Cadastrar com:"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_size_15"
         android:textColor="@color/md_theme_onBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -201,7 +201,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
-        android:layout_height="350dp"
+        android:layout_height="@dimen/hero_image_height"
         android:layout_marginEnd="-50dp"
         android:layout_marginBottom="-80dp"
         android:scaleType="centerCrop"

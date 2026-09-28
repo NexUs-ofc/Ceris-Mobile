@@ -17,7 +17,7 @@
         android:fontFamily="@font/huninn"
         android:text="Entrando..."
         android:textColor="@color/md_theme_onBackground"
-        android:textSize="28sp"
+        android:textSize="@dimen/text_size_28"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,7 +65,7 @@
             android:maxLines="1"
             android:text="Aguarde um momento"
             android:textColor="@color/md_theme_onBackground"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_16"
             android:textStyle="bold" />
 
         <TextView
@@ -78,13 +78,13 @@
             android:maxLines="1"
             android:text="Estamos validando suas credenciais"
             android:textColor="@color/md_secundary_text"
-            android:textSize="15sp" />
+            android:textSize="@dimen/text_size_15" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/backgroundPattern"
         android:layout_width="0dp"
-        android:layout_height="350dp"
+        android:layout_height="@dimen/hero_image_height"
         android:layout_marginEnd="-25dp"
         android:layout_marginBottom="-100dp"
         android:scaleType="centerCrop"
