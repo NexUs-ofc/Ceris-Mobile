@@ -56,10 +56,15 @@
     <integer name="grid_columns">2</integer>
 
     <!-- Ilustracoes de estado vazio e botao flutuante secundario -->
-    <dimen name="ilustracao_size">220dp</dimen>
+    <dimen name="ilustracao_size">160dp</dimen>
     <dimen name="fab_secundario_size">58dp</dimen>
 
-    <dimen name="chip_height">42dp</dimen>
+    <dimen name="chip_height">46dp</dimen>
+    <dimen name="chip_padding_h">22dp</dimen>
+
+    <dimen name="busca_radius">16dp</dimen>
+    <dimen name="nav_indicador_size">48dp</dimen>
+    <dimen name="alterar_radius">10dp</dimen>
 
     <dimen name="nav_bar_corner_radius">28dp</dimen>
 

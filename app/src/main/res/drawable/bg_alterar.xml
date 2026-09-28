@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Botão "Alterar" do cabeçalho de Locais.
+
+    Tem shape próprio porque no design ele não é uma pílula como os selos de
+    situação do produto: o arredondamento é bem menor.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/ceris_purple_100" />
+
+    <corners android:radius="@dimen/alterar_radius" />
+
+</shape>

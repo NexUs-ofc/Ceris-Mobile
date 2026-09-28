@@ -29,11 +29,19 @@
         <item name="android:textSize">@dimen/nav_label_text</item>
     </style>
 
-    <!-- Texto dos chips de filtro: semi bold nos dois estados. -->
+    <!-- Texto dos chips de filtro: bold nos dois estados. -->
     <style name="TextoFiltroChip" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <!-- Titulo de secao dentro da tela: "Supermercados proximos", "Receitas salvas". -->
+    <style name="TituloSecao">
         <item name="android:fontFamily">@font/montserrat_semibold</item>
         <item name="fontFamily">@font/montserrat_semibold</item>
-        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:textColor">@color/md_theme_onBackground</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
     </style>
 
 </resources>

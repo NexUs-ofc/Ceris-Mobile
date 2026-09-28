@@ -69,10 +69,20 @@
     <integer name="grid_columns">1</integer>
 
     <!-- Ilustracoes de estado vazio e botao flutuante secundario -->
-    <dimen name="ilustracao_size">160dp</dimen>
+    <dimen name="ilustracao_size">120dp</dimen>
     <dimen name="fab_secundario_size">48dp</dimen>
 
-    <dimen name="chip_height">34dp</dimen>
+    <dimen name="chip_height">38dp</dimen>
+    <dimen name="chip_padding_h">18dp</dimen>
+
+    <!-- Campo de busca: retangulo arredondado, nao pilula como os do login -->
+    <dimen name="busca_radius">14dp</dimen>
+
+    <!-- Fundo circular do destino ativo da barra -->
+    <dimen name="nav_indicador_size">40dp</dimen>
+
+    <!-- Pilula do "Alterar" em Locais -->
+    <dimen name="alterar_radius">8dp</dimen>
 
     <dimen name="nav_bar_corner_radius">24dp</dimen>
 

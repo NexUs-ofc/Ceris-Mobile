@@ -55,7 +55,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/campo_busca"
-            style="@style/InputStyle"
+            style="@style/BuscaInputStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/field_height"
             android:layout_marginTop="@dimen/spacing_m"
@@ -64,7 +64,7 @@
             app:layout_constraintTop_toBottomOf="@id/titulo"
             app:layout_constraintWidth_max="@dimen/content_max_width"
             app:startIconDrawable="@drawable/ic_menu_search"
-            app:startIconTint="@color/md_theme_hint">
+            app:startIconTint="@color/ceris_cinza">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_busca"
@@ -74,7 +74,7 @@
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:textColor="@color/md_theme_onBackground"
-                android:textColorHint="@color/md_theme_hint"
+                android:textColorHint="@color/ceris_cinza"
                 android:textSize="@dimen/text_size_14" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -90,10 +90,17 @@
             app:layout_constraintTop_toBottomOf="@id/campo_busca"
             app:layout_constraintWidth_max="@dimen/content_max_width">
 
+            <!--
+                HorizontalScrollView é um FrameLayout, então layout_gravity
+                centraliza os chips quando eles cabem na largura. Quando não
+                cabem, o filho passa a ser mais largo que a viewport e a rolagem
+                volta a valer — sem precisar de fillViewport.
+            -->
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/grupo_filtros"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 app:singleLine="true"
                 app:singleSelection="true">
 

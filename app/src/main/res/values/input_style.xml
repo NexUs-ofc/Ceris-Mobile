@@ -10,4 +10,18 @@
         <item name="hintEnabled">false</item>
     </style>
 
+    <!--
+        Campo de busca da tela inicial. Nao herda o raio de 30dp do InputStyle:
+        no design ele e um retangulo arredondado, e os campos do login e que sao
+        pilulas. Por isso e um estilo proprio, e nao uma mudanca no InputStyle.
+    -->
+    <style name="BuscaInputStyle" parent="InputStyle">
+        <item name="boxCornerRadiusBottomEnd">@dimen/busca_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/busca_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/busca_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/busca_radius</item>
+        <item name="boxStrokeColor">@color/ceris_cinza_claro</item>
+        <item name="boxStrokeWidth">1dp</item>
+    </style>
+
 </resources>

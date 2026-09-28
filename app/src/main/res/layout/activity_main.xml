@@ -40,6 +40,7 @@
             android:layout_gravity="bottom"
             android:background="@android:color/transparent"
             app:elevation="0dp"
+            app:itemActiveIndicatorStyle="@style/IndicadorNavAtivo"
             app:itemIconSize="@dimen/nav_icon_size"
             app:itemIconTint="@color/nav_item_tint"
             app:itemTextAppearanceActive="@style/RotuloNavAtivo"
