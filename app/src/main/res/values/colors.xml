@@ -63,4 +63,10 @@
     <color name="local_distancia_texto">#1F4B8E</color>
     <!-- Barra de progresso das listas -->
     <color name="progresso_trilho">#EDE3FA</color>
+    <!-- Lista de compras -->
+    <color name="lista_painel_fundo">#F3EDFB</color>
+    <color name="lista_item_concluido">#9A94A8</color>
+    <color name="campo_contorno">#D9D0E8</color>
+    <color name="stepper_fundo">#F3EDFB</color>
+    <color name="sheet_alca">#D9D0E8</color>
 </resources>

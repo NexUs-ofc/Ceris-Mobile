@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Linha de item da lista de compras.
+
+    Caixa à esquerda, nome e quantidade no meio, valor à direita. O item
+    concluído fica cinza; quem troca a cor é o adapter.
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_s"
+    app:cardBackgroundColor="@color/md_theme_surface"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/card_contorno"
+    app:strokeWidth="@dimen/card_stroke_width">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/item_lista_padding">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/check_item"
+            android:layout_width="@dimen/item_check_size"
+            android:layout_height="@dimen/item_check_size"
+            app:buttonTint="@color/check_item_tint"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:useMaterialThemeColors="false" />
+
+        <TextView
+            android:id="@+id/txt_nome_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_semibold"
+            android:maxLines="1"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_15"
+            app:layout_constraintEnd_toStartOf="@id/txt_valor_item"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/check_item"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Tomate" />
+
+        <TextView
+            android:id="@+id/txt_quantidade_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/md_secundary_text"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintEnd_toEndOf="@id/txt_nome_item"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/txt_nome_item"
+            app:layout_constraintTop_toBottomOf="@id/txt_nome_item"
+            tools:text="6 unidades" />
+
+        <TextView
+            android:id="@+id/txt_valor_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_s"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="R$ 14,90" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
