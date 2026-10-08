@@ -54,6 +54,7 @@ android {
         val camposObrigatorios =
             mapOf(
                 "GOOGLE_WEB_CLIENT_ID" to "PREENCHER",
+                "CORE_API_BASE_URL" to "https://ceris-core.vercel.app/",
             )
 
         camposObrigatorios.forEach { (nome, reserva) ->

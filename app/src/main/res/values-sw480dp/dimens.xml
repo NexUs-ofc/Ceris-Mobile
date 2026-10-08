@@ -99,4 +99,25 @@
     <dimen name="botao_radius">32dp</dimen>
     <dimen name="progresso_altura">8dp</dimen>
 
+    <!-- Lista de compras -->
+    <dimen name="lista_painel_padding">18dp</dimen>
+    <dimen name="lista_painel_radius">14dp</dimen>
+    <dimen name="lista_cabecalho_text">12sp</dimen>
+    <dimen name="lista_ilustracao_size">180dp</dimen>
+    <dimen name="item_check_size">26dp</dimen>
+    <dimen name="item_lista_padding">16dp</dimen>
+
+    <!-- Formulário de item -->
+    <dimen name="sheet_corner_radius">28dp</dimen>
+    <dimen name="sheet_padding">32dp</dimen>
+    <dimen name="sheet_alca_largura">48dp</dimen>
+    <dimen name="sheet_alca_altura">5dp</dimen>
+    <dimen name="campo_rotulo_text">12sp</dimen>
+    <dimen name="campo_altura">60dp</dimen>
+    <dimen name="campo_radius">14dp</dimen>
+    <dimen name="campo_padding_h">18dp</dimen>
+    <dimen name="stepper_botao_size">40dp</dimen>
+    <dimen name="stepper_icone_size">18dp</dimen>
+    <dimen name="icone_acao_size">28dp</dimen>
+
 </resources>

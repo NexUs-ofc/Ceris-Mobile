@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Formulário de item, aberto por cima do detalhe da lista.
+
+    Rola por dentro: no celular em paisagem o teclado cobre metade da altura e
+    sem rolagem o botão de confirmar fica inalcançável.
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/md_theme_surface"
+    android:clipToPadding="false">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/sheet_padding"
+        android:paddingTop="@dimen/spacing_s"
+        android:paddingEnd="@dimen/sheet_padding"
+        android:paddingBottom="@dimen/sheet_padding">
+
+        <View
+            android:id="@+id/alca"
+            android:layout_width="@dimen/sheet_alca_largura"
+            android:layout_height="@dimen/sheet_alca_altura"
+            android:background="@drawable/bg_sheet_alca"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/titulo_sheet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="@string/item_form_titulo"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/alca" />
+
+        <TextView
+            android:id="@+id/rotulo_nome"
+            style="@style/RotuloCampo"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:text="@string/item_form_nome"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titulo_sheet" />
+
+        <EditText
+            android:id="@+id/campo_nome"
+            style="@style/CampoFormulario"
+            android:autofillHints="name"
+            android:hint="@string/item_form_nome_hint"
+            android:imeOptions="actionNext"
+            android:inputType="textCapSentences"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rotulo_nome" />
+
+        <TextView
+            android:id="@+id/rotulo_quantidade"
+            style="@style/RotuloCampo"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:text="@string/item_form_quantidade"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/campo_nome" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stepper"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/campo_altura"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:background="@drawable/bg_campo_outline"
+            android:paddingStart="@dimen/spacing_s"
+            android:paddingEnd="@dimen/spacing_s"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rotulo_quantidade">
+
+            <ImageButton
+                android:id="@+id/btn_diminuir"
+                android:layout_width="@dimen/stepper_botao_size"
+                android:layout_height="@dimen/stepper_botao_size"
+                android:background="@drawable/bg_stepper_botao"
+                android:contentDescription="@string/item_form_diminuir"
+                android:padding="@dimen/spacing_s"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_menu_minus"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/md_theme_primary" />
+
+            <EditText
+                android:id="@+id/campo_quantidade"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center"
+                android:imeOptions="actionNext"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:textColor="@color/md_theme_onBackground"
+                android:textColorHint="@color/md_theme_hint"
+                android:textSize="@dimen/text_size_15"
+                app:layout_constraintEnd_toStartOf="@id/btn_aumentar"
+                app:layout_constraintStart_toEndOf="@id/btn_diminuir"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1" />
+
+            <ImageButton
+                android:id="@+id/btn_aumentar"
+                android:layout_width="@dimen/stepper_botao_size"
+                android:layout_height="@dimen/stepper_botao_size"
+                android:background="@drawable/bg_stepper_botao"
+                android:contentDescription="@string/item_form_aumentar"
+                android:padding="@dimen/spacing_s"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_menu_plus"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/md_theme_primary" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/rotulo_unidade"
+            style="@style/RotuloCampo"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:text="@string/item_form_unidade"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stepper" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/caixa_unidade"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/campo_altura"
+            android:layout_marginTop="@dimen/spacing_s"
+            app:boxCornerRadiusBottomEnd="@dimen/campo_radius"
+            app:boxCornerRadiusBottomStart="@dimen/campo_radius"
+            app:boxCornerRadiusTopEnd="@dimen/campo_radius"
+            app:boxCornerRadiusTopStart="@dimen/campo_radius"
+            app:boxStrokeColor="@color/campo_contorno"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rotulo_unidade">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/campo_unidade"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="none"
+                android:textColor="@color/md_theme_onBackground"
+                android:textSize="@dimen/text_size_15"
+                tools:text="Unidades" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/rotulo_categoria"
+            style="@style/RotuloCampo"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:text="@string/item_form_categoria"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/caixa_unidade" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/caixa_categoria"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/campo_altura"
+            android:layout_marginTop="@dimen/spacing_s"
+            app:boxCornerRadiusBottomEnd="@dimen/campo_radius"
+            app:boxCornerRadiusBottomStart="@dimen/campo_radius"
+            app:boxCornerRadiusTopEnd="@dimen/campo_radius"
+            app:boxCornerRadiusTopStart="@dimen/campo_radius"
+            app:boxStrokeColor="@color/campo_contorno"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rotulo_categoria">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/campo_categoria"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="none"
+                android:textColor="@color/md_theme_onBackground"
+                android:textSize="@dimen/text_size_15"
+                tools:text="Hortifruti" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/rotulo_valor"
+            style="@style/RotuloCampo"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:text="@string/item_form_valor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/caixa_categoria" />
+
+        <EditText
+            android:id="@+id/campo_valor"
+            style="@style/CampoFormulario"
+            android:hint="@string/item_form_valor_hint"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rotulo_valor" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_confirmar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:fontFamily="@font/montserrat_semibold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/item_form_confirmar"
+            android:textSize="@dimen/text_size_15"
+            app:backgroundTint="@color/md_theme_primary"
+            app:cornerRadius="@dimen/botao_radius"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/campo_valor" />
+
+        <TextView
+            android:id="@+id/btn_cancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/spacing_s"
+            android:text="@string/item_form_cancelar"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_confirmar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -9,15 +9,6 @@
     <color name="ceris_deep_400">#322340</color>
     <color name="ceris_white">#FFFFFF</color>
     <color name="ceris_black">#000000</color>
-
-    <!--
-        Neutros. Ficam na paleta, e nao espalhados pelas telas, para nao
-        aparecerem cinco cinzas parecidos com nomes diferentes.
-    -->
-    <color name="ceris_cinza">#737380</color>
-    <color name="ceris_cinza_claro">#E2E2E9</color>
-    <color name="ceris_linha">#EDEDF2</color>
-    <color name="ceris_fundo_suave">#FAFAFA</color>
     <color name="md_theme_onBackground">@color/ceris_deep_400</color>
     <color name="md_theme_onSurface">@color/ceris_deep_400</color>
     <color name="md_secundary_text">@color/ceris_deep_200</color>
@@ -51,7 +42,7 @@
     <color name="md_theme_errorContainer">#FFDAD5</color>
     <color name="md_theme_onErrorContainer">#73342D</color>
     <!-- Card de produto -->
-    <color name="card_contorno">@color/ceris_linha</color>
+    <color name="card_contorno">#EDEDF2</color>
 
     <!-- Selos de situacao do produto -->
     <color name="selo_fresco_fundo">#D6F5E3</color>
@@ -60,21 +51,22 @@
     <color name="selo_vencendo_texto">#A5610B</color>
     <color name="selo_vencido_fundo">#FFDAD5</color>
     <color name="selo_vencido_texto">#73342D</color>
-    <!-- Icone e rotulo inativos da barra -->
-    <color name="nav_contorno">@color/ceris_cinza</color>
+    <!-- Icone e rotulo inativos da barra: o mesmo cinza dos icones do Figma -->
+    <color name="nav_contorno">#737380</color>
 
-    <!-- Traco do topo da barra: bem mais fraco que o texto -->
-    <color name="nav_traco">@color/ceris_cinza_claro</color>
-
-    <!-- Fundo do destino ativo da barra -->
-    <color name="nav_indicador">@color/ceris_purple_100</color>
-
+    <!-- Traco do topo da barra: cinza claro, bem mais fraco que o texto -->
+    <color name="nav_traco">#E2E2E9</color>
     <!-- Tela de Locais -->
-    <color name="header_fundo">@color/ceris_fundo_suave</color>
-    <color name="header_divisor">@color/ceris_linha</color>
+    <color name="header_fundo">#FAFAFA</color>
+    <color name="header_divisor">#EDEDF2</color>
     <color name="local_distancia_fundo">#E3EDFB</color>
     <color name="local_distancia_texto">#1F4B8E</color>
-
     <!-- Barra de progresso das listas -->
-    <color name="progresso_trilho">@color/ceris_purple_100</color>
+    <color name="progresso_trilho">#EDE3FA</color>
+    <!-- Lista de compras -->
+    <color name="lista_painel_fundo">#F3EDFB</color>
+    <color name="lista_item_concluido">#9A94A8</color>
+    <color name="campo_contorno">#D9D0E8</color>
+    <color name="stepper_fundo">#F3EDFB</color>
+    <color name="sheet_alca">#D9D0E8</color>
 </resources>

@@ -64,8 +64,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Só na primeira criação: em recriação o FragmentManager já restaurou tudo.
+        //
+        // A exibição é chamada direto, e não por selectedItemId: a barra já marca
+        // o primeiro item do menu ao inflar, entao atribuir esse mesmo id nao
+        // muda nada e o listener nunca dispara - o container ficaria vazio.
         if (savedInstanceState == null) {
             barra.selectedItemId = R.id.nav_estoque
+            mostrar(R.id.nav_estoque) { EstoqueFragment() }
         }
     }
 

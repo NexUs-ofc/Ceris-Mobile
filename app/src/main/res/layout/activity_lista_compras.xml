@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Lista de Compras.
+    Detalhe da lista de compras.
 
-    Estrutura adaptativa: o conteudo cresce ate content_max_width e centraliza,
-    em vez de esticar no tablet. Medidas sempre por @dimen.
+    Sem barra de navegação: chega-se aqui pela seta de voltar, a partir da aba
+    Lista. É um empilhamento, não um destino da barra.
 
-    TODO conteudo: montar a partir do Figma (Prototipos > V1 > Lista de Compras).
+    Os dois estados do design convivem no mesmo layout e se alternam por
+    visibilidade: a lista com os itens e o total, ou a ilustração de vazio.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,16 +18,223 @@
     android:background="@color/md_theme_background"
     tools:context=".view.ListaComprasActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/conteudo"
+    <ImageButton
+        android:id="@+id/btn_voltar"
+        android:layout_width="@dimen/icone_acao_size"
+        android:layout_height="@dimen/icone_acao_size"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginTop="@dimen/spacing_xl"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/lista_voltar"
+        android:src="@drawable/ic_menu_arrow_left"
+        app:layout_constraintBottom_toBottomOf="@id/txt_titulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txt_titulo"
+        app:tint="@color/md_theme_primary" />
+
+    <TextView
+        android:id="@+id/txt_titulo"
+        style="@style/TituloTela"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_m"
+        android:layout_marginTop="@dimen/spacing_xl"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="@dimen/text_size_28"
+        app:layout_constraintEnd_toStartOf="@id/btn_renomear"
+        app:layout_constraintStart_toEndOf="@id/btn_voltar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Lista de compras" />
+
+    <ImageButton
+        android:id="@+id/btn_renomear"
+        android:layout_width="@dimen/icone_acao_size"
+        android:layout_height="@dimen/icone_acao_size"
+        android:layout_marginStart="@dimen/spacing_s"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/lista_renomear"
+        android:src="@drawable/ic_menu_pencil"
+        app:layout_constraintBottom_toBottomOf="@id/txt_titulo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txt_titulo"
+        app:tint="@color/md_theme_primary" />
+
+    <TextView
+        android:id="@+id/txt_subtitulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xs"
         android:paddingStart="@dimen/screen_margin_horizontal"
         android:paddingEnd="@dimen/screen_margin_horizontal"
-        app:layout_constraintBottom_toTopOf="parent"
+        android:text="@string/lista_detalhe_subtitulo"
+        android:textColor="@color/md_secundary_text"
+        android:textSize="@dimen/text_size_14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_titulo"
         app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/painel_progresso"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:background="@drawable/bg_painel_progresso"
+        android:padding="@dimen/lista_painel_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_subtitulo"
+        app:layout_constraintWidth_max="@dimen/content_max_width">
+
+        <TextView
+            android:id="@+id/txt_concluidos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintEnd_toStartOf="@id/txt_percentual"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="3 de 7 itens concluídos" />
+
+        <TextView
+            android:id="@+id/txt_percentual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_s"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintBaseline_toBaselineOf="@id/txt_concluidos"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="43%" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/barra_progresso"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s"
+            app:indicatorColor="@color/md_theme_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_concluidos"
+            app:trackColor="@color/progresso_trilho"
+            app:trackCornerRadius="@dimen/progresso_altura"
+            app:trackThickness="@dimen/progresso_altura"
+            tools:progress="43" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lista_itens"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:paddingBottom="@dimen/spacing_s"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/rotulo_total"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/painel_progresso"
+        app:layout_constraintWidth_max="@dimen/content_max_width"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_lista_produto" />
+
+    <ImageView
+        android:id="@+id/img_vazio"
+        android:layout_width="@dimen/lista_ilustracao_size"
+        android:layout_height="@dimen/lista_ilustracao_size"
+        android:contentDescription="@string/lista_ilustracao_vazia"
+        android:scaleType="fitCenter"
+        android:src="@drawable/img_lista_vazia"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/txt_vazio"
+        app:layout_constraintEnd_toEndOf="@id/lista_itens"
+        app:layout_constraintStart_toStartOf="@id/lista_itens"
+        app:layout_constraintTop_toTopOf="@id/lista_itens"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/txt_vazio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_m"
+        android:gravity="center"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:text="@string/lista_sem_itens"
+        android:textColor="@color/md_secundary_text"
+        android:textSize="@dimen/text_size_14"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/lista_itens"
+        app:layout_constraintEnd_toEndOf="@id/lista_itens"
+        app:layout_constraintStart_toStartOf="@id/lista_itens"
+        app:layout_constraintTop_toBottomOf="@id/img_vazio"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/rotulo_total"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="@string/lista_total_estimado"
+        android:textColor="@color/md_theme_onBackground"
+        android:textSize="@dimen/text_size_15"
+        app:layout_constraintBottom_toTopOf="@id/btn_adicionar_item"
+        app:layout_constraintEnd_toStartOf="@id/txt_total"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Total estimado" />
+
+    <TextView
+        android:id="@+id/txt_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_s"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="@color/md_theme_primary"
+        android:textSize="@dimen/text_size_18"
+        app:layout_constraintBaseline_toBaselineOf="@id/rotulo_total"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="R$ 65,29" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_adicionar_item"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:layout_marginBottom="@dimen/spacing_l"
+        android:fontFamily="@font/montserrat_semibold"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/lista_adicionar_item"
+        android:textSize="@dimen/text_size_15"
+        app:backgroundTint="@color/md_theme_primary"
+        app:cornerRadius="@dimen/botao_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+    <!-- Some junto com o total quando a lista está vazia. -->
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/grupo_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="rotulo_total,txt_total" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
