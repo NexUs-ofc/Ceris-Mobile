@@ -11,5 +11,6 @@ local.properties
 
 ### project
 .env
+.claude
 
 */libs.versions.toml

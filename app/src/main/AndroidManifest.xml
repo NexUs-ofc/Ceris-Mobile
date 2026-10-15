@@ -21,6 +21,9 @@
             android:name=".view.LoginLoadingActivity"
             android:exported="false" />
         <activity
+            android:name=".view.GoogleLoadingActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.MainActivity"
             android:exported="false" />
         <activity
@@ -70,6 +73,9 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.ResetPasswordLoadingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ErroActivity"
             android:exported="false" />
         <activity
             android:name=".view.ChatbotActivity"

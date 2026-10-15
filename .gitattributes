@@ -1,0 +1,9 @@
+# Binarios nunca passam por conversao de fim de linha. As quatro Montserrat ja
+# chegaram uma vez como pagina HTML salva com extensao .ttf, e o Android falha
+# em silencio nesse caso: cai na fonte do sistema, com um peso so.
+*.ttf binary
+*.otf binary
+*.png binary
+*.jpg binary
+*.webp binary
+*.pdf binary

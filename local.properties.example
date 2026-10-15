@@ -1,0 +1,26 @@
+# Modelo do local.properties, que nao vai para o repositorio.
+#
+# Copie para local.properties e preencha. Toda chave daqui vira campo do
+# BuildConfig; o que faltar cai na reserva definida em app/build.gradle.kts,
+# e o app abre avisando em vez de fechar sozinho.
+#
+# Os enderecos nao tem reserva de proposito: um endereco antigo no codigo faz
+# o app falar com um host morto em silencio. Sem a chave, a tela diz que a API
+# nao responde.
+
+sdk.dir=C\:\\Users\\SEU_USUARIO\\AppData\\Local\\Android\\Sdk
+
+# Barra no fim e opcional: o ApiBaseUrl acrescenta se faltar.
+AUTH_API_BASE_URL=https://endereco-do-auth/
+CORE_API_BASE_URL=https://endereco-da-core/
+
+# Publico e estavel, raramente muda.
+VIA_CEP_URL=https://viacep.com.br/
+
+# Mesma chave que o Auth valida no cabecalho X-API-Key.
+API_KEY=PREENCHER
+
+# Client ID web do projeto no Google Cloud, nao o do Android.
+GOOGLE_WEB_CLIENT_ID=PREENCHER
+
+ACCOUNT_TYPE=HOUSEHOLD
