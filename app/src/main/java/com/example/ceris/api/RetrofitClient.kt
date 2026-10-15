@@ -1,6 +1,8 @@
 package com.example.ceris.api
 
 import com.example.ceris.BuildConfig
+import com.example.ceris.local.SessionManager
+import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,6 +12,11 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
     private val retrofitInstances = mutableMapOf<String, Retrofit>()
+
+    private val retrofitAutenticados = mutableMapOf<String, Retrofit>()
+
+    @Volatile
+    private var renovador: Authenticator? = null
 
     private val httpClient: OkHttpClient by lazy {
         val logging = HttpLoggingInterceptor().apply {
@@ -26,11 +33,48 @@ object RetrofitClient {
             .build()
     }
 
+    /**
+     * Liga a renovação automática de sessão. Chamada uma vez, na abertura do
+     * app, porque precisa de um Context para o SessionManager.
+     *
+     * O cliente que renova é o comum, sem Authenticator: se o próprio
+     * /token/refresh respondesse 401, um cliente com renovação tentaria
+     * renovar a renovação, em círculo.
+     */
+    fun configurarRenovacao(sessionManager: SessionManager) {
+        renovador = RenovadorDeSessao(
+            sessionManager = sessionManager,
+            api = getApi(ApiBaseUrl.auth, AuthAPI::class.java)
+        )
+
+        // Quem foi criado antes disto ficou sem renovação; refazer o cache
+        // evita depender da ordem em que as telas pedem sua API.
+        retrofitAutenticados.clear()
+    }
+
     private fun getRetrofit(baseUrl: String): Retrofit {
         return retrofitInstances.getOrPut(baseUrl) {
             Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(httpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        }
+    }
+
+    private fun getRetrofitAutenticado(baseUrl: String): Retrofit {
+        val autenticador = renovador ?: return getRetrofit(baseUrl)
+
+        return retrofitAutenticados.getOrPut(baseUrl) {
+            Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(
+                    // newBuilder reaproveita pool de conexões e interceptors
+                    // do cliente comum; muda só a renovação.
+                    httpClient.newBuilder()
+                        .authenticator(autenticador)
+                        .build()
+                )
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }
@@ -43,4 +87,14 @@ object RetrofitClient {
         return getRetrofit(baseUrl).create(api)
     }
 
+    /**
+     * Para as APIs que exigem Bearer: um 401 renova a sessão e repete a
+     * chamada sozinho, sem a tela precisar saber.
+     */
+    fun <T> getApiAutenticada(
+        baseUrl: String,
+        api: Class<T>
+    ): T {
+        return getRetrofitAutenticado(baseUrl).create(api)
+    }
 }

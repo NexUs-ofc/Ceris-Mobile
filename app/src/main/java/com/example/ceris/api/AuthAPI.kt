@@ -10,6 +10,8 @@ import com.example.ceris.model.dto.PasswordLoginRequest
 import com.example.ceris.model.dto.PasswordLoginResponse
 import com.example.ceris.model.dto.PasswordRegisterRequest
 import com.example.ceris.model.dto.PasswordRegisterResponse
+import com.example.ceris.model.dto.RefreshRequest
+import com.example.ceris.model.dto.RefreshSessionResponse
 import com.example.ceris.model.dto.ResetPasswordRequest
 import com.example.ceris.model.dto.VerifyPasswordResetRequest
 import com.example.ceris.model.dto.VerifyPasswordResetResponse
@@ -69,4 +71,13 @@ interface AuthAPI {
         @Header("X-API-Key") apiKey: String,
         @Body req: GoogleRegistrationRequest
     ): Call<GoogleSessionResponse>
+
+    // O access token vale 15 minutos (ACCESS_TOKEN_TTL do NexUs-Auth) e o
+    // refresh vale 30 dias. Sem esta chamada a sessao morria a cada 15 min e
+    // o refresh token guardado no aparelho nunca servia para nada.
+    @POST("/api/auth/token/refresh")
+    fun refreshSession(
+        @Header("X-API-Key") apiKey: String,
+        @Body req: RefreshRequest
+    ): Call<RefreshSessionResponse>
 }
