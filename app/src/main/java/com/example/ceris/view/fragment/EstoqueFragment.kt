@@ -1,10 +1,12 @@
 package com.example.ceris.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.example.ceris.R
+import com.example.ceris.view.ChatbotActivity
 import com.example.ceris.view.MainActivity
 
 /**
@@ -18,10 +20,18 @@ class EstoqueFragment : Fragment(R.layout.fragment_estoque) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        val btnAssistente = view.findViewById<ImageButton>(R.id.btn_assistente)
+        btnAssistente.setOnClickListener {
+            val intent = Intent(activity, ChatbotActivity::class.java)
+            startActivity(intent)
+        }
+
         // O perfil exibe a barra sem ser um destino dela, então quem troca o
         // conteúdo é a Activity: o fragment não mexe no FragmentManager dela.
         view.findViewById<ImageButton>(R.id.btn_perfil).setOnClickListener {
             (activity as? MainActivity)?.abrirPerfil()
+
         }
     }
 }

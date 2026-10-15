@@ -2,7 +2,7 @@ package com.example.ceris.viewmodel
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
-import com.example.ceris.BuildConfig
+import com.example.ceris.api.ApiBaseUrl
 import com.example.ceris.api.AuthAPI
 import com.example.ceris.api.RetrofitClient
 import com.example.ceris.local.SessionManager
@@ -10,9 +10,10 @@ import com.example.ceris.model.Channel
 import com.example.ceris.model.dto.ApiError
 import com.example.ceris.model.dto.PasswordLoginRequest
 import com.example.ceris.repository.AuthRepository
+import com.example.ceris.util.mensagemDeFalha
 
 class LoginViewModel : ViewModel() {
-    private val authURL = BuildConfig.AUTH_API_BASE_URL
+    private val authURL = ApiBaseUrl.auth
     private val api = RetrofitClient.getApi(authURL, AuthAPI::class.java)
     private lateinit var authRepository: AuthRepository
 
@@ -78,7 +79,7 @@ class LoginViewModel : ViewModel() {
                 listener.makeText(errorMessageFor(statusCode, errorBody))
             },
             onFailure = { throwable ->
-                listener.makeText("Um erro inesperado aconteceu: ${throwable.message}")
+                listener.makeText(mensagemDeFalha(throwable))
             }
         )
     }

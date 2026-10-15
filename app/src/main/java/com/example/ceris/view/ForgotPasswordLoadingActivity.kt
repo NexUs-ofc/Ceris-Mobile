@@ -2,7 +2,6 @@ package com.example.ceris.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +17,9 @@ class ForgotPasswordLoadingActivity : AppCompatActivity(), RecoverPasswordViewMo
 
     companion object {
         const val EXTRA_EMAIL = "extra_email"
+
+        /** Motivo da falha, devolvido para a tela anterior mostrar no campo. */
+        const val EXTRA_ERRO = "extra_erro"
     }
 
     private val viewModel: RecoverPasswordViewModel by viewModels()
@@ -44,8 +46,12 @@ class ForgotPasswordLoadingActivity : AppCompatActivity(), RecoverPasswordViewMo
         viewModel.forgotPassword(email)
     }
 
+    /**
+     * A tela de espera nao tem onde escrever e sai de cena assim que a resposta
+     * chega: devolve o motivo para quem a abriu mostrar embaixo do campo.
+     */
     override fun makeText(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        setResult(RESULT_OK, Intent().putExtra(EXTRA_ERRO, message))
         finish()
     }
 

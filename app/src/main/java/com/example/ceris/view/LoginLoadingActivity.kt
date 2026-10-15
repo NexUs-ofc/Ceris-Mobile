@@ -2,7 +2,6 @@ package com.example.ceris.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +17,9 @@ class LoginLoadingActivity : AppCompatActivity(), LoginViewModel.Listener {
     companion object {
         const val EXTRA_EMAIL = "extra_email"
         const val EXTRA_PASSWORD = "extra_password"
+
+        /** Motivo da falha, devolvido para a tela de login mostrar no campo. */
+        const val EXTRA_ERRO = "extra_erro"
     }
 
     private val viewModel: LoginViewModel by viewModels()
@@ -50,9 +52,13 @@ class LoginLoadingActivity : AppCompatActivity(), LoginViewModel.Listener {
         super.onDestroy()
     }
 
+    /**
+     * Esta tela nao tem onde escrever: ela e so a espera, e sai de cena assim
+     * que a resposta chega. Entao devolve o motivo para quem a abriu — o
+     * login, que sabe em qual campo pendurar a mensagem.
+     */
     override fun makeText(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT)
-            .show()
+        setResult(RESULT_OK, Intent().putExtra(EXTRA_ERRO, message))
         finish()
     }
 
