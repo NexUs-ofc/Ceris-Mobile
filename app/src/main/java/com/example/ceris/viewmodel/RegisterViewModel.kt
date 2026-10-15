@@ -2,7 +2,7 @@ package com.example.ceris.viewmodel
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
-import com.example.ceris.BuildConfig
+import com.example.ceris.api.ApiBaseUrl
 import com.example.ceris.api.AuthAPI
 import com.example.ceris.api.RetrofitClient
 import com.example.ceris.api.ViaCEPAPI
@@ -14,11 +14,12 @@ import com.example.ceris.model.dto.ViaCEPResponse
 import com.example.ceris.model.dto.VerifyRegistrationRequest
 import com.example.ceris.repository.AuthRepository
 import com.example.ceris.repository.ViaCEPRepository
+import com.example.ceris.util.mensagemDeFalha
 
 class RegisterViewModel: ViewModel() {
-    private val authURL = BuildConfig.AUTH_API_BASE_URL
+    private val authURL = ApiBaseUrl.auth
     private val api = RetrofitClient.getApi(authURL, AuthAPI::class.java)
-    private val viaCEPURL = BuildConfig.VIA_CEP_URL
+    private val viaCEPURL = ApiBaseUrl.viaCep
     private val viaCEPApi = RetrofitClient.getApi(viaCEPURL, ViaCEPAPI::class.java)
     private var passwordRegisterDTO = PasswordRegisterDTO()
     private lateinit var authRepository: AuthRepository
@@ -138,7 +139,7 @@ class RegisterViewModel: ViewModel() {
                 listener.makeText(errorMessageFor(statusCode, errorBody))
             },
             onFailure = { throwable ->
-                listener.makeText("Um erro inesperado aconteceu: ${throwable.message}")
+                listener.makeText(mensagemDeFalha(throwable))
             }
         )
 
@@ -172,7 +173,7 @@ class RegisterViewModel: ViewModel() {
                 listener.makeText(text)
             },
             onFailure = { throwable ->
-                listener.makeText("Um erro inesperado aconteceu: ${throwable.message}")
+                listener.makeText(mensagemDeFalha(throwable))
             }
         )
     }

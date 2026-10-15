@@ -28,6 +28,20 @@
     </style>
 
 
+    <!--
+        Fundo do destino ativo. O padrão do Material3 é uma pílula larga; o
+        design pede um círculo em volta do ícone, então largura e altura são
+        iguais e a forma vem do FormaCirculo.
+    -->
+    <style name="IndicadorNavAtivo" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:width">@dimen/nav_indicador_size</item>
+        <item name="android:height">@dimen/nav_indicador_size</item>
+        <item name="android:color">@color/nav_indicador</item>
+        <item name="marginHorizontal">0dp</item>
+        <item name="shapeAppearance">@style/FormaCirculo</item>
+    </style>
+
+
     <!-- Foto do estabelecimento: cantos arredondados nos quatro lados. -->
     <style name="FormaImagemLocal">
         <item name="cornerFamily">rounded</item>

@@ -11,7 +11,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/md_theme_surface"
     android:clipToPadding="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +19,7 @@
         android:paddingStart="@dimen/sheet_padding"
         android:paddingTop="@dimen/spacing_s"
         android:paddingEnd="@dimen/sheet_padding"
-        android:paddingBottom="@dimen/sheet_padding">
+        android:paddingBottom="@dimen/sheet_padding_bottom">
 
         <View
             android:id="@+id/alca"
@@ -36,7 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_l"
-            android:fontFamily="@font/montserrat_semibold"
+            android:fontFamily="@font/huninn"
             android:text="@string/item_form_titulo"
             android:textColor="@color/md_theme_onBackground"
             android:textSize="@dimen/text_size_20"
@@ -140,12 +139,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/stepper" />
 
+        <!--
+            A altura fica no campo, nao na caixa.
+
+            O estilo do dropdown do Material traz 17dp de enchimento em cima e
+            embaixo. Com a caixa presa em 52dp e o campo em match_parent sobravam
+            18dp para a linha de texto — e a linha da Montserrat em 15sp mede
+            18,3dp. Enquanto as fontes estavam quebradas o aparelho desenhava
+            Roboto, que cabia; com a Montserrat de volta o TextView passou a
+            cortar a sobra, e so se via nas palavras com descida: Acougue,
+            Laticinios, Higiene.
+
+            Agora a caixa envolve o campo, o campo tem os 52dp do design e o
+            texto fica centrado neles, sem enchimento para espremer a linha.
+        -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/caixa_unidade"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
-            android:layout_height="@dimen/campo_altura"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_s"
+            app:hintEnabled="false"
             app:boxCornerRadiusBottomEnd="@dimen/campo_radius"
             app:boxCornerRadiusBottomStart="@dimen/campo_radius"
             app:boxCornerRadiusTopEnd="@dimen/campo_radius"
@@ -158,10 +172,16 @@
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/campo_unidade"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/campo_altura"
+                android:gravity="center_vertical"
                 android:inputType="none"
+                android:maxLines="1"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
                 android:textColor="@color/md_theme_onBackground"
+                android:popupBackground="@color/md_theme_surface"
                 android:textSize="@dimen/text_size_15"
+                app:simpleItemSelectedColor="@color/selecao_item"
                 tools:text="Unidades" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -178,8 +198,9 @@
             android:id="@+id/caixa_categoria"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
-            android:layout_height="@dimen/campo_altura"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_s"
+            app:hintEnabled="false"
             app:boxCornerRadiusBottomEnd="@dimen/campo_radius"
             app:boxCornerRadiusBottomStart="@dimen/campo_radius"
             app:boxCornerRadiusTopEnd="@dimen/campo_radius"
@@ -192,10 +213,16 @@
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/campo_categoria"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/campo_altura"
+                android:gravity="center_vertical"
                 android:inputType="none"
+                android:maxLines="1"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
                 android:textColor="@color/md_theme_onBackground"
+                android:popupBackground="@color/md_theme_surface"
                 android:textSize="@dimen/text_size_15"
+                app:simpleItemSelectedColor="@color/selecao_item"
                 tools:text="Hortifruti" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -227,6 +254,7 @@
             android:fontFamily="@font/montserrat_semibold"
             android:insetTop="0dp"
             android:insetBottom="0dp"
+            android:textColor="@color/md_theme_onPrimary"
             android:text="@string/item_form_confirmar"
             android:textSize="@dimen/text_size_15"
             app:backgroundTint="@color/md_theme_primary"

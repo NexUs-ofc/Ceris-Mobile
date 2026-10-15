@@ -7,8 +7,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,6 +17,8 @@ import com.example.ceris.R
 import com.example.ceris.local.SessionManager
 import com.example.ceris.view.utils.hideKeyboard
 import com.example.ceris.view.utils.hideNavigationBar
+import com.example.ceris.view.utils.mostrarErro
+import com.google.android.material.textfield.TextInputLayout
 import com.example.ceris.viewmodel.RecoverPasswordViewModel
 
 /**
@@ -69,13 +71,23 @@ class ForgotPasswordActivity : AppCompatActivity(), RecoverPasswordViewModel.Lis
         voltarBtn.setOnClickListener { finish() }
     }
 
+    // Um campo so na tela: toda mensagem pertence a ele.
     override fun makeText(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        findViewById<TextInputLayout>(R.id.etl_email).mostrarErro(message)
     }
 
     override fun operationCompleted() {
         val intent = Intent(this, ForgotPasswordLoadingActivity::class.java)
         intent.putExtra(ForgotPasswordLoadingActivity.EXTRA_EMAIL, emailInput.text.toString())
-        startActivity(intent)
+        enviarCodigo.launch(intent)
+    }
+
+    /** O envio acontece na tela de espera; a falha volta para ca, no campo. */
+    private val enviarCodigo = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { resultado ->
+        resultado.data
+            ?.getStringExtra(ForgotPasswordLoadingActivity.EXTRA_ERRO)
+            ?.let { makeText(it) }
     }
 }

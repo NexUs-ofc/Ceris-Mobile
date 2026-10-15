@@ -1,7 +1,7 @@
 package com.example.ceris.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.ceris.BuildConfig
+import com.example.ceris.api.ApiBaseUrl
 import com.example.ceris.api.AuthAPI
 import com.example.ceris.api.RetrofitClient
 import com.example.ceris.local.SessionManager
@@ -12,10 +12,11 @@ import com.example.ceris.model.dto.GoogleAuthenticateRequest
 import com.example.ceris.model.dto.GoogleRegistrationRequest
 import com.example.ceris.model.dto.GoogleRegistrationRequiredResponse
 import com.example.ceris.repository.AuthRepository
+import com.example.ceris.util.mensagemDeFalha
 
 class GoogleAuthViewModel : ViewModel() {
 
-    private val authURL = BuildConfig.AUTH_API_BASE_URL
+    private val authURL = ApiBaseUrl.auth
     private val api = RetrofitClient.getApi(authURL, AuthAPI::class.java)
     private lateinit var authRepository: AuthRepository
 
@@ -82,7 +83,7 @@ class GoogleAuthViewModel : ViewModel() {
             },
             onFailure = { throwable ->
                 listener.googleSignInFinished()
-                listener.makeText("Um erro inesperado aconteceu: ${throwable.message}")
+                listener.makeText(mensagemDeFalha(throwable))
             }
         )
     }
@@ -123,7 +124,7 @@ class GoogleAuthViewModel : ViewModel() {
             },
             onFailure = { throwable ->
                 listener.googleSignInFinished()
-                listener.makeText("Um erro inesperado aconteceu: ${throwable.message}")
+                listener.makeText(mensagemDeFalha(throwable))
             }
         )
     }

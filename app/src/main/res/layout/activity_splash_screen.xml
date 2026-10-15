@@ -20,8 +20,9 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="148dp"
-        android:layout_height="72dp"
+        android:fontFamily="@font/huninn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:alpha="0"
         android:text="Ceris"
@@ -35,8 +36,12 @@
 
     <TextView
         android:id="@+id/legends"
-        android:layout_width="202dp"
-        android:layout_height="35dp"
+        android:fontFamily="@font/huninn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:lineSpacingExtra="2dp"
         android:layout_marginTop="35dp"
         android:text="Monitorar seu estoque nunca ficou tão fácil"
         android:textAlignment="center"

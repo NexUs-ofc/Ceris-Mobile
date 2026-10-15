@@ -19,6 +19,9 @@ class ResetPasswordLoadingActivity : AppCompatActivity(), RecoverPasswordViewMod
     companion object {
         const val EXTRA_NEW_PASSWORD = "extra_new_password"
         const val EXTRA_CONFIRM_PASSWORD = "extra_confirm_password"
+
+        /** Motivo da falha, devolvido para a tela anterior mostrar no campo. */
+        const val EXTRA_ERRO = "extra_erro"
     }
 
     private val viewModel: RecoverPasswordViewModel by viewModels()
@@ -42,8 +45,15 @@ class ResetPasswordLoadingActivity : AppCompatActivity(), RecoverPasswordViewMod
         viewModel.resetPassword(newPassword, confirmPassword)
     }
 
+    /**
+     * A tela de espera nao tem onde escrever e sai de cena assim que a resposta
+     * chega: devolve o motivo para quem a abriu mostrar embaixo do campo.
+     *
+     * O Toast de sucesso logo abaixo fica: ele confirma o que deu certo, nao
+     * aponta campo errado, e a tela seguinte e um login limpo.
+     */
     override fun makeText(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        setResult(RESULT_OK, Intent().putExtra(EXTRA_ERRO, message))
         finish()
     }
 

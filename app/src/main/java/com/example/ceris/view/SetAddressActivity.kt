@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,9 +16,12 @@ import com.example.ceris.view.utils.MaskTextWatcher
 import com.example.ceris.view.utils.Masks
 import com.example.ceris.view.utils.hideKeyboard
 import com.example.ceris.view.utils.hideNavigationBar
+import com.example.ceris.view.utils.limparErros
+import com.example.ceris.view.utils.mostrarErro
 import com.example.ceris.view.utils.onlyNumbers
 import com.example.ceris.viewmodel.RegisterViewModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
     private lateinit var cepInput: TextInputEditText
@@ -150,17 +152,32 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
                 estadoInput.setText(response.uf)
             },
             onError = { throwable ->
-                Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
+                // A busca e pelo CEP: o aviso pertence ao campo do CEP.
+                cepLayout().mostrarErro(throwable.message)
             }
         )
     }
 
+    /**
+     * Mensagem embaixo do campo, nao mais em Toast. O CEP tem frase propria e
+     * e o primeiro campo da tela; quando falta tudo, os seis acendem e o texto
+     * fica no topo, onde a pessoa esta olhando.
+     */
     override fun makeText(message: String) {
-        Toast.makeText(
-            this,
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
+        val campos = camposDoEndereco()
+
+        limparErros(*campos)
+
+        when {
+            message.contains("CEP", ignoreCase = true) -> cepLayout().mostrarErro(message)
+
+            message.contains("Preencha", ignoreCase = true) -> {
+                campos.drop(1).forEach { it.mostrarErro(" ") }
+                cepLayout().mostrarErro(message)
+            }
+
+            else -> cepLayout().mostrarErro(message)
+        }
     }
 
     override fun operationCompleted() {
@@ -168,4 +185,15 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
         intent.putExtra(EmailVerificationActivity.EXTRA_EMAIL, email )
         startActivity(intent)
     }
+
+    private fun cepLayout() = findViewById<TextInputLayout>(R.id.etl_cep)
+
+    private fun camposDoEndereco() = arrayOf(
+        cepLayout(),
+        findViewById<TextInputLayout>(R.id.etl_rua),
+        findViewById<TextInputLayout>(R.id.etl_numero),
+        findViewById<TextInputLayout>(R.id.etl_bairro),
+        findViewById<TextInputLayout>(R.id.etl_cidade),
+        findViewById<TextInputLayout>(R.id.etl_estado)
+    )
 }

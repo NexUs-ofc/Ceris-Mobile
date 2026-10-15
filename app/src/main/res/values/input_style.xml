@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--
+        Contorno cinza, não roxo: o boxStrokeColor apontava para o
+        md_theme_outline, que é o roxo da escala (#9769BF), e no Figma a borda
+        do campo é um cinza neutro.
+
+        As cores de erro fecham o estado que o design pede nas telas de login,
+        cadastro e endereço: a borda fica vermelha e a mensagem aparece embaixo
+        do campo, no mesmo tom.
+    -->
     <style name="InputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxCornerRadiusBottomEnd">30dp</item>
         <item name="boxCornerRadiusBottomStart">30dp</item>
         <item name="boxCornerRadiusTopEnd">30dp</item>
         <item name="boxCornerRadiusTopStart">30dp</item>
-        <item name="boxStrokeColor">@color/md_theme_outline</item>
+        <item name="boxStrokeColor">@color/campo_borda</item>
+        <item name="boxStrokeErrorColor">@color/campo_erro</item>
+        <item name="errorTextColor">@color/campo_erro</item>
+        <item name="errorIconDrawable">@null</item>
         <item name="hintEnabled">false</item>
+    </style>
+
+    <!--
+        Campo de busca da tela inicial. Nao herda o raio de 30dp do InputStyle:
+        no design ele e um retangulo arredondado, e os campos do login e que sao
+        pilulas. Por isso e um estilo proprio, e nao uma mudanca no InputStyle.
+    -->
+    <style name="BuscaInputStyle" parent="InputStyle">
+        <item name="boxCornerRadiusBottomEnd">@dimen/busca_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/busca_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/busca_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/busca_radius</item>
+        <item name="boxStrokeColor">@color/campo_borda</item>
+        <item name="boxStrokeWidth">1dp</item>
     </style>
 
 </resources>

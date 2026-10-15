@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Libera HTTP sem TLS apenas na variante de debug.
+
+    A partir do Android 9 o sistema bloqueia texto claro por padrao, e o
+    AUTH_API_BASE_URL e um load balancer http://. Toda chamada de login morria
+    antes de sair do aparelho, com "CLEARTEXT communication not permitted by
+    network security policy" - que chega ao usuario como "um erro inesperado
+    aconteceu", indistinguivel de API fora do ar.
+
+    Fica so no debug de proposito: em release o bloqueio continua valendo, e
+    publicar exige um endereco https.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application android:usesCleartextTraffic="true" />
+
+</manifest>

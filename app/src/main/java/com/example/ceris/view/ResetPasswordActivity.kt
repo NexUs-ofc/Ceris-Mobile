@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -15,6 +15,8 @@ import com.example.ceris.R
 import com.example.ceris.local.SessionManager
 import com.example.ceris.view.utils.hideKeyboard
 import com.example.ceris.view.utils.hideNavigationBar
+import com.example.ceris.view.utils.mostrarErro
+import com.google.android.material.textfield.TextInputLayout
 import com.example.ceris.viewmodel.RecoverPasswordViewModel
 
 
@@ -56,8 +58,21 @@ class ResetPasswordActivity : AppCompatActivity(), RecoverPasswordViewModel.List
         voltarBtn.setOnClickListener { finish() }
     }
 
+    /**
+     * "As senhas nao conferem" e sobre a confirmacao; o resto e sobre a senha
+     * nova. Marcar o campo errado faria a pessoa mexer no que estava certo.
+     */
     override fun makeText(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        val campo =
+            if (message.contains("conferem", ignoreCase = true)) {
+                R.id.etl_confirm_password
+            } else {
+                R.id.etl_new_password
+            }
+
+        findViewById<TextInputLayout>(R.id.etl_new_password).mostrarErro(null)
+        findViewById<TextInputLayout>(R.id.etl_confirm_password).mostrarErro(null)
+        findViewById<TextInputLayout>(campo).mostrarErro(message)
     }
 
     override fun operationCompleted() {
@@ -69,6 +84,15 @@ class ResetPasswordActivity : AppCompatActivity(), RecoverPasswordViewModel.List
                 confirmPasswordInput.text.toString()
             )
         }
-        startActivity(intent)
+        redefinir.launch(intent)
+    }
+
+    /** A troca acontece na tela de espera; a falha volta para ca, no campo. */
+    private val redefinir = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { resultado ->
+        resultado.data
+            ?.getStringExtra(ResetPasswordLoadingActivity.EXTRA_ERRO)
+            ?.let { makeText(it) }
     }
 }

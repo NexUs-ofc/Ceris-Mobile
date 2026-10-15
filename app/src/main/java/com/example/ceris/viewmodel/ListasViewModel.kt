@@ -1,7 +1,7 @@
 package com.example.ceris.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.ceris.BuildConfig
+import com.example.ceris.api.ApiBaseUrl
 import com.example.ceris.api.RetrofitClient
 import com.example.ceris.api.ShoppingListAPI
 import com.example.ceris.local.ListaLocalStore
@@ -14,8 +14,10 @@ import com.example.ceris.util.mensagemDeFalha
 // A View implementa Listener e so reage a eventos, como no LoginViewModel.
 class ListasViewModel : ViewModel() {
 
-    private val coreURL = BuildConfig.CORE_API_BASE_URL
-    private val api = RetrofitClient.getApi(coreURL, ShoppingListAPI::class.java)
+    private val coreURL = ApiBaseUrl.core
+    // Autenticada: 401 renova a sessao e repete a chamada, em vez de mandar
+    // a pessoa para o login a cada 15 minutos.
+    private val api = RetrofitClient.getApiAutenticada(coreURL, ShoppingListAPI::class.java)
     private lateinit var repository: ShoppingListRepository
 
     interface Listener {

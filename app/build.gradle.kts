@@ -49,12 +49,22 @@ android {
         // escreve apenas um subconjunto das chaves - sem isto, a compilacao
         // quebra la com "Unresolved reference".
         //
-        // O valor de reserva e a sentinela que o GoogleSignInHelper reconhece:
-        // com ela o app avisa que falta configurar, em vez de falhar sozinho.
+        // "PREENCHER" e a sentinela que o GoogleSignInHelper e o ApiBaseUrl
+        // reconhecem: com ela o app abre e avisa que falta configurar, em vez
+        // de fechar sozinho.
+        //
+        // Nenhum endereco de API entra aqui como reserva de verdade. Eles
+        // mudam de um dia para o outro, e deixar o antigo no codigo faz o app
+        // falar com um host morto em silencio - foi o que aconteceu com a
+        // ceris-core.vercel.app, que responde DEPLOYMENT_NOT_FOUND.
         val camposObrigatorios =
             mapOf(
                 "GOOGLE_WEB_CLIENT_ID" to "PREENCHER",
-                "CORE_API_BASE_URL" to "https://ceris-core.vercel.app/",
+                "CORE_API_BASE_URL" to "PREENCHER",
+                "AUTH_API_BASE_URL" to "PREENCHER",
+                "API_KEY" to "PREENCHER",
+                "ACCOUNT_TYPE" to "HOUSEHOLD",
+                "VIA_CEP_URL" to "https://viacep.com.br/",
             )
 
         camposObrigatorios.forEach { (nome, reserva) ->

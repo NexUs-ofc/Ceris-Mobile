@@ -18,26 +18,31 @@
     android:background="@color/md_theme_background"
     tools:context=".view.ListaComprasActivity">
 
+    <!--
+        Mesmo construto das telas em que a seta aparece (esqueci a senha,
+        endereco, OTP): srcCompat com o back_button, que e um vetor com
+        fillColor e strokeColor declarados. O ic_menu_arrow_left aqui, via
+        android:src com tint, nao estava desenhando.
+    -->
     <ImageButton
         android:id="@+id/btn_voltar"
-        android:layout_width="@dimen/icone_acao_size"
-        android:layout_height="@dimen/icone_acao_size"
-        android:layout_marginStart="@dimen/screen_margin_horizontal"
-        android:layout_marginTop="@dimen/spacing_xl"
+        android:layout_width="@dimen/icone_voltar_size"
+        android:layout_height="@dimen/icone_voltar_size"
+        android:layout_marginStart="@dimen/spacing_s"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/lista_voltar"
-        android:src="@drawable/ic_menu_arrow_left"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@id/txt_titulo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/txt_titulo"
-        app:tint="@color/md_theme_primary" />
+        app:srcCompat="@drawable/back_button" />
 
     <TextView
         android:id="@+id/txt_titulo"
         style="@style/TituloTela"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_m"
+        android:layout_marginStart="@dimen/spacing_xs"
         android:layout_marginTop="@dimen/spacing_xl"
         android:ellipsize="end"
         android:maxLines="1"
@@ -66,15 +71,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_xs"
-        android:paddingStart="@dimen/screen_margin_horizontal"
-        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
         android:text="@string/lista_detalhe_subtitulo"
         android:textColor="@color/md_secundary_text"
         android:textSize="@dimen/text_size_14"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_titulo"
-        app:layout_constraintWidth_max="@dimen/content_max_width" />
+        app:layout_constraintStart_toStartOf="@id/txt_titulo"
+        app:layout_constraintTop_toBottomOf="@id/txt_titulo" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/painel_progresso"
@@ -153,9 +156,10 @@
         android:id="@+id/img_vazio"
         android:layout_width="@dimen/lista_ilustracao_size"
         android:layout_height="@dimen/lista_ilustracao_size"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/lista_ilustracao_vazia"
         android:scaleType="fitCenter"
-        android:src="@drawable/img_lista_vazia"
+        android:src="@drawable/coelho_curioso"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/txt_vazio"
         app:layout_constraintEnd_toEndOf="@id/lista_itens"
@@ -187,6 +191,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginBottom="@dimen/spacing_l"
         android:fontFamily="@font/montserrat_semibold"
         android:text="@string/lista_total_estimado"
         android:textColor="@color/md_theme_onBackground"

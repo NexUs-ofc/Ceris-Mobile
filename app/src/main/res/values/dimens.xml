@@ -28,6 +28,7 @@
 
     <!-- Tipografia: escala numerica, o nome guarda o valor do celular -->
     <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_13">13sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_15">15sp</dimen>
@@ -69,10 +70,21 @@
     <integer name="grid_columns">1</integer>
 
     <!-- Ilustracoes de estado vazio e botao flutuante secundario -->
-    <dimen name="ilustracao_size">160dp</dimen>
+    <dimen name="ilustracao_size">120dp</dimen>
     <dimen name="fab_secundario_size">48dp</dimen>
 
-    <dimen name="chip_height">34dp</dimen>
+    <dimen name="chip_height">38dp</dimen>
+    <dimen name="chip_padding_h">8dp</dimen>
+    <dimen name="chip_espaco">12dp</dimen>
+
+    <!-- Campo de busca: retangulo arredondado, nao pilula como os do login -->
+    <dimen name="busca_radius">14dp</dimen>
+
+    <!-- Fundo circular do destino ativo da barra -->
+    <dimen name="nav_indicador_size">40dp</dimen>
+
+    <!-- Pilula do "Alterar" em Locais -->
+    <dimen name="alterar_radius">8dp</dimen>
 
     <dimen name="nav_bar_corner_radius">24dp</dimen>
 
@@ -119,6 +131,8 @@
     <!-- Formulário de item -->
     <dimen name="sheet_corner_radius">24dp</dimen>
     <dimen name="sheet_padding">24dp</dimen>
+    <!-- Embaixo do Cancelar ainda vem a barra de gestos do sistema -->
+    <dimen name="sheet_padding_bottom">40dp</dimen>
     <dimen name="sheet_alca_largura">40dp</dimen>
     <dimen name="sheet_alca_altura">4dp</dimen>
     <dimen name="campo_rotulo_text">11sp</dimen>
@@ -128,4 +142,20 @@
     <dimen name="stepper_botao_size">34dp</dimen>
     <dimen name="stepper_icone_size">16dp</dimen>
     <dimen name="icone_acao_size">24dp</dimen>
+    <dimen name="icone_voltar_size">42dp</dimen>
+
+    <!-- Chatbot -->
+    <dimen name="chat_header_altura">72dp</dimen>
+    <dimen name="chat_avatar_size">44dp</dimen>
+    <dimen name="chat_balao_radius">18dp</dimen>
+    <dimen name="chat_balao_radius_canto">6dp</dimen>
+    <dimen name="chat_balao_padding_h">16dp</dimen>
+    <dimen name="chat_balao_padding_v">12dp</dimen>
+    <dimen name="chat_balao_max_width">280dp</dimen>
+    <dimen name="chat_campo_radius">28dp</dimen>
+    <dimen name="chat_campo_altura">56dp</dimen>
+    <dimen name="chat_enviar_size">44dp</dimen>
+    <dimen name="chat_sugestao_radius">20dp</dimen>
+    <dimen name="chat_sugestao_padding_h">14dp</dimen>
+    <dimen name="chat_sugestao_altura">38dp</dimen>
 </resources>

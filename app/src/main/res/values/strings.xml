@@ -61,6 +61,8 @@
     <string name="lista_sem_itens">Você não tem nenhum produto na lista</string>
     <string name="lista_total_estimado">Total estimado</string>
     <string name="lista_adicionar_item">Adicionar item</string>
+    <!-- Descricao da seta de voltar, usada em toda tela empilhada -->
+    <string name="voltar">Voltar</string>
     <string name="lista_voltar">Voltar</string>
     <string name="lista_renomear">Renomear lista</string>
     <string name="lista_ilustracao_vazia">Lista sem produtos</string>
@@ -91,4 +93,24 @@
     <string name="lista_excluir_pergunta">Excluir \"%1$s\"? Os itens dela serão perdidos.</string>
     <string name="lista_excluir_confirmar">Excluir</string>
     <string name="lista_item_remover_pergunta">Remover este item da lista?</string>
+
+    <!-- Tela de falha geral -->
+    <string name="erro_titulo">Ops! Algo deu errado</string>
+    <string name="erro_mensagem">Não conseguimos carregar esta tela.
+Tente novamente ou volte ao início.</string>
+    <string name="erro_tentar">Tentar novamente</string>
+    <string name="erro_inicio">Voltar ao início</string>
+
+    <!-- Chatbot -->
+    <string name="chat_nome">Cerita</string>
+    <string name="chat_situacao">Online · pronta para ajudar</string>
+    <string name="chat_avatar">Foto da Cerita</string>
+    <string name="chat_voltar">Voltar</string>
+    <string name="chat_hoje">HOJE</string>
+    <string name="chat_campo_hint">Digite sua mensagem…</string>
+    <string name="chat_enviar">Enviar mensagem</string>
+    <string name="chat_sugestao_receita">Receita mais rápida</string>
+    <string name="chat_sugestao_lista">Criar lista de compras</string>
+    <string name="chat_sugestao_vencendo">Ver itens vencendo</string>
+    <string name="chat_abertura">Oi! Posso ajudar a planejar compras, sugerir receitas ou conferir o que falta no estoque.</string>
 </resources>

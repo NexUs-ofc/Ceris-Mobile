@@ -3,6 +3,7 @@ package com.example.ceris.view.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -26,6 +27,9 @@ class ListasFragment :
 
     private lateinit var lista: RecyclerView
     private lateinit var txtVazia: TextView
+    private lateinit var imgVazia: ImageView
+
+    private var temListas = false
 
     private val adapter = ListaAdapter { escolhida -> abrirDetalhe(escolhida.id, escolhida.nome) }
 
@@ -34,6 +38,7 @@ class ListasFragment :
 
         lista = view.findViewById(R.id.lista_listas)
         txtVazia = view.findViewById(R.id.txt_listas_vazia)
+        imgVazia = view.findViewById(R.id.img_listas_vazia)
         lista.adapter = adapter
 
         view.findViewById<MaterialButton>(R.id.btn_criar_lista).setOnClickListener {
@@ -52,20 +57,44 @@ class ListasFragment :
 
     override fun listasCarregadas(listas: List<ListaCompra>) {
         adapter.submitList(listas)
+        temListas = listas.isNotEmpty()
 
-        val vazia = listas.isEmpty()
-        lista.visibility = if (vazia) View.GONE else View.VISIBLE
-        txtVazia.visibility = if (vazia) View.VISIBLE else View.GONE
+        txtVazia.setText(R.string.listas_vazia)
+        mostrarAviso(!temListas)
     }
 
     override fun listaCriada(id: String, nome: String) {
         abrirDetalhe(id, nome)
     }
 
+    /**
+     * Sem lista nenhuma na tela, a falha ocupa o lugar do aviso de vazio.
+     *
+     * Antes a tela ficava em branco: o `listasCarregadas` nunca chegava, as duas
+     * views do estado vazio seguiam `gone` e o Toast sumia em alguns segundos.
+     * Quem abria o app com a sessão morta via título, subtítulo e um vão branco
+     * até o botão de criar.
+     *
+     * Com listas já na tela o Toast continua: trocar o conteúdo por uma mensagem
+     * apagaria o que a pessoa estava lendo por causa de uma falha passageira.
+     */
     override fun makeText(message: String) {
         // O fragment pode já ter saído de cena enquanto a chamada estava no ar.
         val contexto = context ?: return
-        Toast.makeText(contexto, message, Toast.LENGTH_LONG).show()
+
+        if (temListas) {
+            Toast.makeText(contexto, message, Toast.LENGTH_LONG).show()
+            return
+        }
+
+        txtVazia.text = message
+        mostrarAviso(true)
+    }
+
+    private fun mostrarAviso(visivel: Boolean) {
+        lista.visibility = if (visivel) View.GONE else View.VISIBLE
+        txtVazia.visibility = if (visivel) View.VISIBLE else View.GONE
+        imgVazia.visibility = if (visivel) View.VISIBLE else View.GONE
     }
 
     // childFragmentManager para o sheet achar este fragment como ouvinte.

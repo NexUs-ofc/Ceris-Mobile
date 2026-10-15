@@ -57,6 +57,9 @@ class EmailVerificationActivity : AppCompatActivity(), RegisterViewModel.Listene
 
         subtitleText = findViewById(R.id.subtitleText)
         confirmCodeBtn = findViewById(R.id.confirmCodeBtn)
+
+        findViewById<android.widget.ImageButton>(R.id.voltarBtn)
+            .setOnClickListener { finish() }
         resendButton = findViewById(R.id.resendButton)
         resendTimerText = findViewById(R.id.resendTimerText)
 
