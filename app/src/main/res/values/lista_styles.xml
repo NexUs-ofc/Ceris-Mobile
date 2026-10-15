@@ -3,11 +3,16 @@
 <resources>
 
     <!-- Rótulo miúdo acima de cada campo: NOME DO ITEM, QUANTIDADE... -->
+    <!--
+        Bold, nao semibold: no Figma o rotulo e bem mais pesado que o titulo
+        do sheet, e com semibold nos dois a hierarquia sumia.
+    -->
     <style name="RotuloCampo">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:fontFamily">@font/montserrat_semibold</item>
-        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="android:textAllCaps">true</item>
         <item name="android:letterSpacing">0.06</item>
         <item name="android:textColor">@color/md_theme_primary</item>
         <item name="android:textSize">@dimen/campo_rotulo_text</item>
@@ -35,9 +40,15 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
+    <!--
+        Branco puro. O Material3 escurece a superficie conforme a elevacao, e
+        o sheet saia acinzentado em vez do branco do Figma.
+    -->
     <style name="FundoBottomSheet" parent="Widget.Material3.BottomSheet">
         <item name="shapeAppearanceOverlay">@style/FormaBottomSheet</item>
         <item name="backgroundTint">@color/md_theme_surface</item>
+        <item name="elevationOverlayEnabled">false</item>
+        <item name="android:elevation">0dp</item>
     </style>
 
     <style name="TemaBottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">

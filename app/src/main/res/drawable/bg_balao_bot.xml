@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/chat_balao_bot" />
+    <corners
+        android:topLeftRadius="@dimen/chat_balao_radius"
+        android:topRightRadius="@dimen/chat_balao_radius"
+        android:bottomRightRadius="@dimen/chat_balao_radius"
+        android:bottomLeftRadius="@dimen/chat_balao_radius_canto" />
+</shape>

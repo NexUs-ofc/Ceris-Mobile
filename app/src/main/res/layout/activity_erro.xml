@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Tela de falha geral (Figma > Protótipos > V1 > Ops! Algo deu errado).
+
+    Aparece quando um serviço não responde e não há o que mostrar na tela que a
+    pessoa pediu: a splash sem a Auth de pé, o app sem a Core, ou uma falha que
+    derrubaria tudo. A mensagem do meio é trocada em tempo de execução pela
+    frase que o MensagensDeApi devolveu, por isso ela não fica presa a um texto
+    fixo aqui.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
+    tools:context=".view.ErroActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/conteudo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="@dimen/content_max_width">
+
+        <ImageView
+            android:id="@+id/img_erro"
+            android:layout_width="@dimen/lista_ilustracao_size"
+            android:layout_height="@dimen/lista_ilustracao_size"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/erro_titulo"
+            android:scaleType="fitCenter"
+            android:src="@drawable/coelho_curioso"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_erro_titulo"
+            style="@style/TituloTela"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:gravity="center"
+            android:text="@string/erro_titulo"
+            android:textSize="@dimen/text_size_28"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_erro" />
+
+        <TextView
+            android:id="@+id/txt_erro_mensagem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/erro_mensagem"
+            android:textColor="@color/campo_placeholder"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_erro_titulo" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_tentar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:fontFamily="@font/montserrat_semibold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/erro_tentar"
+            android:textColor="@color/md_theme_onPrimary"
+            android:textSize="@dimen/text_size_15"
+            app:backgroundTint="@color/md_theme_primary"
+            app:cornerRadius="@dimen/botao_radius"
+            app:icon="@drawable/ic_menu_refresh_cw"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/spacing_s"
+            app:iconTint="@color/md_theme_onPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_erro_mensagem" />
+
+        <TextView
+            android:id="@+id/btn_inicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:fontFamily="@font/montserrat_semibold"
+            android:padding="@dimen/spacing_s"
+            android:text="@string/erro_inicio"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_tentar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

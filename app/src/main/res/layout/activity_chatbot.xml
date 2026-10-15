@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Chatbot.
+    Cerita (Figma > Protótipos > V1 > Chatbot).
 
-    Estrutura adaptativa: o conteudo cresce ate content_max_width e centraliza,
-    em vez de esticar no tablet. Medidas sempre por @dimen.
+    O cabeçalho fica colado no topo e meio transparente: o padrão do fundo
+    continua aparecendo por baixo dele e as mensagens somem atrás ao rolar. Por
+    isso a lista começa atrás do cabeçalho, com paddingTop do tamanho dele e
+    clipToPadding desligado — e não embaixo dele.
 
-    TODO conteudo: montar a partir do Figma (Prototipos > V1 > Chatbot).
+    O fundo é o background da raiz, e não uma ImageView: assim ele cobre a tela
+    inteira, por baixo do cabeçalho e das barras do sistema, sem sobrar faixa
+    nas pontas. O vetor vinha com um clip-path que cortava os 17% da direita —
+    aberto para a largura toda, senão a estampa parava no meio do caminho.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,19 +19,191 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
     tools:context=".view.ChatbotActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/conteudo"
+    <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingStart="@dimen/screen_margin_horizontal"
-        android:paddingEnd="@dimen/screen_margin_horizontal"
-        app:layout_constraintBottom_toTopOf="parent"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/ceris_chat_bg_final"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--
+        Atalhos do Figma. Ficam acima do campo e somem depois da primeira
+        resposta da pessoa, por isso vivem fora da lista.
+    -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lista_mensagens"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingTop="@dimen/chat_header_altura"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:paddingBottom="@dimen/spacing_s"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/sugestoes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="@dimen/content_max_width" />
+        app:layout_constraintVertical_bias="1.0"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_chat_bot" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/sugestoes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:layout_marginBottom="@dimen/spacing_s"
+        app:chipSpacingHorizontal="@dimen/spacing_s"
+        app:chipSpacingVertical="@dimen/spacing_s"
+        app:layout_constraintBottom_toTopOf="@id/barra_envio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="@dimen/content_max_width">
+
+        <TextView
+            android:id="@+id/sugestao_receita"
+            style="@style/SugestaoChat"
+            android:text="@string/chat_sugestao_receita" />
+
+        <TextView
+            android:id="@+id/sugestao_lista"
+            style="@style/SugestaoChat"
+            android:text="@string/chat_sugestao_lista" />
+
+        <TextView
+            android:id="@+id/sugestao_vencendo"
+            style="@style/SugestaoChat"
+            android:text="@string/chat_sugestao_vencendo" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/barra_envio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:layout_marginBottom="@dimen/spacing_m"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="@dimen/content_max_width">
+
+        <EditText
+            android:id="@+id/campo_mensagem"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/chat_campo_altura"
+            android:background="@drawable/bg_chat_campo"
+            android:gravity="center_vertical"
+            android:hint="@string/chat_campo_hint"
+            android:imeOptions="actionSend"
+            android:importantForAutofill="no"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="3"
+            android:paddingStart="@dimen/spacing_l"
+            android:paddingEnd="@dimen/chat_enviar_size"
+            android:textColor="@color/md_theme_onBackground"
+            android:textColorHint="@color/campo_placeholder"
+            android:textSize="@dimen/text_size_15"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_enviar"
+            android:layout_width="@dimen/chat_enviar_size"
+            android:layout_height="@dimen/chat_enviar_size"
+            android:layout_marginEnd="@dimen/spacing_xs"
+            android:background="@drawable/bg_chat_enviar"
+            android:contentDescription="@string/chat_enviar"
+            android:padding="@dimen/spacing_s"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_menu_send"
+            app:layout_constraintBottom_toBottomOf="@id/campo_mensagem"
+            app:layout_constraintEnd_toEndOf="@id/campo_mensagem"
+            app:layout_constraintTop_toTopOf="@id/campo_mensagem"
+            app:tint="@color/md_theme_onPrimary" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Por último no XML para ficar por cima da lista que rola sob ele. -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cabecalho"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/chat_header_altura"
+        android:background="@drawable/bg_chat_header"
+        android:paddingStart="@dimen/spacing_s"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_voltar"
+            android:layout_width="@dimen/icone_voltar_size"
+            android:layout_height="@dimen/icone_voltar_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/chat_voltar"
+            android:padding="@dimen/spacing_s"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/back_button" />
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="@dimen/chat_avatar_size"
+            android:layout_height="@dimen/chat_avatar_size"
+            android:layout_marginStart="@dimen/spacing_s"
+            android:background="@drawable/bg_chat_avatar"
+            android:contentDescription="@string/chat_avatar"
+            android:padding="@dimen/spacing_xs"
+            android:scaleType="fitCenter"
+            android:src="@drawable/cerita_chat"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_voltar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/nome_bot"
+            style="@style/TituloTela"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:maxLines="1"
+            android:text="@string/chat_nome"
+            android:textSize="@dimen/text_size_20"
+            app:layout_constraintBottom_toTopOf="@id/situacao_bot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/situacao_bot"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:maxLines="1"
+            android:text="@string/chat_situacao"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_12"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/avatar"
+            app:layout_constraintTop_toBottomOf="@id/nome_bot" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

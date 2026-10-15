@@ -10,10 +10,14 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:fontFamily="@font/huninn"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
         android:layout_marginTop="50dp"
-        android:text="Bem-Vindo(a)!"
+        android:textAlignment="center"
+        android:text="Bem-Vindo(a) de volta!"
         android:textColor="@color/md_theme_onBackground"
         android:textSize="@dimen/text_size_36"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +31,7 @@
         android:layout_marginTop="125dp"
         android:textColor="@color/md_theme_onBackground"
         android:text="Acesse sua conta"
+        android:visibility="gone"
         android:textSize="@dimen/text_size_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,16 +41,16 @@
         android:id="@+id/etl_email"
         style="@style/InputStyle"
         android:layout_width="@dimen/field_width"
-        android:layout_height="@dimen/field_height"
-        android:layout_marginTop="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView2">
+        app:layout_constraintTop_toBottomOf="@id/textView">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/field_height"
             android:hint="Endereço de e-mail"
             android:inputType="textEmailAddress"
             android:textColor="@color/md_theme_onBackground"
@@ -57,7 +62,7 @@
         android:id="@+id/etl_senha"
         style="@style/InputStyle"
         android:layout_width="@dimen/field_width"
-        android:layout_height="@dimen/field_height"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +72,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/field_height"
             android:hint="Senha"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
@@ -117,7 +122,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/md_theme_onBackground"
-            android:text="Não tem conta? " />
+            android:text="Ainda não é cadastrado? " />
 
         <TextView
             android:id="@+id/registerButton"
@@ -125,7 +130,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:text="Cadastre-se"
+            android:text="Cadastrar-se"
             android:textColor="@color/md_theme_primary_translucent" />
     </LinearLayout>
 

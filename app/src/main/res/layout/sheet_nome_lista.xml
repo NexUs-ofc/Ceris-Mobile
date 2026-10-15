@@ -6,11 +6,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/md_theme_surface"
     android:paddingStart="@dimen/sheet_padding"
     android:paddingTop="@dimen/spacing_s"
     android:paddingEnd="@dimen/sheet_padding"
-    android:paddingBottom="@dimen/sheet_padding">
+    android:paddingBottom="@dimen/sheet_padding_bottom">
 
     <View
         android:id="@+id/alca"
@@ -26,7 +25,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_l"
-        android:fontFamily="@font/montserrat_semibold"
+        android:fontFamily="@font/huninn"
         android:textColor="@color/md_theme_onBackground"
         android:textSize="@dimen/text_size_20"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,6 +60,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:insetTop="0dp"
         android:insetBottom="0dp"
+        android:textColor="@color/md_theme_onPrimary"
         android:textSize="@dimen/text_size_15"
         app:backgroundTint="@color/md_theme_primary"
         app:cornerRadius="@dimen/botao_radius"

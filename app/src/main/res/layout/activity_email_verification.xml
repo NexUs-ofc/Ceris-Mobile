@@ -8,6 +8,19 @@
     android:background="@color/md_theme_background"
     tools:context=".view.EmailVerificationActivity">
 
+    <ImageButton
+        android:id="@+id/voltarBtn"
+        android:layout_width="@dimen/icone_voltar_size"
+        android:layout_height="@dimen/icone_voltar_size"
+        android:layout_marginStart="@dimen/spacing_s"
+        android:layout_marginTop="@dimen/spacing_xl"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/voltar"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back_button" />
+
     <TextView
         android:id="@+id/titleText"
         android:layout_width="392dp"
