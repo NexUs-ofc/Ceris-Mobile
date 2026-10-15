@@ -9,10 +9,43 @@
     <color name="ceris_deep_400">#322340</color>
     <color name="ceris_white">#FFFFFF</color>
     <color name="ceris_black">#000000</color>
+    <!--
+        Cinzas neutros do Figma, fora da escala roxa. O merge da main apagou os
+        três, mas os estilos que vieram desta branch continuaram apontando para
+        eles: era o que quebrava o link dos recursos.
+    -->
+    <color name="ceris_cinza">#737380</color>
+
+    <!--
+        Borda de todo campo de entrada: formularios, busca, caixas de OTP e os
+        campos do sheet. E o mesmo lilas claro do realce dos popups, para a
+        selecao e o contorno falarem a mesma lingua.
+
+        Era o cinza neutro #D9D9D9, medido nas telas de login e cadastro do
+        Figma; trocado por decisao de design depois de ver nas telas.
+    -->
+    <color name="campo_borda">@color/ceris_purple_200</color>
+    <!-- Placeholder: cinza neutro, medido no fundo da rampa das telas -->
+    <color name="campo_placeholder">#737373</color>
+
+    <!-- Borda e texto de campo com erro, como nas telas de login e cadastro -->
+    <color name="campo_erro">#FE696C</color>
+
+    <!-- Item selecionado do dropdown. Os outros ficam brancos. -->
+    <color name="selecao_item">#F2EDFA</color>
+    <color name="ceris_cinza_claro">#E2E2E9</color>
+
+    <!--
+        Realce de selecao dos popups e menus. O padrao do Material deriva do
+        colorPrimary, que e o roxo escuro #4F2078: como fundo de item
+        selecionado ele fica pesado e fora da paleta. O lilas claro quase nao
+        se distinguia do fundo branco, entao e o cinza da escala que fica.
+    -->
+    <color name="selecao_realce">@color/ceris_cinza_claro</color>
     <color name="md_theme_onBackground">@color/ceris_deep_400</color>
     <color name="md_theme_onSurface">@color/ceris_deep_400</color>
     <color name="md_secundary_text">@color/ceris_deep_200</color>
-    <color name="md_theme_hint">#809769BF</color>
+    <color name="md_theme_hint">@color/campo_placeholder</color>
     <color name="md_theme_primary">@color/ceris_deep_300</color>
     <color name="md_theme_onPrimary">@color/ceris_white</color>
     <color name="md_theme_primaryContainer">@color/ceris_purple_100</color>
@@ -52,10 +85,13 @@
     <color name="selo_vencido_fundo">#FFDAD5</color>
     <color name="selo_vencido_texto">#73342D</color>
     <!-- Icone e rotulo inativos da barra: o mesmo cinza dos icones do Figma -->
-    <color name="nav_contorno">#737380</color>
+    <color name="nav_contorno">@color/ceris_cinza</color>
 
     <!-- Traco do topo da barra: cinza claro, bem mais fraco que o texto -->
-    <color name="nav_traco">#E2E2E9</color>
+    <color name="nav_traco">@color/ceris_cinza_claro</color>
+
+    <!-- Fundo do destino ativo da barra, usado pelo IndicadorNavAtivo -->
+    <color name="nav_indicador">@color/ceris_purple_100</color>
     <!-- Tela de Locais -->
     <color name="header_fundo">#FAFAFA</color>
     <color name="header_divisor">#EDEDF2</color>
@@ -64,9 +100,16 @@
     <!-- Barra de progresso das listas -->
     <color name="progresso_trilho">#EDE3FA</color>
     <!-- Lista de compras -->
-    <color name="lista_painel_fundo">#F3EDFB</color>
+    <color name="lista_painel_fundo">#F2EDFA</color>
     <color name="lista_item_concluido">#9A94A8</color>
-    <color name="campo_contorno">#D9D0E8</color>
+    <!-- Mantido como nome proprio porque tambem pinta o checkbox das listas -->
+    <color name="campo_contorno">@color/campo_borda</color>
     <color name="stepper_fundo">#F3EDFB</color>
     <color name="sheet_alca">#D9D0E8</color>
+    <!-- Chatbot (Figma > Protótipos > V1 > Chatbot) -->
+    <color name="chat_fundo">#FAF8F0</color>
+    <color name="chat_balao_bot">#E8DCFA</color>
+    <!-- Creme do fundo com alfa: o padrão continua aparecendo sob o cabeçalho -->
+    <color name="chat_header_fundo">#E6FAF8F0</color>
+    <color name="chat_header_traco">#1A4F2078</color>
 </resources>
