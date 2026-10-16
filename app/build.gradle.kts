@@ -62,7 +62,9 @@ android {
                 "GOOGLE_WEB_CLIENT_ID" to "PREENCHER",
                 "CORE_API_BASE_URL" to "PREENCHER",
                 "AUTH_API_BASE_URL" to "PREENCHER",
+                "IA_API_BASE_URL" to "PREENCHER",
                 "API_KEY" to "PREENCHER",
+                "CERISIA_API_KEY" to "PREENCHER",
                 "ACCOUNT_TYPE" to "HOUSEHOLD",
                 "VIA_CEP_URL" to "https://viacep.com.br/",
             )

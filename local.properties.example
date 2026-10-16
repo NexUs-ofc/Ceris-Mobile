@@ -13,12 +13,18 @@ sdk.dir=C\:\\Users\\SEU_USUARIO\\AppData\\Local\\Android\\Sdk
 # Barra no fim e opcional: o ApiBaseUrl acrescenta se faltar.
 AUTH_API_BASE_URL=https://endereco-do-auth/
 CORE_API_BASE_URL=https://endereco-da-core/
+# ms-ia (a Cerita). Sem esta chave a tela do chatbot avisa que falta configurar.
+IA_API_BASE_URL=https://endereco-da-ia/
 
 # Publico e estavel, raramente muda.
 VIA_CEP_URL=https://viacep.com.br/
 
 # Mesma chave que o Auth valida no cabecalho X-API-Key.
 API_KEY=PREENCHER
+
+# Chave do ms-ia, que tem lista propria. Mandar a API_KEY acima para a IA
+# volta 401 "Invalid API key".
+CERISIA_API_KEY=PREENCHER
 
 # Client ID web do projeto no Google Cloud, nao o do Android.
 GOOGLE_WEB_CLIENT_ID=PREENCHER
