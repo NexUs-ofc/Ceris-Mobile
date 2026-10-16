@@ -4,6 +4,8 @@
 
     Raiz em CoordinatorLayout por causa do encaixe do botão de scan na barra.
     O conteúdo ainda não foi montado: falta ler as propriedades da tela no Figma.
+    O botão de sair está aqui sozinho por enquanto — é o único jeito de trocar
+    de conta sem desinstalar o app.
 
     TODO conteúdo: montar a partir do node 625:1428.
 -->
@@ -26,6 +28,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:paddingStart="@dimen/screen_margin_horizontal"
-        android:paddingEnd="@dimen/screen_margin_horizontal" />
+        android:paddingEnd="@dimen/screen_margin_horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_sair"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:backgroundTint="@color/md_theme_primary"
+            android:text="@string/perfil_sair"
+            android:textColor="@color/md_theme_onPrimary"
+            android:textSize="@dimen/text_size_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
