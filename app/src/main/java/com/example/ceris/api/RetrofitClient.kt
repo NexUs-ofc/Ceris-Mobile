@@ -11,6 +11,10 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
+    // O proxy do DisCloud corta em 30s e devolve uma pagina HTML de erro com
+    // status 200. Passar disso nao adianta: so atrasa o inevitavel.
+    private const val LEITURA_DEMORADA_SEGUNDOS = 45L
+
     private val retrofitInstances = mutableMapOf<String, Retrofit>()
 
     private val retrofitAutenticados = mutableMapOf<String, Retrofit>()
@@ -62,6 +66,17 @@ object RetrofitClient {
         }
     }
 
+    /**
+     * Cliente do chat. A Cerita passa por varios nos e demora mais que as
+     * outras rotas, mas quem manda no teto e o DisCloud, que corta em 30s.
+     */
+    private val httpClientDemorado: OkHttpClient by lazy {
+        httpClient.newBuilder()
+            .readTimeout(LEITURA_DEMORADA_SEGUNDOS, TimeUnit.SECONDS)
+            .callTimeout(LEITURA_DEMORADA_SEGUNDOS, TimeUnit.SECONDS)
+            .build()
+    }
+
     private fun getRetrofitAutenticado(baseUrl: String): Retrofit {
         val autenticador = renovador ?: return getRetrofit(baseUrl)
 
@@ -71,7 +86,8 @@ object RetrofitClient {
                 .client(
                     // newBuilder reaproveita pool de conexões e interceptors
                     // do cliente comum; muda só a renovação.
-                    httpClient.newBuilder()
+                    (if (baseUrl == ApiBaseUrl.ia) httpClientDemorado else httpClient)
+                        .newBuilder()
                         .authenticator(autenticador)
                         .build()
                 )

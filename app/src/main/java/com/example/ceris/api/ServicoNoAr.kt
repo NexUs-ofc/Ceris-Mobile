@@ -43,11 +43,6 @@ object ServicoNoAr {
      *  erro pronta para a tela quando não respondeu. Sempre na thread da UI.
      */
     fun verificar(baseUrl: String, caminho: String, resposta: (String?) -> Unit) {
-        if (!ApiBaseUrl.configurada(baseUrl)) {
-            principal.post { resposta("Endereço da API não configurado nesta versão.") }
-            return
-        }
-
         val pedido = Request.Builder()
             .url(baseUrl.trimEnd('/') + "/" + caminho.trimStart('/'))
             .get()
