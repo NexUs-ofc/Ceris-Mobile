@@ -7,4 +7,7 @@ object SessionKeys {
     const val ACCESS_TOKEN = "access_token"
     const val REFRESH_TOKEN = "refresh_token"
     const val GOOGLE_TICKET = "google_ticket"
+
+    /** Fio da conversa com a Cerita, retomado enquanto o app nao fecha. */
+    const val CHAT_SESSION_ID = "chat_session_id"
 }

@@ -16,7 +16,10 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.ceris.R
+import com.example.ceris.api.ApiBaseUrl
+import com.example.ceris.api.ChatAPI
 import com.example.ceris.api.RetrofitClient
+import com.example.ceris.repository.ChatRepository
 import com.example.ceris.api.ServicoNoAr
 import com.example.ceris.local.SessionKeys
 import com.example.ceris.local.SessionManager
@@ -55,6 +58,13 @@ class SplashScreen : AppCompatActivity() {
         // Aqui porque e a primeira tela do app e o RenovadorDeSessao precisa de
         // um Context para ler os tokens guardados.
         RetrofitClient.configurarRenovacao(sessionManager)
+
+        // A conversa da Cerita que ficou aberta na ultima execucao e encerrada
+        // aqui: e o servidor que resume e guarda as preferencias dela.
+        ChatRepository(
+            api = RetrofitClient.getApiAutenticada(ApiBaseUrl.ia, ChatAPI::class.java),
+            sessionManager = sessionManager
+        ).encerrarPendente()
 
         conferirServico(sessionManager)
 

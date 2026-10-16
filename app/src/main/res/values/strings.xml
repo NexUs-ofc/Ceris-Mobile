@@ -103,6 +103,10 @@ Tente novamente ou volte ao início.</string>
 
     <!-- Chatbot -->
     <string name="chat_nome">Cerita</string>
+    <string name="perfil_sair">Sair da conta</string>
+    <string name="chat_encerrar">Encerrar conversa</string>
+    <string name="chat_encerrada">Conversa encerrada. Pode começar de novo.</string>
+    <string name="chat_digitando">digitando…</string>
     <string name="chat_situacao">Online · pronta para ajudar</string>
     <string name="chat_avatar">Foto da Cerita</string>
     <string name="chat_voltar">Voltar</string>
