@@ -20,7 +20,11 @@ fun mensagemDeErro(statusCode: Int, errorBody: String?): String {
     return when (statusCode) {
         400 -> doServidor?.let { "Dados inválidos:\n$it" }
             ?: "Dados inválidos. Confira os campos e tente novamente."
-        401 -> "Sessão expirada. Entre novamente."
+        // Nem todo 401 e de sessao: o ms-ia responde 401 com
+        // {"detail":"Invalid API key"} quando a chave do app nao esta na
+        // lista dele. Dizer "sessao expirada" ali manda a pessoa refazer o
+        // login para um problema que o login nao resolve.
+        401 -> doServidor ?: "Sessão expirada. Entre novamente."
         403 -> doServidor ?: "Você não tem acesso a esta lista."
         404 -> "Essa lista não existe mais."
         else -> doServidor ?: "Erro $statusCode. Algo deu errado, tente novamente!"
@@ -65,6 +69,9 @@ private fun Throwable.temNaCadeia(vararg tipos: Class<out Throwable>): Boolean {
  */
 fun mensagemDeFalha(throwable: Throwable): String {
     val frase = when {
+        throwable is com.example.ceris.repository.ChatRepository.RespostaCortada ->
+            throwable.message.orEmpty()
+
         throwable is ShoppingListRepository.SemSessao -> "Sessão expirada. Entre novamente."
 
         throwable is SocketTimeoutException -> "O servidor demorou para responder. Tente de novo."

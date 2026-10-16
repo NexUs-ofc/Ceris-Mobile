@@ -44,6 +44,14 @@ class RenovadorDeSessao(
             return null
         }
 
+        // 401 nem sempre fala do token. O ms-ia recusa a X-API-Key com 401 e
+        // `WWW-Authenticate: ApiKey`; renovar ali gasta o refresh, troca os
+        // dois tokens por novos e toma 401 de novo pelo mesmo motivo. Só o
+        // desafio Bearer é sobre a sessão.
+        if (!desafioEhBearer(response)) {
+            return null
+        }
+
         val refreshToken = sessionManager.getString(SessionKeys.REFRESH_TOKEN, "")
 
         if (refreshToken.isBlank()) {
@@ -58,6 +66,13 @@ class RenovadorDeSessao(
             .newBuilder()
             .header("Authorization", "Bearer ${sessao.accessToken}")
             .build()
+    }
+
+/** Sem cabeçalho de desafio, assume Bearer: era o comportamento antigo. */
+    private fun desafioEhBearer(response: Response): Boolean {
+        val desafio = response.header("WWW-Authenticate") ?: return true
+
+        return desafio.trim().startsWith("Bearer", ignoreCase = true)
     }
 
     private fun renovar(refreshToken: String) = try {

@@ -32,6 +32,9 @@ object ApiBaseUrl {
 
     val viaCep: String = normalizar(BuildConfig.VIA_CEP_URL)
 
+    /** ms-ia, a Cerita. */
+    val ia: String = normalizar(BuildConfig.IA_API_BASE_URL)
+
     /** Falso quando a chave nao foi preenchida no local.properties. */
     fun configurada(url: String): Boolean = url != RESERVA
 

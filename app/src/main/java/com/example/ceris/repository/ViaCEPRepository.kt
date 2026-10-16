@@ -20,7 +20,6 @@ class ViaCEPRepository(
         onError: (statusCode: Int) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
-        Log.d(TAG, "Consultando CEP: $cep")
         api.getAddressByCEP(cep)
             .enqueue(object : Callback<ViaCEPResponse> {
                 override fun onResponse(
@@ -28,7 +27,6 @@ class ViaCEPRepository(
                     response: Response<ViaCEPResponse>
                 ) {
                     val body = response.body()
-                    Log.d(TAG, "Resposta ViaCEP (${response.code()}): $body")
                     if (response.isSuccessful && body != null && body.isValid()) {
                         onSuccess(body)
                     } else {

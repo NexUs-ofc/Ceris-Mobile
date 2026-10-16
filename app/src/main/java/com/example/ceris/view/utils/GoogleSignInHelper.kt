@@ -44,8 +44,6 @@ object GoogleSignInHelper {
 
         solicitar(context, porGoogleId)?.let { return it }
 
-        Log.i(TAG, "GetGoogleIdOption não ofereceu conta, tentando Sign in with Google")
-
         val porBotaoGoogle = GetSignInWithGoogleOption
             .Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
             .build()
@@ -88,7 +86,6 @@ object GoogleSignInHelper {
                 Resultado.Erro("Não foi possível ler a credencial do Google.")
             }
         } catch (e: GetCredentialCancellationException) {
-            Log.i(TAG, "Usuário cancelou a seleção de conta", e)
             Resultado.Cancelado
         } catch (e: NoCredentialException) {
             Log.w(TAG, "Nenhuma credencial oferecida para esta opção", e)
