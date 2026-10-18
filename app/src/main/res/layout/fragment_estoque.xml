@@ -107,6 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:chipSpacingHorizontal="@dimen/chip_espaco"
+                app:selectionRequired="true"
                 app:singleLine="true"
                 app:singleSelection="true">
 
@@ -122,15 +123,8 @@
                     style="@style/FiltroChip"
                     android:text="@string/estoque_filtro_vencendo" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/filtro_carnes"
-                    style="@style/FiltroChip"
-                    android:text="@string/estoque_filtro_carnes" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/filtro_congelados"
-                    style="@style/FiltroChip"
-                    android:text="@string/estoque_filtro_congelados" />
+                <!-- As categorias entram aqui pelo EstoqueFragment, uma por
+                     categoria presente no estoque. -->
 
             </com.google.android.material.chip.ChipGroup>
 

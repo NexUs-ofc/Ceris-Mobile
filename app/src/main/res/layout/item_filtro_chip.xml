@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Chip de categoria do estoque. Inflado pelo EstoqueFragment, um por categoria
+    presente: assim herda o FiltroChip inteiro, o que um Chip criado em codigo
+    so com tema nao faria.
+-->
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/FiltroChip"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
