@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".CerisApplication"
@@ -18,10 +21,21 @@
         <meta-data
             android:name="firebase_messaging_installation_id_enabled"
             android:value="true" />
-        <!-- O cadastro e o recebimento entram na proxima PR. -->
+        <!-- O registro manual exige sessao e permissao de notificacoes. -->
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="false" />
+        <service
+            android:name=".notification.CerisMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".notification.PushSyncJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <activity
             android:name=".view.LoginActivity"
             android:exported="false"

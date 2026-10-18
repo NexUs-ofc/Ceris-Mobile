@@ -6,7 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.ceris.R
 import com.example.ceris.local.ListaLocalStore
-import com.example.ceris.local.SessionManager
+import com.example.ceris.notification.PushNotifications
 import com.example.ceris.view.LoginActivity
 import com.google.android.material.button.MaterialButton
 
@@ -25,7 +25,8 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil) {
     }
 
     /**
-     * Só apaga a sessão no aparelho; a Auth não fica sabendo.
+     * Limpa a sessao local e tenta desvincular o push usando a conta antiga.
+     * A Auth nao e chamada; a indisponibilidade do Notify nao bloqueia a saida.
      *
      * O refresh continua válido no servidor pelos 30 dias, mas ninguém mais o
      * tem: ele morava só aqui. Sair tem de funcionar com a Auth fora do ar —
@@ -38,7 +39,7 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil) {
     private fun sair() {
         val contexto = requireContext()
 
-        SessionManager(contexto).clear()
+        PushNotifications.get(contexto).logout()
         ListaLocalStore(contexto).limpar()
 
         // CLEAR_TASK porque voltar depois de sair traria Estoque e listas da
