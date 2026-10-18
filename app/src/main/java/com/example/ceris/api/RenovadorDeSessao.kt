@@ -2,9 +2,8 @@ package com.example.ceris.api
 
 import android.util.Log
 import com.example.ceris.BuildConfig
-import com.example.ceris.local.SessionKeys
 import com.example.ceris.local.SessionManager
-import com.example.ceris.model.SessionAttribute
+import com.example.ceris.local.SessionSnapshot
 import com.example.ceris.model.dto.RefreshRequest
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -29,17 +28,21 @@ import java.io.IOException
  */
 class RenovadorDeSessao(
     private val sessionManager: SessionManager,
-    private val api: AuthAPI
+    private val api: AuthAPI,
+    private val avisar: (String) -> Unit = { Log.w(TAG, it) },
 ) : Authenticator {
-
     companion object {
         private const val TAG = "RenovadorDeSessao"
 
         /** Uma tentativa por requisição: se o token novo também tomar 401, para. */
         private const val LIMITE_DE_TENTATIVAS = 1
+        private val RENOVACAO_LOCK = Any()
     }
 
-    override fun authenticate(route: Route?, response: Response): Request? {
+    override fun authenticate(
+        route: Route?,
+        response: Response,
+    ): Request? {
         if (tentativasJaFeitas(response) >= LIMITE_DE_TENTATIVAS) {
             return null
         }
@@ -52,66 +55,65 @@ class RenovadorDeSessao(
             return null
         }
 
-        val refreshToken = sessionManager.getString(SessionKeys.REFRESH_TOKEN, "")
+        val origem = response.request().tag(SessionSnapshot::class.java) ?: return null
 
-        if (refreshToken.isBlank()) {
-            return null
+        // O lock da renovacao nao bloqueia o logout. O compare-and-set do
+        // SessionManager descarta uma resposta que chegue depois dele.
+        return synchronized(RENOVACAO_LOCK) {
+            val atual = sessionManager.snapshot() ?: return null
+            if (atual.generation != origem.generation) return null
+
+            // Outra chamada ja renovou enquanto esta aguardava o lock.
+            val token =
+                if (response.request().header("Authorization") != "Bearer ${atual.accessToken}") {
+                    atual.accessToken
+                } else {
+                    renovar(atual) ?: return null
+                }
+
+            if (!sessionManager.isCurrent(origem)) return null
+            response.request().newBuilder()
+                .header("Authorization", "Bearer $token")
+                .tag(SessionSnapshot::class.java, sessionManager.snapshot())
+                .build()
         }
-
-        val sessao = renovar(refreshToken) ?: return null
-
-        // OkHttp 3.x: request() e priorResponse() sao metodos, nao
-        // propriedades — o projeto usa o logging-interceptor 3.14.9.
-        return response.request()
-            .newBuilder()
-            .header("Authorization", "Bearer ${sessao.accessToken}")
-            .build()
     }
 
-/** Sem cabeçalho de desafio, assume Bearer: era o comportamento antigo. */
+    /** Sem cabecalho de desafio, assume Bearer, como os servicos atuais. */
     private fun desafioEhBearer(response: Response): Boolean {
         val desafio = response.header("WWW-Authenticate") ?: return true
 
         return desafio.trim().startsWith("Bearer", ignoreCase = true)
     }
 
-    private fun renovar(refreshToken: String) = try {
-        val resposta = api.refreshSession(
-            BuildConfig.API_KEY,
-            RefreshRequest(refreshToken)
-        ).execute()
+    private fun renovar(sessao: SessionSnapshot): String? =
+        try {
+            val resposta =
+                api.refreshSession(
+                    BuildConfig.API_KEY,
+                    RefreshRequest(sessao.refreshToken),
+                ).execute()
 
-        val corpo = resposta.body()
+            val corpo = resposta.body()
 
-        if (resposta.isSuccessful && corpo != null) {
-            // O refresh token também é trocado: guardar só o access deixaria a
-            // renovação seguinte com um token já gasto.
-            sessionManager.set(
-                SessionAttribute(SessionKeys.ACCESS_TOKEN, corpo.accessToken),
-                SessionAttribute(SessionKeys.REFRESH_TOKEN, corpo.refreshToken)
-            )
-            corpo
-        } else {
-            Log.w(TAG, "Renovação recusada com HTTP ${resposta.code()}")
-            descartarSessao()
+            if (resposta.isSuccessful && corpo != null) {
+                if (sessionManager.renew(sessao, corpo.accessToken, corpo.refreshToken)) corpo.accessToken else null
+            } else {
+                resposta.errorBody()?.close()
+                avisar("Renovacao recusada com HTTP ${resposta.code()}")
+                // 429, 5xx e erros de configuracao nao comprovam token revogado.
+                if (resposta.code() == 401) sessionManager.discard(sessao)
+                null
+            }
+        } catch (e: IOException) {
+            // Rede fora não é sessão inválida: os tokens ficam onde estão para a
+            // próxima tentativa.
+            avisar("Nao foi possivel renovar a sessao agora")
+            null
+        } catch (e: RuntimeException) {
+            avisar("Resposta de renovacao invalida")
             null
         }
-    } catch (e: IOException) {
-        // Rede fora não é sessão inválida: os tokens ficam onde estão para a
-        // próxima tentativa.
-        Log.w(TAG, "Não foi possível renovar a sessão agora", e)
-        null
-    }
-
-    /**
-     * Refresh recusado é fim de sessão de verdade — os 30 dias acabaram ou o
-     * token foi revogado. Apagar os dois faz a próxima abertura do app cair no
-     * login, em vez de insistir numa sessão que o servidor não aceita mais.
-     */
-    private fun descartarSessao() {
-        sessionManager.remove(SessionKeys.ACCESS_TOKEN)
-        sessionManager.remove(SessionKeys.REFRESH_TOKEN)
-    }
 
     private fun tentativasJaFeitas(response: Response): Int {
         var feitas = 0

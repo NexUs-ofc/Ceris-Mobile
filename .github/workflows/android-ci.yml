@@ -2,18 +2,26 @@ name: Android CI
 
 on:
   push:
-    branches:
-      - main
-
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-
-  tests:
-    name: Tests
+  android:
+    name: ${{ matrix.name }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Tests
+            task: test
+          - name: Lint
+            task: lint
+          - name: Build
+            task: assembleDebug
+          - name: Ktlint
+            task: ktlintCheck
 
     steps:
       - name: Checkout repository
@@ -28,109 +36,43 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Create local.properties
+      - name: Configure Android services
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          CERISIA_API_KEY: ${{ secrets.CERISIA_API_KEY }}
+          AUTH_API_BASE_URL: ${{ secrets.AUTH_API_BASE_URL }}
+          CORE_API_BASE_URL: ${{ secrets.CORE_API_BASE_URL }}
+          IA_API_BASE_URL: ${{ secrets.IA_API_BASE_URL }}
+          NOTIFY_API_BASE_URL: ${{ secrets.NOTIFY_API_BASE_URL || 'https://ceris-notify.discloud.dev/' }}
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          VIA_CEP_URL: ${{ secrets.VIA_CEP_URL }}
+          ACCOUNT_TYPE: ${{ secrets.ACCOUNT_TYPE }}
         run: |
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
-          echo "API_KEY=${{ secrets.API_KEY }}" >> local.properties
-          echo "AUTH_API_BASE_URL=${{ secrets.AUTH_API_BASE_URL }}" >> local.properties
-          echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
-          echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          config = json.loads(Path("app/google-services.json").read_text())
+          packages = {client["client_info"]["android_client_info"]["package_name"] for client in config["client"]}
+          assert config["project_info"]["project_id"] == "ceris-bfbfe", "Projeto Firebase divergente"
+          assert "com.example.ceris" in packages, "Pacote Android divergente"
+
+          keys = (
+              "API_KEY", "CERISIA_API_KEY", "AUTH_API_BASE_URL", "CORE_API_BASE_URL",
+              "IA_API_BASE_URL", "NOTIFY_API_BASE_URL", "GOOGLE_WEB_CLIENT_ID",
+              "VIA_CEP_URL", "ACCOUNT_TYPE",
+          )
+          def escape(value):
+              return value.replace("\\", "\\\\").replace("\n", "\\n").replace("\r", "\\r")
+
+          values = {"sdk.dir": os.environ["ANDROID_HOME"]}
+          values.update({key: os.environ[key] for key in keys if os.environ.get(key)})
+          Path("local.properties").write_text("".join(f"{key}={escape(value)}\n" for key, value in values.items()), encoding="utf-8")
+          PY
 
       - name: Grant permission to Gradle
         run: chmod +x gradlew
 
-      - name: Run unit tests
-        run: ./gradlew test
-
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Create local.properties
-        run: |
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
-          echo "API_KEY=${{ secrets.API_KEY }}" >> local.properties
-          echo "AUTH_API_BASE_URL=${{ secrets.AUTH_API_BASE_URL }}" >> local.properties
-          echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
-          echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
-
-      - name: Grant permission to Gradle
-        run: chmod +x gradlew
-
-      - name: Run lint
-        run: ./gradlew lint
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Create local.properties
-        run: |
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
-          echo "API_KEY=${{ secrets.API_KEY }}" >> local.properties
-          echo "AUTH_API_BASE_URL=${{ secrets.AUTH_API_BASE_URL }}" >> local.properties
-          echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
-          echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
-
-      - name: Grant permission to Gradle
-        run: chmod +x gradlew
-
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug
-
-  ktlint:
-    name: Ktlint
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Create local.properties
-        run: |
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
-          echo "API_KEY=${{ secrets.API_KEY }}" >> local.properties
-          echo "AUTH_API_BASE_URL=${{ secrets.AUTH_API_BASE_URL }}" >> local.properties
-          echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
-          echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
-
-      - name: Grant permission to Gradle
-        run: chmod +x gradlew
-
-      - name: Run Ktlint
-        run: ./gradlew ktlintCheck
+      - name: Run verification
+        run: ./gradlew ${{ matrix.task }} --console=plain

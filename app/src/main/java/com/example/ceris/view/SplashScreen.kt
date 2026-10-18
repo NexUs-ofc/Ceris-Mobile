@@ -55,10 +55,6 @@ class SplashScreen : AppCompatActivity() {
 
         val sessionManager = SessionManager(this)
 
-        // Aqui porque e a primeira tela do app e o RenovadorDeSessao precisa de
-        // um Context para ler os tokens guardados.
-        RetrofitClient.configurarRenovacao(sessionManager)
-
         // A conversa da Cerita que ficou aberta na ultima execucao e encerrada
         // aqui: e o servidor que resume e guarda as preferencias dela.
         ChatRepository(

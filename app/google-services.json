@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "188386796496",
+    "project_id": "ceris-bfbfe",
+    "storage_bucket": "ceris-bfbfe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188386796496:android:4dba160ae340f6b2a88fd5",
+        "android_client_info": {
+          "package_name": "com.example.ceris"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR6ugB1iCxwICL85dNoIyZ_PATpFDkTxw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

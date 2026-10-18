@@ -35,6 +35,9 @@ object ApiBaseUrl {
     /** ms-ia, a Cerita. */
     val ia: String = normalizar(BuildConfig.IA_API_BASE_URL)
 
+    /** Historico e cadastro de instalacoes push. */
+    val notify: String = normalizar(BuildConfig.NOTIFY_API_BASE_URL)
+
     /** Falso quando a chave nao foi preenchida no local.properties. */
     fun configurada(url: String): Boolean = url != RESERVA
 
