@@ -57,6 +57,17 @@ class SessionManager internal constructor(private val preferences: SharedPrefere
             snapshot()?.generation == session.generation
         }
 
+    /** Impede login/logout entre a verificacao e a publicacao de um aviso. */
+    fun withCurrentSession(
+        session: SessionSnapshot,
+        action: () -> Unit,
+    ): Boolean =
+        synchronized(SESSION_LOCK) {
+            if (!isCurrent(session)) return false
+            action()
+            true
+        }
+
     fun renew(
         session: SessionSnapshot,
         accessToken: String,
