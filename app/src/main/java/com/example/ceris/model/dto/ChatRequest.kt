@@ -10,10 +10,8 @@ import com.google.gson.annotations.SerializedName
  * "sessionId" e o servidor abre sessao nova a cada mensagem, perdendo o fio da
  * conversa.
  *
- * household_account_id e account_id existem no contrato e ficam de fora de
- * proposito: o controller sobrescreve account_id pelo subject do token, e o
- * household tem default no servidor. Mandar um palpite daqui seria inventar
- * dado que o backend ja sabe.
+ * Nenhum id de usuario vai aqui: o app nao guarda id, so o token, e o ms-ia
+ * tira a casa e a conta do subject do token, como a Core faz no estoque.
  */
 data class ChatRequest(
     val mensagem: String,
