@@ -72,6 +72,9 @@ fun mensagemDeFalha(throwable: Throwable): String {
         throwable is com.example.ceris.repository.ChatRepository.RespostaCortada ->
             throwable.message.orEmpty()
 
+        throwable is com.example.ceris.repository.NotaFiscalRepository.LeituraCortada ->
+            throwable.message.orEmpty()
+
         throwable is ShoppingListRepository.SemSessao -> "Sessão expirada. Entre novamente."
 
         throwable is SocketTimeoutException -> "O servidor demorou para responder. Tente de novo."

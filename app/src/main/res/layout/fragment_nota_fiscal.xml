@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Leitura de nota fiscal: um fragment so, em tres camadas que se alternam.
+
+    camada_camera  - preview da camera com a moldura; o botao central da barra
+                     tira a foto.
+    camada_lendo   - espera da leitura, com um unico texto de andamento.
+    camada_revisao - itens lidos para conferir antes de entrar no estoque.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/raiz_nota"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
+    tools:context=".view.fragment.NotaFiscalFragment">
+
+    <!-- Camera -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/camada_camera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ceris_black">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/preview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/moldura"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/spacing_xl"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:layout_marginEnd="@dimen/spacing_xl"
+            android:layout_marginBottom="@dimen/spacing_xl"
+            android:background="@drawable/bg_moldura_nota"
+            app:layout_constraintBottom_toTopOf="@id/dica"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+        <TextView
+            android:id="@+id/dica"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_margin_horizontal"
+            android:layout_marginEnd="@dimen/screen_margin_horizontal"
+            android:layout_marginBottom="@dimen/spacing_xl"
+            android:gravity="center"
+            android:text="@string/nota_dica"
+            android:textColor="@color/ceris_white"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/sem_permissao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_margin_horizontal"
+            android:layout_marginEnd="@dimen/screen_margin_horizontal"
+            android:gravity="center"
+            android:text="@string/nota_sem_permissao"
+            android:textColor="@color/ceris_white"
+            android:textSize="@dimen/text_size_15"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Lendo / salvando -->
+    <LinearLayout
+        android:id="@+id/camada_lendo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/md_theme_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/screen_margin_horizontal"
+        android:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:indicatorColor="@color/md_theme_primary" />
+
+        <TextView
+            android:id="@+id/txt_andamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:gravity="center"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_15"
+            tools:text="Lendo a nota…" />
+
+    </LinearLayout>
+
+    <!-- Revisao -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/camada_revisao"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/titulo_revisao"
+            style="@style/TituloTela"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:text="@string/nota_revisao_titulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_loja"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:textColor="@color/md_secundary_text"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titulo_revisao"
+            tools:text="Mercado Exemplo · 8 itens lidos" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lista_itens_nota"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/spacing_s"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/btn_adicionar_estoque"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_loja"
+            tools:listitem="@layout/item_nota" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_adicionar_estoque"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:fontFamily="@font/montserrat_semibold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/nota_adicionar"
+            android:textColor="@color/md_theme_onPrimary"
+            android:textSize="@dimen/text_size_15"
+            app:backgroundTint="@color/md_theme_primary"
+            app:cornerRadius="@dimen/botao_radius"
+            app:layout_constraintBottom_toTopOf="@id/btn_descartar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+        <TextView
+            android:id="@+id/btn_descartar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:layout_marginBottom="@dimen/spacing_m"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/spacing_s"
+            android:text="@string/nota_descartar"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
