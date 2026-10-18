@@ -22,10 +22,12 @@ object RetrofitClient {
     @Volatile
     private var renovador: Authenticator? = null
 
+    private var sessaoInterceptor: SessionRequestInterceptor? = null
+
     private val httpClient: OkHttpClient by lazy {
         val logging = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
+                HttpLoggingInterceptor.Level.BASIC
             } else {
                 HttpLoggingInterceptor.Level.NONE
             }
@@ -45,17 +47,20 @@ object RetrofitClient {
      * /token/refresh respondesse 401, um cliente com renovação tentaria
      * renovar a renovação, em círculo.
      */
+    @Synchronized
     fun configurarRenovacao(sessionManager: SessionManager) {
         renovador = RenovadorDeSessao(
             sessionManager = sessionManager,
             api = getApi(ApiBaseUrl.auth, AuthAPI::class.java)
         )
+        sessaoInterceptor = SessionRequestInterceptor(sessionManager)
 
         // Quem foi criado antes disto ficou sem renovação; refazer o cache
         // evita depender da ordem em que as telas pedem sua API.
         retrofitAutenticados.clear()
     }
 
+    @Synchronized
     private fun getRetrofit(baseUrl: String): Retrofit {
         return retrofitInstances.getOrPut(baseUrl) {
             Retrofit.Builder()
@@ -77,20 +82,23 @@ object RetrofitClient {
             .build()
     }
 
+    @Synchronized
     private fun getRetrofitAutenticado(baseUrl: String): Retrofit {
         val autenticador = renovador ?: return getRetrofit(baseUrl)
 
         return retrofitAutenticados.getOrPut(baseUrl) {
+            val interceptor = checkNotNull(sessaoInterceptor)
+            val client =
+                (if (baseUrl == ApiBaseUrl.ia) httpClientDemorado else httpClient)
+                    .newBuilder()
+                    .addInterceptor(interceptor)
+                    .authenticator(autenticador)
+                    .build()
             Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .client(
-                    // newBuilder reaproveita pool de conexões e interceptors
-                    // do cliente comum; muda só a renovação.
-                    (if (baseUrl == ApiBaseUrl.ia) httpClientDemorado else httpClient)
-                        .newBuilder()
-                        .authenticator(autenticador)
-                        .build()
-                )
+                // O interceptor roda depois da fila. Vincular antes dela evita
+                // rejeitar chamadas de listas/chat quando outra chamada renova.
+                .callFactory(interceptor.vincularChamadas(client))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }

@@ -29,12 +29,15 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Create local.properties
+        env:
+          NOTIFY_API_BASE_URL: ${{ secrets.NOTIFY_API_BASE_URL || 'https://ceris-notify.discloud.dev/' }}
         run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
           echo "API_KEY=${{ secrets.API_KEY }}" >> local.properties
           echo "AUTH_API_BASE_URL=${{ secrets.AUTH_API_BASE_URL }}" >> local.properties
           echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
           echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
+          echo "NOTIFY_API_BASE_URL=$NOTIFY_API_BASE_URL" >> local.properties
 
       - name: Grant permission to Gradle
         run: chmod +x gradlew
@@ -60,12 +63,15 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Create local.properties
+        env:
+          NOTIFY_API_BASE_URL: ${{ secrets.NOTIFY_API_BASE_URL || 'https://ceris-notify.discloud.dev/' }}
         run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
           echo "API_KEY=${{ secrets.API_KEY }}" >> local.properties
           echo "AUTH_API_BASE_URL=${{ secrets.AUTH_API_BASE_URL }}" >> local.properties
           echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
           echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
+          echo "NOTIFY_API_BASE_URL=$NOTIFY_API_BASE_URL" >> local.properties
 
       - name: Grant permission to Gradle
         run: chmod +x gradlew
@@ -91,12 +97,15 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Create local.properties
+        env:
+          NOTIFY_API_BASE_URL: ${{ secrets.NOTIFY_API_BASE_URL || 'https://ceris-notify.discloud.dev/' }}
         run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
           echo "API_KEY=${{ secrets.API_KEY }}" >> local.properties
           echo "AUTH_API_BASE_URL=${{ secrets.AUTH_API_BASE_URL }}" >> local.properties
           echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
           echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
+          echo "NOTIFY_API_BASE_URL=$NOTIFY_API_BASE_URL" >> local.properties
 
       - name: Grant permission to Gradle
         run: chmod +x gradlew
@@ -122,12 +131,15 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Create local.properties
+        env:
+          NOTIFY_API_BASE_URL: ${{ secrets.NOTIFY_API_BASE_URL || 'https://ceris-notify.discloud.dev/' }}
         run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
           echo "API_KEY=${{ secrets.API_KEY }}" >> local.properties
           echo "AUTH_API_BASE_URL=${{ secrets.AUTH_API_BASE_URL }}" >> local.properties
           echo "VIA_CEP_URL=${{ secrets.VIA_CEP_URL }}" >> local.properties
           echo "ACCOUNT_TYPE=${{ secrets.ACCOUNT_TYPE }}" >> local.properties
+          echo "NOTIFY_API_BASE_URL=$NOTIFY_API_BASE_URL" >> local.properties
 
       - name: Grant permission to Gradle
         run: chmod +x gradlew
