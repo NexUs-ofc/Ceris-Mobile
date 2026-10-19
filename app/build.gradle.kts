@@ -138,6 +138,10 @@ dependencies {
     // quando ela esta inteira e parada na moldura. A leitura de verdade segue no ms-ia.
     implementation("com.google.mlkit:text-recognition:16.0.1")
 
+    // Codigo de barras do produto, lido no aparelho e sem rede: EAN-13, EAN-8,
+    // UPC. O modelo vem junto no APK, nao depende do Play Services baixar.
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+
     // Foto do produto no detalhe. O Glide carrega em segundo plano e faz cache.
     // Nao usar o Coil: ele traz OkHttp 4, que quebra o codigo de OkHttp 3 do projeto.
     implementation("com.github.bumptech.glide:glide:4.16.0")

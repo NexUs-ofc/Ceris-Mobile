@@ -32,6 +32,11 @@ import com.example.ceris.view.MainActivity
 import com.example.ceris.view.adapter.ItemNotaAdapter
 import com.example.ceris.viewmodel.NotaFiscalViewModel
 import com.example.ceris.viewmodel.NotaFiscalViewModel.Estado
+import com.example.ceris.model.CadastroPorCodigo
+import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
@@ -45,7 +50,8 @@ import java.util.concurrent.Executors
  * fragment da barra. Quem tira a foto e o botao central da barra, que a
  * MainActivity repassa para capturar().
  */
-class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalViewModel.Listener {
+class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalViewModel.Listener,
+    CodigoBarrasBottomSheet.Listener {
 
     private val viewModel: NotaFiscalViewModel by viewModels()
 
@@ -72,6 +78,23 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
 
     /** Depois do disparo automatico, nao dispara de novo ate a camera ser religada. */
     private var disparoAutomatico = false
+
+    /** So os formatos de produto de mercado: QR e outros nao sao GTIN. */
+    private val leitorCodigo = BarcodeScanning.getClient(
+        BarcodeScannerOptions.Builder()
+            .setBarcodeFormats(
+                Barcode.FORMAT_EAN_13, Barcode.FORMAT_EAN_8, Barcode.FORMAT_UPC_A, Barcode.FORMAT_UPC_E
+            )
+            .build()
+    )
+
+    /** Modo da camera: nota fiscal (foto e leitura no ms-ia) ou codigo de barras. */
+    @Volatile private var modoCodigo = false
+
+    /** Cadastro aberto: a camera para de ler para nao abrir outro por cima. */
+    @Volatile private var cadastroAberto = false
+
+    private lateinit var dica: TextView
 
     /** JPEG e rotacao fora da thread principal: a foto inteira pesa megas. */
     private lateinit var trabalho: ExecutorService
@@ -103,6 +126,12 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
 
         trabalho = Executors.newSingleThreadExecutor()
 
+        dica = view.findViewById(R.id.dica)
+        view.findViewById<MaterialButtonToggleGroup>(R.id.grupo_modo)
+            .addOnButtonCheckedListener { _, id, marcado ->
+                if (marcado) aplicarModo(id == R.id.modo_codigo)
+            }
+
         viewModel.listener = this
         viewModel.init(SessionManager(requireContext()))
         estado(viewModel.estado)
@@ -113,6 +142,7 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
         cameraProvider?.unbindAll()
         trabalho.shutdown()
         reconhecedor.close()
+        leitorCodigo.close()
     }
 
     /**
@@ -132,7 +162,8 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     /** Chamado pelo botao central da barra quando esta tela ja esta aberta. */
     fun capturar() {
         val alvo = captura ?: return
-        if (viewModel.estado != Estado.CAMERA) return
+        // No modo codigo de barras a leitura e automatica; nao ha foto a tirar.
+        if (viewModel.estado != Estado.CAMERA || modoCodigo) return
 
         alvo.takePicture(
             ContextCompat.getMainExecutor(requireContext()),
@@ -204,19 +235,56 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     }
 
     /**
+     * Primeiro codigo valido do quadro abre o cadastro. O digito verificador
+     * filtra leitura pela metade, que a camera faz com o produto em movimento.
+     */
+    private fun achouCodigo(codigos: List<String>) {
+        if (cadastroAberto || !isAdded) return
+        val gtin = codigos.firstOrNull(CadastroPorCodigo::gtinValido) ?: return
+
+        cadastroAberto = true
+        CodigoBarrasBottomSheet.novo(gtin).show(childFragmentManager, CodigoBarrasBottomSheet.TAG)
+    }
+
+    override fun aoFecharCadastroCodigo(salvou: Boolean) {
+        // Volta a ler: da para cadastrar varios produtos em sequencia.
+        cadastroAberto = false
+    }
+
+    private fun aplicarModo(codigo: Boolean) {
+        modoCodigo = codigo
+        cadastroAberto = false
+        disparoAutomatico = false
+        centradaDesde = 0L
+        dica.setText(if (codigo) R.string.codigo_dica else R.string.nota_dica)
+    }
+
+    /**
      * Roda em segundo plano, a cada quadro. Fecha o quadro em todo caminho,
      * senao a camera para de entregar.
      */
     private fun analisarQuadro(quadro: ImageProxy) {
         val midia = quadro.image
 
-        if (midia == null || analisando || disparoAutomatico || viewModel.estado != Estado.CAMERA) {
+        if (midia == null || analisando || viewModel.estado != Estado.CAMERA ||
+            (modoCodigo && cadastroAberto) || (!modoCodigo && disparoAutomatico)
+        ) {
             quadro.close()
             return
         }
 
         analisando = true
         val entrada = InputImage.fromMediaImage(midia, quadro.imageInfo.rotationDegrees)
+
+        if (modoCodigo) {
+            leitorCodigo.process(entrada)
+                .addOnSuccessListener { codigos -> achouCodigo(codigos.mapNotNull { it.rawValue }) }
+                .addOnCompleteListener {
+                    analisando = false
+                    quadro.close()
+                }
+            return
+        }
 
         reconhecedor.process(entrada)
             .addOnSuccessListener { texto -> conferirEnquadramento(texto, entrada.width, entrada.height) }

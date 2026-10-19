@@ -1,5 +1,6 @@
 package com.example.ceris.api
 
+import com.example.ceris.model.dto.FoodRegistrationRequest
 import com.example.ceris.model.dto.FoodResponse
 import com.example.ceris.model.dto.StockItemRequest
 import com.example.ceris.model.dto.StockItemResponse
@@ -24,6 +25,16 @@ interface StockAPI {
         @Header("Authorization") autorizacao: String,
         @Query("search") busca: String? = null
     ): Call<List<FoodResponse>>
+
+    /**
+     * Cadastro pelo codigo de barras: reaproveita o alimento se o GTIN ja
+     * existe e cria o item no estoque da casa do token.
+     */
+    @POST("/api/foods")
+    fun registrarPorCodigo(
+        @Header("Authorization") autorizacao: String,
+        @Body cadastro: FoodRegistrationRequest
+    ): Call<StockItemResponse>
 
     /** Cada chamada cria um lote novo: a Core nao soma com o que ja existe. */
     @POST("/api/stock")
