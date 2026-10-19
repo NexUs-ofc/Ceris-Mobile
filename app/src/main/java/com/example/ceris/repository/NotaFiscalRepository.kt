@@ -1,5 +1,7 @@
 package com.example.ceris.repository
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.example.ceris.BuildConfig
 import com.example.ceris.api.NotaFiscalAPI
@@ -33,12 +35,22 @@ class NotaFiscalRepository(
     private val sessionManager: SessionManager
 ) {
 
-    /** O corte de 30s do DisCloud chega como pagina HTML com status 200. */
+    /** Proxy na frente do ms-ia respondendo pagina HTML em vez do JSON da leitura. */
     class LeituraCortada : IOException(
-        "A leitura da nota passou de 30 segundos e o servidor cortou. " +
-            "Tente com a nota mais perto e bem iluminada."
+        "O servidor respondeu com uma página de erro em vez da leitura. Tente de novo."
     )
 
+    private val principal = Handler(Looper.getMainLooper())
+
+    private val acompanhamento = AcompanhamentoDeLeitura(
+        api = notaApi,
+        agendar = { atraso, bloco -> principal.postDelayed(bloco, atraso) }
+    )
+
+    /**
+     * Le por pedido: a foto sobe, o ms-ia devolve um numero na hora e o app
+     * pergunta ate ficar pronta. Nenhuma chamada fica aberta durante o OCR.
+     */
     fun ler(
         jpeg: ByteArray,
         onSuccess: (ReceiptScanResponse) -> Unit,
@@ -50,25 +62,19 @@ class NotaFiscalRepository(
         val corpo = RequestBody.create(MediaType.parse("image/jpeg"), jpeg)
         val parte = MultipartBody.Part.createFormData("image", "nota.jpg", corpo)
 
-        notaApi.ler(autorizacao, BuildConfig.CERISIA_API_KEY, parte).enqueue(
-            object : Callback<ReceiptScanResponse> {
-                override fun onResponse(call: Call<ReceiptScanResponse>, response: Response<ReceiptScanResponse>) {
-                    val lida = response.body()
-
-                    if (response.isSuccessful && lida != null) {
-                        onSuccess(lida)
-                    } else {
-                        onError(response.code(), runCatching { response.errorBody()?.string() }.getOrNull())
-                    }
-                }
-
-                override fun onFailure(call: Call<ReceiptScanResponse>, t: Throwable) {
-                    Log.e(TAG, "leitura falhou", t)
-                    onFailure(if (respostaNaoEraJson(t)) LeituraCortada() else t)
-                }
+        acompanhamento.iniciar(
+            autorizacao, BuildConfig.CERISIA_API_KEY, parte,
+            onSuccess = onSuccess,
+            onError = onError,
+            onFailure = { t ->
+                Log.e(TAG, "leitura falhou", t)
+                onFailure(if (respostaNaoEraJson(t)) LeituraCortada() else t)
             }
         )
     }
+
+    /** A tela saiu: para de perguntar pela leitura em andamento. */
+    fun cancelarLeitura() = acompanhamento.cancelar()
 
     fun catalogo(onSuccess: (List<FoodResponse>) -> Unit, onFailure: (Throwable) -> Unit) {
         val autorizacao = autorizacao() ?: return onFailure(ShoppingListRepository.SemSessao())
@@ -76,7 +82,15 @@ class NotaFiscalRepository(
         estoqueApi.alimentos(autorizacao).enqueue(
             object : Callback<List<FoodResponse>> {
                 override fun onResponse(call: Call<List<FoodResponse>>, response: Response<List<FoodResponse>>) {
-                    onSuccess(response.body().orEmpty())
+                    // Erro da Core nao vira lista vazia: sem catalogo a revisao
+                    // abre com o campo "Produto" sem nada, e ninguem entende por que.
+                    val corpo = response.body()
+                    if (response.isSuccessful && corpo != null) {
+                        onSuccess(corpo)
+                    } else {
+                        Log.e(TAG, "catalogo: HTTP ${response.code()}")
+                        onFailure(IOException("catalogo respondeu HTTP ${response.code()}"))
+                    }
                 }
 
                 override fun onFailure(call: Call<List<FoodResponse>>, t: Throwable) {

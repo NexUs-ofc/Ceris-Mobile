@@ -91,6 +91,9 @@ class NotaFiscalViewModel : ViewModel() {
                 // Sem catalogo nao ha como casar os itens; tenta mais uma vez
                 // antes de abrir a revisao.
                 val abrir = {
+                    if (catalogo.isEmpty()) {
+                        listener.makeText("Não consegui carregar a lista de produtos. Tente ler a nota de novo em instantes.")
+                    }
                     mudar(Estado.REVISAO)
                     listener.itensLidos(nota.store, nota.items.map(::paraRevisao), catalogo)
                 }
@@ -208,6 +211,7 @@ class NotaFiscalViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         pararAndamento()
+        if (this::repository.isInitialized) repository.cancelarLeitura()
     }
 
     private companion object {
