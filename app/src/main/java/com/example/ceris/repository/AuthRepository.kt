@@ -266,10 +266,7 @@ class AuthRepository (
         )
     }
     fun saveTokens(accessToken: String, refreshToken: String) {
-        sessionManager.set(
-            SessionAttribute(SessionKeys.ACCESS_TOKEN, accessToken),
-            SessionAttribute(SessionKeys.REFRESH_TOKEN, refreshToken)
-        )
+        sessionManager.startSession(accessToken, refreshToken)
     }
 
     fun getRegistrationId(): String {

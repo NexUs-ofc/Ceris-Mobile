@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="canal_produtos">Validade dos produtos</string>
+    <string name="canal_eventos">Eventos próximos</string>
+    <string name="canal_lojas">Lojas próximas</string>
+    <string name="notificacao_privada">Você recebeu um novo aviso.</string>
+    <string name="notificacoes_permissao_titulo">Receber avisos</string>
+    <string name="notificacoes_permissao_mensagem">Quer receber avisos sobre a validade dos produtos, eventos e lojas próximas?</string>
+    <string name="notificacoes_ativar">Ativar notificações</string>
+    <string name="notificacoes_agora_nao">Agora não</string>
+    <string name="notificacoes_desativadas">Os avisos estão desativados. Você pode ativá-los nas configurações de notificações do Android.</string>
+</resources>

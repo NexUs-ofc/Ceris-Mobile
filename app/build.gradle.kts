@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.google.services)
 }
 
 // Carrega o local.properties
@@ -31,23 +32,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Adiciona as propriedades do local.properties ao BuildConfig
-        localProperties.forEach { (key, value) ->
-            val propertyName = key.toString()
-
-            if (propertyName != "sdk.dir") {
-                buildConfigField(
-                    "String",
-                    propertyName,
-                    "\"${value.toString().replace("\"", "\\\"")}\"",
-                )
-            }
-        }
-
-        // Campos que o codigo referencia e por isso precisam existir sempre.
-        // O bloco acima so cria o que estiver no local.properties, e o CI
-        // escreve apenas um subconjunto das chaves - sem isto, a compilacao
-        // quebra la com "Unresolved reference".
+        // Lista explicita de configuracoes Android e valores quando ausentes.
+        // Assim o CI compila sem copiar credenciais privadas para o APK.
         //
         // "PREENCHER" e a sentinela que o GoogleSignInHelper e o ApiBaseUrl
         // reconhecem: com ela o app abre e avisa que falta configurar, em vez
@@ -63,6 +49,7 @@ android {
                 "CORE_API_BASE_URL" to "PREENCHER",
                 "AUTH_API_BASE_URL" to "PREENCHER",
                 "IA_API_BASE_URL" to "PREENCHER",
+                "NOTIFY_API_BASE_URL" to "PREENCHER",
                 "API_KEY" to "PREENCHER",
                 "CERISIA_API_KEY" to "PREENCHER",
                 "ACCOUNT_TYPE" to "HOUSEHOLD",
@@ -70,9 +57,15 @@ android {
             )
 
         camposObrigatorios.forEach { (nome, reserva) ->
-            if (!localProperties.containsKey(nome)) {
-                buildConfigField("String", nome, "\"$reserva\"")
-            }
+            // Apenas configuracoes do Android entram no APK. Outras chaves
+            // locais, como credenciais privadas de servidor, ficam de fora.
+            val valor = localProperties.getProperty(nome)?.takeIf { it.isNotBlank() } ?: reserva
+            val literal =
+                valor.replace("\\", "\\\\")
+                    .replace("\"", "\\\"")
+                    .replace("\n", "\\n")
+                    .replace("\r", "\\r")
+            buildConfigField("String", nome, "\"$literal\"")
         }
     }
 
@@ -110,6 +103,10 @@ dependencies {
 
     // Material
     implementation(libs.material)
+
+    // Mesmo projeto Firebase do Notify; as versoes ficam no catalogo.
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

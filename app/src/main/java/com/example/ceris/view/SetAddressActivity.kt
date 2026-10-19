@@ -69,6 +69,7 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
             return
         }
         val password = intent.getStringExtra(EXTRA_PASSWORD)
+        val doGoogle = intent.getBooleanExtra(EXTRA_DO_GOOGLE, false)
 
         cepInput = findViewById(R.id.cepInput)
         ruaInput = findViewById(R.id.ruaInput)
@@ -126,6 +127,7 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
                 putExtra(AddressLoadingActivity.EXTRA_FAMILY_NAME, familyName)
                 putExtra(AddressLoadingActivity.EXTRA_EMAIL, email)
                 putExtra(AddressLoadingActivity.EXTRA_PASSWORD, password)
+                putExtra(AddressLoadingActivity.EXTRA_DO_GOOGLE, doGoogle)
                 putExtra(AddressLoadingActivity.EXTRA_CEP, cepInput.text.toString().onlyNumbers())
                 putExtra(AddressLoadingActivity.EXTRA_STREET, ruaInput.text.toString())
                 putExtra(AddressLoadingActivity.EXTRA_NUMBER, numeroInput.text.toString())

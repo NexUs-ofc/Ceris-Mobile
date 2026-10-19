@@ -1,7 +1,7 @@
 # Modelo do local.properties, que nao vai para o repositorio.
 #
-# Copie para local.properties e preencha. Toda chave daqui vira campo do
-# BuildConfig; o que faltar cai na reserva definida em app/build.gradle.kts,
+# Copie para local.properties e preencha. As chaves Android permitidas viram
+# campos do BuildConfig; o que faltar cai na reserva em app/build.gradle.kts,
 # e o app abre avisando em vez de fechar sozinho.
 #
 # Os enderecos nao tem reserva de proposito: um endereco antigo no codigo faz
@@ -15,6 +15,8 @@ AUTH_API_BASE_URL=https://endereco-do-auth/
 CORE_API_BASE_URL=https://endereco-da-core/
 # ms-ia (a Cerita). Sem esta chave a tela do chatbot avisa que falta configurar.
 IA_API_BASE_URL=https://endereco-da-ia/
+# Notify usa Bearer do Auth, sem API_KEY propria.
+NOTIFY_API_BASE_URL=https://ceris-notify.discloud.dev/
 
 # Publico e estavel, raramente muda.
 VIA_CEP_URL=https://viacep.com.br/

@@ -1,12 +1,20 @@
 package com.example.ceris.view
 
+import android.Manifest
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.ceris.R
+import com.example.ceris.local.SessionManager
+import com.example.ceris.notification.PushNotifications
 import com.example.ceris.view.fragment.EstoqueFragment
 import com.example.ceris.view.fragment.ListasFragment
 import com.example.ceris.view.fragment.LocaisFragment
@@ -15,6 +23,7 @@ import com.example.ceris.view.fragment.PerfilFragment
 import com.example.ceris.view.fragment.ReceitasFragment
 import com.example.ceris.view.utils.hideNavigationBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
@@ -30,6 +39,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
  * recriaria a tela do zero.
  */
 class MainActivity : AppCompatActivity() {
+    private val notificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            PushNotifications.get(this).refresh()
+            if (!granted) Toast.makeText(this, R.string.notificacoes_desativadas, Toast.LENGTH_LONG).show()
+        }
 
     private val destinos: Map<Int, () -> Fragment> = mapOf(
         R.id.nav_estoque to { EstoqueFragment() },
@@ -82,6 +96,38 @@ class MainActivity : AppCompatActivity() {
             barra.selectedItemId = R.id.nav_estoque
             mostrar(R.id.nav_estoque) { EstoqueFragment() }
         }
+        requestNotifications(savedInstanceState == null)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // O toque num aviso pode acontecer depois de a sessao ter sido encerrada.
+        if (SessionManager(this).snapshot() == null) {
+            startActivity(
+                Intent(this, LoginActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                },
+            )
+            finish()
+            return
+        }
+        PushNotifications.get(this).refresh()
+    }
+
+    private fun requestNotifications(firstCreation: Boolean) {
+        if (Build.VERSION.SDK_INT < 33 || !firstCreation || SessionManager(this).snapshot() == null) return
+        val push = PushNotifications.get(this)
+        if (push.state.permissionRequested || NotificationManagerCompat.from(this).areNotificationsEnabled()) return
+        // Uma explicacao por instalacao; recusar nao impede usar o aplicativo.
+        push.state.requestPermission()
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.notificacoes_permissao_titulo)
+            .setMessage(R.string.notificacoes_permissao_mensagem)
+            .setPositiveButton(R.string.notificacoes_ativar) { _, _ ->
+                notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+            .setNegativeButton(R.string.notificacoes_agora_nao) { _, _ -> push.refresh() }
+            .show()
     }
 
     /**
