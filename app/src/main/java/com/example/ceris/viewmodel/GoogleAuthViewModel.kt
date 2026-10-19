@@ -9,10 +9,12 @@ import com.example.ceris.model.Address
 import com.example.ceris.model.Channel
 import com.example.ceris.model.dto.ApiError
 import com.example.ceris.model.dto.GoogleAuthenticateRequest
+import com.example.ceris.model.dto.GoogleAuthenticateResponse
 import com.example.ceris.model.dto.GoogleRegistrationRequest
 import com.example.ceris.model.dto.GoogleRegistrationRequiredResponse
 import com.example.ceris.repository.AuthRepository
 import com.example.ceris.util.mensagemDeFalha
+import com.google.gson.Gson
 
 class GoogleAuthViewModel : ViewModel() {
 
@@ -79,7 +81,22 @@ class GoogleAuthViewModel : ViewModel() {
             },
             onError = { statusCode, errorBody ->
                 listener.googleSignInFinished()
-                listener.makeText(errorMessageFor(statusCode, errorBody))
+                if (statusCode == 428) {
+                    val resposta = try {
+                        Gson().fromJson(errorBody, GoogleAuthenticateResponse::class.java)
+                    } catch (e: Exception) {
+                        null
+                    }
+                    val cadastro = resposta?.registration
+                    if (cadastro != null) {
+                        this.authRepository.saveGoogleTicket(cadastro.googleTicket)
+                        listener.registrationRequired(cadastro)
+                    } else {
+                        listener.makeText(errorMessageFor(statusCode, errorBody))
+                    }
+                } else {
+                    listener.makeText(errorMessageFor(statusCode, errorBody))
+                }
             },
             onFailure = { throwable ->
                 listener.googleSignInFinished()
