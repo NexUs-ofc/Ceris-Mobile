@@ -1,6 +1,7 @@
 package com.example.ceris
 
 import android.Manifest
+import android.content.Intent
 import android.graphics.Bitmap
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -8,7 +9,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.example.ceris.model.Produto
 import com.example.ceris.model.SituacaoProduto
 import com.example.ceris.view.DetalheProdutoActivity
-import com.example.ceris.view.MainActivity
+import com.example.ceris.debug.TelaDeTesteActivity
 import com.example.ceris.view.fragment.CodigoBarrasBottomSheet
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -58,9 +59,14 @@ class TelasTest {
         }
     }
 
+    /** A MainActivity exige sessao; a tela vai numa activity so do debug. */
+    private fun tela(nome: String) = ActivityScenario.launch<TelaDeTesteActivity>(
+        Intent(contexto, TelaDeTesteActivity::class.java).putExtra(TelaDeTesteActivity.EXTRA_TELA, nome)
+    )
+
     @Test
     fun cards_do_estoque() {
-        ActivityScenario.launch(MainActivity::class.java).use { cena ->
+        tela(TelaDeTesteActivity.TELA_ESTOQUE).use { cena ->
             // Sem login a Core nao responde; o adapter recebe os produtos direto.
             Thread.sleep(3_000)
             cena.onActivity { atividade ->
@@ -81,9 +87,7 @@ class TelasTest {
 
     @Test
     fun camera_com_os_dois_modos_e_cadastro_por_codigo() {
-        ActivityScenario.launch(MainActivity::class.java).use { cena ->
-            Thread.sleep(1_500)
-            cena.onActivity { it.findViewById<android.view.View>(R.id.nav_scan).performClick() }
+        tela(TelaDeTesteActivity.TELA_NOTA).use { cena ->
             Thread.sleep(3_000)
             print("2_camera_modo_nota")
 
@@ -92,8 +96,11 @@ class TelasTest {
             print("3_camera_modo_codigo")
 
             // Mesmo caminho do leitor: um GTIN valido abre o cadastro.
+            // Mesmo caminho do leitor: aberto pela tela da camera, que volta a
+            // ler quando o cadastro fecha.
             cena.onActivity {
-                CodigoBarrasBottomSheet.novo("7891000100103").show(it.supportFragmentManager, "teste")
+                val camera = it.supportFragmentManager.findFragmentByTag(TelaDeTesteActivity.TELA_NOTA)!!
+                CodigoBarrasBottomSheet.novo("7891000100103").show(camera.childFragmentManager, "teste")
             }
             Thread.sleep(6_000)
             print("4_cadastro_codigo_barras")
