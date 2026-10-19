@@ -25,10 +25,19 @@ class ItemNotaAdapter : RecyclerView.Adapter<ItemNotaAdapter.Card>() {
 
     val itens = mutableListOf<ItemNota>()
 
-    private var catalogo: List<FoodResponse> = emptyList()
+    /**
+     * Rotulo de cada produto do catalogo: nome e marca. O catalogo repete o
+     * nome para cada marca ("Alface crespa" aparece varias vezes), e so pelo
+     * nome a pessoa nao sabe qual esta escolhendo.
+     */
+    private var porRotulo: Map<String, FoodResponse> = emptyMap()
+    private var rotulos: Array<String> = emptyArray()
 
     fun trocar(novos: List<ItemNota>, catalogo: List<FoodResponse>) {
-        this.catalogo = catalogo.sortedBy { it.name.lowercase() }
+        porRotulo = catalogo
+            .sortedBy { it.name.lowercase() }
+            .associateBy(::rotulo)
+        rotulos = porRotulo.keys.toTypedArray()
         itens.clear()
         itens.addAll(novos)
         notifyDataSetChanged()
@@ -61,10 +70,14 @@ class ItemNotaAdapter : RecyclerView.Adapter<ItemNotaAdapter.Card>() {
             incluir.isChecked = item.incluir
             incluir.setOnCheckedChangeListener { _, marcado -> item.incluir = marcado }
 
-            produto.setSimpleItems(catalogo.map { it.name }.toTypedArray())
-            produto.setText(item.alimentoNome.orEmpty(), false)
-            produto.setOnItemClickListener { _, _, posicao, _ ->
-                val escolhido = catalogo[posicao]
+            // Digitavel: com centenas de produtos, rolar a lista inteira nao da.
+            // Filtrado, a posicao clicada nao e a do catalogo; por isso o produto
+            // sai do rotulo clicado, nunca do indice.
+            produto.setSimpleItems(rotulos)
+            val escolhidoAntes = porRotulo.values.firstOrNull { it.id == item.alimentoId }
+            produto.setText(escolhidoAntes?.let(::rotulo) ?: item.alimentoNome.orEmpty(), false)
+            produto.setOnItemClickListener { lista, _, posicao, _ ->
+                val escolhido = porRotulo[lista.getItemAtPosition(posicao) as String] ?: return@setOnItemClickListener
                 item.alimentoId = escolhido.id
                 item.alimentoNome = escolhido.name
                 unidadeNaTela(escolhido.unitOfMeasure)?.let { item.unidade = it }
@@ -122,6 +135,9 @@ class ItemNotaAdapter : RecyclerView.Adapter<ItemNotaAdapter.Card>() {
             ).show()
         }
     }
+
+    private fun rotulo(food: FoodResponse): String =
+        listOfNotNull(food.name, food.productBrand?.takeIf { it.isNotBlank() }).joinToString(" · ")
 
     private companion object {
         val ISO = SimpleDateFormat("yyyy-MM-dd", Locale.US)
