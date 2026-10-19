@@ -12,7 +12,9 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -263,6 +265,9 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
      * Roda em segundo plano, a cada quadro. Fecha o quadro em todo caminho,
      * senao a camera para de entregar.
      */
+    // quadro.image e API experimental do CameraX; e o caminho documentado para
+    // entregar o quadro ao ML Kit sem copiar a imagem.
+    @OptIn(ExperimentalGetImage::class)
     private fun analisarQuadro(quadro: ImageProxy) {
         val midia = quadro.image
 
