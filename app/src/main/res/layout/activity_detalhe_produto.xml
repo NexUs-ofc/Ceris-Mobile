@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_s"
             android:fontFamily="@font/montserrat_semibold"
+            app:fontFamily="@font/montserrat_semibold"
             android:text="@string/detalhe_produto_titulo"
             android:textColor="@color/card_titulo"
             android:textSize="@dimen/text_size_18" />
@@ -105,6 +106,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_bold"
+                            app:fontFamily="@font/montserrat_bold"
                             android:textColor="@color/card_titulo"
                             android:textSize="@dimen/text_size_16"
                             tools:text="Leite Integral Piracanjuba 1L" />
@@ -200,6 +202,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_semibold"
+                    app:fontFamily="@font/montserrat_semibold"
                     android:text="@string/detalhe_produto_nutricao"
                     android:textColor="@color/card_titulo"
                     android:textSize="@dimen/text_size_16" />
@@ -227,6 +230,7 @@
         android:layout_marginEnd="@dimen/screen_margin_horizontal"
         android:layout_marginBottom="@dimen/spacing_l"
         android:fontFamily="@font/montserrat_semibold"
+        app:fontFamily="@font/montserrat_semibold"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:text="@string/detalhe_produto_consumido"

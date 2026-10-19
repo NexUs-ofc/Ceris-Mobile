@@ -28,6 +28,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/spacing_xs</item>
         <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
         <item name="android:textColor">@color/card_titulo</item>
         <item name="android:textSize">@dimen/text_size_13</item>
     </style>

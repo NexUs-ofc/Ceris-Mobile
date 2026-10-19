@@ -21,6 +21,7 @@
     <TextView
         android:id="@+id/title"
         android:fontFamily="@font/huninn"
+        app:fontFamily="@font/huninn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -42,6 +43,7 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="@dimen/screen_margin_horizontal"
         android:fontFamily="@font/huninn"
+        app:fontFamily="@font/huninn"
         android:lineSpacingExtra="2dp"
         android:text="Monitorar seu estoque nunca ficou tão fácil"
         android:textAlignment="center"

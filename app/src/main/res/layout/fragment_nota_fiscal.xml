@@ -32,6 +32,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Os dois jeitos de colocar produto no estoque pela camera. -->
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/grupo_modo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_m"
+            app:checkedButton="@id/modo_nota"
+            app:selectionRequired="true"
+            app:singleSelection="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/modo_nota"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/modo_nota"
+                android:textColor="@color/ceris_white"
+                app:backgroundTint="@color/selecao_modo_camera"
+                app:strokeColor="@color/ceris_white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/modo_codigo"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/modo_codigo"
+                android:textColor="@color/ceris_white"
+                app:backgroundTint="@color/selecao_modo_camera"
+                app:strokeColor="@color/ceris_white" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
         <View
             android:id="@+id/moldura"
             android:layout_width="0dp"
@@ -44,7 +79,7 @@
             app:layout_constraintBottom_toTopOf="@id/dica"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grupo_modo"
             app:layout_constraintWidth_max="@dimen/content_max_width" />
 
         <TextView
@@ -160,6 +195,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/button_height"
             android:fontFamily="@font/montserrat_semibold"
+            app:fontFamily="@font/montserrat_semibold"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="@string/nota_adicionar"
