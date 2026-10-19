@@ -80,7 +80,13 @@ class RegisterViewModel: ViewModel() {
         city: String?,
         state: String?
     ): Boolean {
-        if (!isAllValid(familyName, email, password, neighborhood, street, number, cep, city, state)) {
+        val campos = mutableListOf<Any?>(familyName, email, neighborhood, street, number, cep, city, state)
+        if (password.isNullOrBlank()) {
+            // Fluxo Google: senha nao e obrigatoria
+        } else {
+            campos.add(password)
+        }
+        if (!isAllValid(*campos.toTypedArray())) {
             listener.makeText("Preencha todos os campos!")
             return false
         }
@@ -115,7 +121,7 @@ class RegisterViewModel: ViewModel() {
         if (email == null || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return "E-mail inválido."
         }
-        if (password == null || password.length < MIN_PASSWORD_LENGTH || password.length > MAX_PASSWORD_LENGTH) {
+        if (password != null && password.isNotBlank() && (password.length < MIN_PASSWORD_LENGTH || password.length > MAX_PASSWORD_LENGTH)) {
             return "A senha deve ter entre $MIN_PASSWORD_LENGTH e $MAX_PASSWORD_LENGTH caracteres."
         }
         return null

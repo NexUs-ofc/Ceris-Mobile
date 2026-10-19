@@ -10,7 +10,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.ceris.R
 import com.example.ceris.local.SessionManager
+import com.example.ceris.model.Address
 import com.example.ceris.view.utils.hideNavigationBar
+import com.example.ceris.viewmodel.GoogleAuthViewModel
 import com.example.ceris.viewmodel.RegisterViewModel
 
 class AddressLoadingActivity : AppCompatActivity(), RegisterViewModel.Listener {
@@ -19,6 +21,7 @@ class AddressLoadingActivity : AppCompatActivity(), RegisterViewModel.Listener {
         const val EXTRA_FAMILY_NAME = "extra_family_name"
         const val EXTRA_EMAIL = "extra_email"
         const val EXTRA_PASSWORD = "extra_password"
+        const val EXTRA_DO_GOOGLE = "extra_do_google"
         const val EXTRA_CEP = "extra_cep"
         const val EXTRA_STREET = "extra_street"
         const val EXTRA_NUMBER = "extra_number"
@@ -28,6 +31,7 @@ class AddressLoadingActivity : AppCompatActivity(), RegisterViewModel.Listener {
     }
 
     private lateinit var email: String
+    private var doGoogle: Boolean = false
 
     private val viewModel: RegisterViewModel by viewModels()
 
@@ -45,6 +49,8 @@ class AddressLoadingActivity : AppCompatActivity(), RegisterViewModel.Listener {
 
         val sessionManager = SessionManager(this)
         viewModel.init(sessionManager)
+
+        doGoogle = intent.getBooleanExtra(EXTRA_DO_GOOGLE, false)
 
         email = intent.getStringExtra(EXTRA_EMAIL) ?: run {
             finish()
@@ -67,7 +73,48 @@ class AddressLoadingActivity : AppCompatActivity(), RegisterViewModel.Listener {
             return
         }
 
-        viewModel.startRegistrationWithPassword()
+        if (doGoogle) {
+            completarCadastroGoogle(sessionManager)
+        } else {
+            viewModel.startRegistrationWithPassword()
+        }
+    }
+
+    private fun completarCadastroGoogle(sessionManager: SessionManager) {
+        val googleViewModel = GoogleAuthViewModel()
+        googleViewModel.init(sessionManager)
+        googleViewModel.listener = object : GoogleAuthViewModel.Listener {
+            override fun makeText(message: String) {
+                Toast.makeText(this@AddressLoadingActivity, message, Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+            }
+
+            override fun googleSignInStarted() = Unit
+
+            override fun googleSignInFinished() = Unit
+
+            override fun loggedIn() {
+                val intent = Intent(this@AddressLoadingActivity, com.example.ceris.view.MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
+            }
+
+            override fun registrationRequired(dados: com.example.ceris.model.dto.GoogleRegistrationRequiredResponse) {
+                makeText("Cadastro ja esta em andamento.")
+            }
+        }
+
+        val address = Address(
+            neighborhood = intent.getStringExtra(EXTRA_NEIGHBORHOOD) ?: "",
+            street = intent.getStringExtra(EXTRA_STREET) ?: "",
+            number = intent.getStringExtra(EXTRA_NUMBER) ?: "",
+            cep = intent.getStringExtra(EXTRA_CEP) ?: "",
+            city = intent.getStringExtra(EXTRA_CITY) ?: "",
+            state = intent.getStringExtra(EXTRA_STATE) ?: ""
+        )
+        googleViewModel.completeRegistration(address = address)
     }
 
     override fun onDestroy() {
