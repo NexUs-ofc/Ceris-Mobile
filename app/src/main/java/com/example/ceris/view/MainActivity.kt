@@ -151,10 +151,17 @@ class MainActivity : AppCompatActivity() {
     private fun abrirNotificacao(link: NotificationLink) {
         val isStore = link.destination == NotificationLink.Destination.STORE
         val tab = if (isStore) R.id.nav_locais else R.id.nav_estoque
-        findViewById<BottomNavigationView>(R.id.nav_destinos).selectedItemId = tab
+        val barra = findViewById<BottomNavigationView>(R.id.nav_destinos)
+        if (barra.selectedItemId == tab) {
+            // O perfil pode estar visivel mesmo com a aba de estoque selecionada.
+            mostrar(tab, destinos.getValue(tab))
+        } else {
+            barra.selectedItemId = tab
+        }
         val activity =
             when (link.destination) {
-                NotificationLink.Destination.PRODUCT -> DetalheProdutoActivity::class.java
+                // O detalhe do produto sera integrado quando a tela correta estiver disponivel.
+                NotificationLink.Destination.PRODUCT -> return
                 NotificationLink.Destination.STORE -> DetalheLocalActivity::class.java
                 NotificationLink.Destination.EVENT -> DetalheEventoActivity::class.java
             }
