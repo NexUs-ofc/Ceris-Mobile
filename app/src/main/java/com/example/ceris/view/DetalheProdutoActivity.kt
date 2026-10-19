@@ -196,18 +196,18 @@ class DetalheProdutoActivity : AppCompatActivity() {
         private const val EXTRA_IMAGEM = "imagem"
         private const val EXTRA_MARCA = "marca"
 
-        fun abrir(contexto: Context, produto: Produto) {
-            contexto.startActivity(
-                Intent(contexto, DetalheProdutoActivity::class.java)
-                    .putExtra(EXTRA_NOME, produto.nome)
-                    .putExtra(EXTRA_CATEGORIA, produto.categoria)
-                    .putExtra(EXTRA_QUANTIDADE, produto.quantidade)
-                    .putExtra(EXTRA_UNIDADE, produto.unidade)
-                    .putExtra(EXTRA_VALIDADE, produto.validade)
-                    .putExtra(EXTRA_SITUACAO, produto.situacao.name)
-                    .putExtra(EXTRA_IMAGEM, produto.imagemUrl)
-                    .putExtra(EXTRA_MARCA, produto.marca)
-            )
-        }
+        fun abrir(contexto: Context, produto: Produto) = contexto.startActivity(intent(contexto, produto))
+
+        /** Separado do abrir() para o teste de tela montar a mesma Intent. */
+        fun intent(contexto: Context, produto: Produto): Intent =
+            Intent(contexto, DetalheProdutoActivity::class.java)
+                .putExtra(EXTRA_NOME, produto.nome)
+                .putExtra(EXTRA_CATEGORIA, produto.categoria)
+                .putExtra(EXTRA_QUANTIDADE, produto.quantidade)
+                .putExtra(EXTRA_UNIDADE, produto.unidade)
+                .putExtra(EXTRA_VALIDADE, produto.validade)
+                .putExtra(EXTRA_SITUACAO, produto.situacao.name)
+                .putExtra(EXTRA_IMAGEM, produto.imagemUrl)
+                .putExtra(EXTRA_MARCA, produto.marca)
     }
 }
