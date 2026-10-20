@@ -12,9 +12,11 @@ class PushState internal constructor(private val preferences: SharedPreferences)
 
     val installationId: String? get() = preferences.getString("fid", null)
     val registrationPending: Boolean get() = preferences.getBoolean("registration_pending", true)
-    val permissionRequested: Boolean get() = preferences.getBoolean("permission_requested", false)
 
-    fun requestPermission() = preferences.edit { putBoolean("permission_requested", true) }
+    // A chave antiga registrava a explicacao do app, mesmo sem abrir o dialogo do Android.
+    val permissionRequested: Boolean get() = preferences.getBoolean("system_permission_requested", false)
+
+    fun requestPermission() = preferences.edit { putBoolean("system_permission_requested", true) }
 
     fun requestRegistration() = preferences.edit { putBoolean("registration_pending", true) }
 

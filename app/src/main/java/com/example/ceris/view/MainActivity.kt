@@ -9,11 +9,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.ceris.R
 import com.example.ceris.local.SessionManager
+import com.example.ceris.notification.NotificationLink
+import com.example.ceris.notification.PendingNotificationLink
 import com.example.ceris.notification.PushNotifications
 import com.example.ceris.view.fragment.EstoqueFragment
 import com.example.ceris.view.fragment.ListasFragment
@@ -22,7 +25,6 @@ import com.example.ceris.view.fragment.PerfilFragment
 import com.example.ceris.view.fragment.ReceitasFragment
 import com.example.ceris.view.utils.hideNavigationBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
@@ -38,21 +40,24 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
  * recriaria a tela do zero.
  */
 class MainActivity : AppCompatActivity() {
+    private var notificationLinkConsumed = false
     private val notificationPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             PushNotifications.get(this).refresh()
-            if (!granted) Toast.makeText(this, R.string.notificacoes_desativadas, Toast.LENGTH_LONG).show()
         }
 
-    private val destinos: Map<Int, () -> Fragment> = mapOf(
-        R.id.nav_estoque to { EstoqueFragment() },
-        R.id.nav_locais to { LocaisFragment() },
-        R.id.nav_lista to { ListasFragment() },
-        R.id.nav_receitas to { ReceitasFragment() }
-    )
+    private val destinos: Map<Int, () -> Fragment> =
+        mapOf(
+            R.id.nav_estoque to { EstoqueFragment() },
+            R.id.nav_locais to { LocaisFragment() },
+            R.id.nav_lista to { ListasFragment() },
+            R.id.nav_receitas to { ReceitasFragment() },
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        notificationLinkConsumed = savedInstanceState?.getBoolean(LINK_CONSUMED) == true
+        if (notificationLinkConsumed) intent.data = null
         enableEdgeToEdge()
         hideNavigationBar()
         setContentView(R.layout.activity_main)
@@ -85,13 +90,23 @@ class MainActivity : AppCompatActivity() {
             barra.selectedItemId = R.id.nav_estoque
             mostrar(R.id.nav_estoque) { EstoqueFragment() }
         }
-        requestNotifications(savedInstanceState == null)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onPostResume() {
+        super.onPostResume()
+        val pending = PendingNotificationLink(this)
+        val rawLink = intent.data?.toString()
+        val incoming = NotificationLink.parse(rawLink)
+        // Consumir antes de navegar evita reabrir o detalhe ao voltar ou girar a tela.
+        intent.data = null
+        if (rawLink != null) notificationLinkConsumed = true
+        val session = SessionManager(this).snapshot()
         // O toque num aviso pode acontecer depois de a sessao ter sido encerrada.
-        if (SessionManager(this).snapshot() == null) {
+        if (session == null) {
+            if (rawLink != null) {
+                pending.clear()
+                if (incoming != null) pending.save(incoming)
+            }
             startActivity(
                 Intent(this, LoginActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -101,22 +116,64 @@ class MainActivity : AppCompatActivity() {
             return
         }
         PushNotifications.get(this).refresh()
+        val link =
+            if (rawLink != null) {
+                pending.clear()
+                incoming
+            } else {
+                pending.take()
+            }
+        if (rawLink != null && incoming == null) {
+            Toast.makeText(this, R.string.notificacao_link_invalido, Toast.LENGTH_LONG).show()
+        }
+        if (link != null) {
+            if (!link.belongsTo(session.profileId)) {
+                Toast.makeText(this, R.string.notificacao_outra_conta, Toast.LENGTH_LONG).show()
+            } else {
+                abrirNotificacao(link)
+                return
+            }
+        }
+        requestNotifications()
     }
 
-    private fun requestNotifications(firstCreation: Boolean) {
-        if (Build.VERSION.SDK_INT < 33 || !firstCreation || SessionManager(this).snapshot() == null) return
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        notificationLinkConsumed = false
+        setIntent(intent)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(LINK_CONSUMED, notificationLinkConsumed)
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun abrirNotificacao(link: NotificationLink) {
+        val isStore = link.destination == NotificationLink.Destination.STORE
+        val tab = if (isStore) R.id.nav_locais else R.id.nav_estoque
+        val barra = findViewById<BottomNavigationView>(R.id.nav_destinos)
+        if (barra.selectedItemId == tab) {
+            // O perfil pode estar visivel mesmo com a aba de estoque selecionada.
+            mostrar(tab, destinos.getValue(tab))
+        } else {
+            barra.selectedItemId = tab
+        }
+        val activity =
+            when (link.destination) {
+                // O detalhe do produto sera integrado quando a tela correta estiver disponivel.
+                NotificationLink.Destination.PRODUCT -> return
+                NotificationLink.Destination.STORE -> DetalheLocalActivity::class.java
+                NotificationLink.Destination.EVENT -> DetalheEventoActivity::class.java
+            }
+        startActivity(Intent(this, activity).setData(link.toUri().toUri()))
+    }
+
+    private fun requestNotifications() {
+        if (Build.VERSION.SDK_INT < 33 || SessionManager(this).snapshot() == null) return
         val push = PushNotifications.get(this)
         if (push.state.permissionRequested || NotificationManagerCompat.from(this).areNotificationsEnabled()) return
-        // Uma explicacao por instalacao; recusar nao impede usar o aplicativo.
         push.state.requestPermission()
-        MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.notificacoes_permissao_titulo)
-            .setMessage(R.string.notificacoes_permissao_mensagem)
-            .setPositiveButton(R.string.notificacoes_ativar) { _, _ ->
-                notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-            .setNegativeButton(R.string.notificacoes_agora_nao) { _, _ -> push.refresh() }
-            .show()
+        notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 
     /**
@@ -133,7 +190,10 @@ class MainActivity : AppCompatActivity() {
      * Traz o destino à frente, criando-o na primeira vez e apenas reexibindo-o
      * nas seguintes.
      */
-    private fun mostrar(chave: Int, criar: () -> Fragment) {
+    private fun mostrar(
+        chave: Int,
+        criar: () -> Fragment,
+    ) {
         val tag = chave.toString()
         val gerenciador = supportFragmentManager
         val atual = gerenciador.fragments.firstOrNull { it.isVisible }
@@ -157,6 +217,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private companion object {
+        const val LINK_CONSUMED = "notification_link_consumed"
+
         /** O perfil não está em nav_menu.xml, então usa uma chave própria. */
         const val PERFIL = -1
     }

@@ -6,11 +6,11 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.example.ceris.R
 import com.example.ceris.local.SessionManager
 import com.example.ceris.view.MainActivity
@@ -32,12 +32,12 @@ class PushNotificationPublisher(private val context: Context, private val state:
         ) {
             return false
         }
+        val link = NotificationLink.from(message) ?: return false
         val intent =
             Intent(context, MainActivity::class.java).apply {
+                action = Intent.ACTION_VIEW
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                data =
-                    Uri.Builder().scheme("ceris").authority("notification")
-                        .appendPath(message.profileId.toString()).appendPath(message.notificationId).build()
+                data = link.toUri().toUri()
             }
         val pending = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val publicVersion =
