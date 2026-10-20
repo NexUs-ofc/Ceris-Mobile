@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Moldura da leitura de nota: so o contorno, para a nota aparecer por dentro. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@android:color/transparent" />
+    <stroke
+        android:width="3dp"
+        android:color="@color/ceris_white" />
+    <corners android:radius="@dimen/card_corner_radius" />
+</shape>

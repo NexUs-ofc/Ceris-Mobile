@@ -3,6 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- A camera e pedida, mas nao exigida: sem ela o app instala e so a
+         leitura de nota fica indisponivel. -->
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -112,9 +120,6 @@
             android:exported="false" />
         <activity
             android:name=".view.ChatbotActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.QrCodeActivity"
             android:exported="false" />
         <activity
             android:name=".view.DetalheProdutoActivity"

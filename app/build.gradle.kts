@@ -124,6 +124,25 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 
+    // Camera da leitura de nota fiscal: preview com a moldura e captura em
+    // alta qualidade, que e o que o OCR do ms-ia precisa.
+    implementation("androidx.camera:camera-core:1.4.1")
+    implementation("androidx.camera:camera-camera2:1.4.1")
+    implementation("androidx.camera:camera-lifecycle:1.4.1")
+    implementation("androidx.camera:camera-view:1.4.1")
+
+    // Reconhece o texto da nota no proprio aparelho, sem rede, so para saber
+    // quando ela esta inteira e parada na moldura. A leitura de verdade segue no ms-ia.
+    implementation("com.google.mlkit:text-recognition:16.0.1")
+
+    // Codigo de barras do produto, lido no aparelho e sem rede: EAN-13, EAN-8,
+    // UPC. O modelo vem junto no APK, nao depende do Play Services baixar.
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+
+    // Foto do produto no detalhe. O Glide carrega em segundo plano e faz cache.
+    // Nao usar o Coil: ele traz OkHttp 4, que quebra o codigo de OkHttp 3 do projeto.
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
     // Testes
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -108,6 +108,7 @@
         android:layout_marginEnd="@dimen/screen_margin_horizontal"
         android:layout_marginBottom="@dimen/spacing_l"
         android:fontFamily="@font/montserrat_semibold"
+        app:fontFamily="@font/montserrat_semibold"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:text="@string/listas_criar"
