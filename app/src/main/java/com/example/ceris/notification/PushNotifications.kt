@@ -97,6 +97,7 @@ class PushNotifications(private val context: Context) {
     }
 
     fun logout() {
+        PendingNotificationLink(context).clear()
         val session = sessionManager.snapshot()
         val binding = state.binding()
         // A limpeza e imediata. O DELETE usa a credencial capturada da conta antiga.
