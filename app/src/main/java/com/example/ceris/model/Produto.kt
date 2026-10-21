@@ -12,7 +12,13 @@ data class Produto(
     val quantidade: Int,
     val validade: String,
     val situacao: SituacaoProduto,
-    val imagemUrl: String? = null
+    val imagemUrl: String? = null,
+    /** Como a Core manda: "un", "kg", "l"... Sem ela, 3 kg viraria "3 un". */
+    val unidade: String = "un",
+    /** Do catalogo da Core. Nulo quando o catalogo nao respondeu. */
+    val categoria: String? = null,
+    /** Marca do produto na Core. Usada para achar a tabela nutricional. */
+    val marca: String? = null
 )
 
 /**
@@ -21,5 +27,8 @@ data class Produto(
 enum class SituacaoProduto {
     FRESCO,
     VENCENDO,
-    VENCIDO
+    VENCIDO,
+
+    /** Cadastrado sem data: nao ha selo nem aviso a dar. */
+    SEM_VALIDADE
 }

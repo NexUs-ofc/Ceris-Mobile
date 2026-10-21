@@ -10,9 +10,17 @@
 
     Fica so no debug de proposito: em release o bloqueio continua valendo, e
     publicar exige um endereco https.
+
+    TelaDeTesteActivity tambem e so do debug: hospeda uma tela do app para o
+    teste de telas (TelasTest) sem passar pelo login. Nao exportada.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application android:usesCleartextTraffic="true" />
+    <application android:usesCleartextTraffic="true">
+        <activity
+            android:name="com.example.ceris.debug.TelaDeTesteActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+    </application>
 
 </manifest>

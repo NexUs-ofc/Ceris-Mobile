@@ -2,9 +2,11 @@ package com.example.ceris.util
 
 import com.example.ceris.BuildConfig
 import com.example.ceris.model.dto.ApiError
+import com.example.ceris.repository.AcompanhamentoDeLeitura
 import com.example.ceris.repository.ShoppingListRepository
 import java.io.EOFException
 import java.io.IOException
+import java.io.InterruptedIOException
 import java.net.ConnectException
 import java.net.ProtocolException
 import java.net.SocketException
@@ -26,7 +28,7 @@ fun mensagemDeErro(statusCode: Int, errorBody: String?): String {
         // login para um problema que o login nao resolve.
         401 -> doServidor ?: "Sessão expirada. Entre novamente."
         403 -> doServidor ?: "Você não tem acesso a esta lista."
-        404 -> "Essa lista não existe mais."
+        404 -> doServidor ?: "Essa lista não existe mais."
         else -> doServidor ?: "Erro $statusCode. Algo deu errado, tente novamente!"
     }
 }
@@ -72,9 +74,21 @@ fun mensagemDeFalha(throwable: Throwable): String {
         throwable is com.example.ceris.repository.ChatRepository.RespostaCortada ->
             throwable.message.orEmpty()
 
+        throwable is com.example.ceris.repository.NotaFiscalRepository.LeituraCortada ->
+            throwable.message.orEmpty()
+
         throwable is ShoppingListRepository.SemSessao -> "Sessão expirada. Entre novamente."
 
-        throwable is SocketTimeoutException -> "O servidor demorou para responder. Tente de novo."
+        throwable is AcompanhamentoDeLeitura.LeituraDemorou -> throwable.message.orEmpty()
+
+        // Tempo limite do cliente. O callTimeout do OkHttp lanca
+        // InterruptedIOException("timeout"), que nao e SocketTimeoutException, e
+        // ao cancelar fecha o socket: sem este ramo antes do de SocketException,
+        // demora do servidor aparecia como "A conexao foi interrompida pelo
+        // servidor" (provado no TempoLimiteTest).
+        throwable is SocketTimeoutException ||
+            (throwable is InterruptedIOException && throwable.message == "timeout") ->
+            "O servidor demorou para responder. Tente de novo."
 
         throwable.temNaCadeia(UnknownHostException::class.java) ->
             "Sem conexão, ou o endereço da API mudou."

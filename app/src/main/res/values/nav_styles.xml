@@ -29,16 +29,15 @@
 
 
     <!--
-        Fundo do destino ativo. O padrão do Material3 é uma pílula larga; o
-        design pede um círculo em volta do ícone, então largura e altura são
-        iguais e a forma vem do FormaCirculo.
+        O destino ativo não tem fundo nenhum: o que marca a seleção é a cor do
+        ícone e do rótulo. Este estilo existe só para apagar a pílula que o
+        Material3 desenha por padrão atrás do item selecionado.
     -->
-    <style name="IndicadorNavAtivo" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:width">@dimen/nav_indicador_size</item>
-        <item name="android:height">@dimen/nav_indicador_size</item>
-        <item name="android:color">@color/nav_indicador</item>
+    <style name="SemIndicadorNav" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:width">0dp</item>
+        <item name="android:height">0dp</item>
+        <item name="android:color">@android:color/transparent</item>
         <item name="marginHorizontal">0dp</item>
-        <item name="shapeAppearance">@style/FormaCirculo</item>
     </style>
 
 

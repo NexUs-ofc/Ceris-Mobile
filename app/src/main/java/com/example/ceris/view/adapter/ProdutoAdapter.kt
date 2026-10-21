@@ -53,15 +53,26 @@ class ProdutoAdapter(
             val contexto = itemView.context
 
             nome.text = produto.nome
-            validade.text = contexto.getString(R.string.produto_validade, produto.validade)
-            quantidade.text = contexto.getString(R.string.produto_quantidade, produto.quantidade)
+            validade.text = if (produto.validade.isBlank()) {
+                contexto.getString(R.string.produto_sem_validade)
+            } else {
+                contexto.getString(R.string.produto_validade, produto.validade)
+            }
+            quantidade.text = contexto.getString(
+                R.string.produto_quantidade_unidade, produto.quantidade, produto.unidade
+            )
 
-            val (rotulo, fundo, texto) = aparencia(produto.situacao)
+            itemView.setOnClickListener { aoTocar(produto) }
+
+            val (rotulo, fundo, texto) = aparencia(produto.situacao) ?: run {
+                selo.visibility = View.GONE
+                return
+            }
+
+            selo.visibility = View.VISIBLE
             selo.setText(rotulo)
             selo.backgroundTintList = ContextCompat.getColorStateList(contexto, fundo)
             selo.setTextColor(ContextCompat.getColor(contexto, texto))
-
-            itemView.setOnClickListener { aoTocar(produto) }
         }
 
         /**
@@ -79,6 +90,7 @@ class ProdutoAdapter(
             SituacaoProduto.VENCIDO -> Triple(
                 R.string.produto_vencido, R.color.selo_vencido_fundo, R.color.selo_vencido_texto
             )
+            SituacaoProduto.SEM_VALIDADE -> null
         }
     }
 

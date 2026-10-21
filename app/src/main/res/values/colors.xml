@@ -9,6 +9,9 @@
     <color name="ceris_deep_400">#322340</color>
     <color name="ceris_white">#FFFFFF</color>
     <color name="ceris_black">#000000</color>
+    <!-- Card de produto: destaque de quantidade e validade, e titulo em negrito. -->
+    <color name="card_destaque">#6D28D9</color>
+    <color name="card_titulo">#1E1B4B</color>
     <!--
         Cinzas neutros do Figma, fora da escala roxa. O merge da main apagou os
         três, mas os estilos que vieram desta branch continuaram apontando para
@@ -90,8 +93,6 @@
     <!-- Traco do topo da barra: cinza claro, bem mais fraco que o texto -->
     <color name="nav_traco">@color/ceris_cinza_claro</color>
 
-    <!-- Fundo do destino ativo da barra, usado pelo IndicadorNavAtivo -->
-    <color name="nav_indicador">@color/ceris_purple_100</color>
     <!-- Tela de Locais -->
     <color name="header_fundo">#FAFAFA</color>
     <color name="header_divisor">#EDEDF2</color>

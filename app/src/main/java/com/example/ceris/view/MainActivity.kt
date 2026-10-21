@@ -21,6 +21,7 @@ import com.example.ceris.notification.PushNotifications
 import com.example.ceris.view.fragment.EstoqueFragment
 import com.example.ceris.view.fragment.ListasFragment
 import com.example.ceris.view.fragment.LocaisFragment
+import com.example.ceris.view.fragment.NotaFiscalFragment
 import com.example.ceris.view.fragment.PerfilFragment
 import com.example.ceris.view.fragment.ReceitasFragment
 import com.example.ceris.view.utils.hideNavigationBar
@@ -54,6 +55,8 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_receitas to { ReceitasFragment() },
         )
 
+    private lateinit var barra: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         notificationLinkConsumed = savedInstanceState?.getBoolean(LINK_CONSUMED) == true
@@ -68,10 +71,18 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val barra = findViewById<BottomNavigationView>(R.id.nav_destinos)
+        barra = findViewById(R.id.nav_destinos)
 
+        // O botao central e a leitura de nota: o primeiro toque abre a camera
+        // aqui mesmo, entre as abas, e com ela aberta o toque tira a foto.
         findViewById<FloatingActionButton>(R.id.nav_scan).setOnClickListener {
-            startActivity(Intent(this, QrCodeActivity::class.java))
+            val nota = supportFragmentManager.findFragmentByTag(NOTA.toString()) as? NotaFiscalFragment
+
+            if (nota != null && nota.isVisible) {
+                nota.capturar()
+            } else {
+                mostrar(NOTA) { NotaFiscalFragment() }
+            }
         }
 
         barra.setOnItemReselectedListener { }
@@ -186,6 +197,15 @@ class MainActivity : AppCompatActivity() {
         mostrar(PERFIL) { PerfilFragment() }
     }
 
+    /** Depois de gravar a nota, a pessoa volta para ver o estoque atualizado. */
+    fun voltarAoEstoque() {
+        if (barra.selectedItemId == R.id.nav_estoque) {
+            mostrar(R.id.nav_estoque) { EstoqueFragment() }
+        } else {
+            barra.selectedItemId = R.id.nav_estoque
+        }
+    }
+
     /**
      * Traz o destino à frente, criando-o na primeira vez e apenas reexibindo-o
      * nas seguintes.
@@ -221,5 +241,8 @@ class MainActivity : AppCompatActivity() {
 
         /** O perfil não está em nav_menu.xml, então usa uma chave própria. */
         const val PERFIL = -1
+
+        /** A leitura de nota tambem fica fora do menu, presa ao botao central. */
+        const val NOTA = -2
     }
 }
