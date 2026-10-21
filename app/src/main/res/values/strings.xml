@@ -79,7 +79,19 @@
     <string name="locais_endereco_atual">Seu endereço atual</string>
     <string name="locais_alterar">Alterar</string>
     <string name="locais_proximos">Supermercados próximos</string>
-    <string name="locais_distancia">%1$s km</string>
+    <string name="locais_distancia">%1$s</string>
+    <string name="locais_carregando">Buscando estabelecimentos próximos…</string>
+    <string name="locais_carregando_endereco">Carregando endereço…</string>
+    <string name="locais_endereco_indisponivel">Endereço não disponível</string>
+    <string name="locais_vazio">Nenhum estabelecimento encontrado em até 5 km do seu endereço.</string>
+    <string name="locais_falha">Não foi possível carregar os locais. Confira sua conexão e tente novamente.</string>
+    <string name="locais_sem_endereco">Cadastre um endereço no seu perfil para encontrar estabelecimentos próximos.</string>
+    <string name="locais_sem_coordenadas">Não foi possível localizar seu endereço no mapa. Revise o endereço cadastrado no perfil.</string>
+    <string name="locais_sessao_invalida">Sua sessão não está disponível. Entre novamente na sua conta.</string>
+    <string name="locais_tentar">Tentar novamente</string>
+    <string name="locais_entrar">Entrar novamente</string>
+    <string name="locais_nome_indisponivel">Estabelecimento sem nome informado</string>
+    <string name="locais_edicao_indisponivel">A edição do endereço ainda não está disponível nesta versão. Você já pode consultar os estabelecimentos para o endereço cadastrado.</string>
     <string name="locais_imagem">Foto do estabelecimento</string>
     <string name="locais_endereco_icone">Endereço atual</string>
 

@@ -28,17 +28,18 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/card_produto_padding">
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/img_local"
             android:layout_width="@dimen/local_imagem_size"
             android:layout_height="@dimen/local_imagem_size"
-            android:background="@color/md_theme_surfaceVariant"
+            android:background="@drawable/bg_local_placeholder"
             android:contentDescription="@string/locais_imagem"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
+            android:padding="@dimen/spacing_m"
+            android:src="@drawable/ic_menu_map_pin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/FormaImagemLocal"
             tools:src="@color/ceris_purple_200" />
 
         <TextView
