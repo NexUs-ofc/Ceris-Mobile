@@ -42,11 +42,11 @@ class PushNotificationPublisher(private val context: Context, private val state:
         val pending = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val publicVersion =
             NotificationCompat.Builder(context, message.channel)
-                .setSmallIcon(R.drawable.ic_menu_bell).setContentTitle(context.getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_notification_ceris).setContentTitle(context.getString(R.string.app_name))
                 .setContentText(context.getString(R.string.notificacao_privada)).build()
         val notification =
             NotificationCompat.Builder(context, message.channel)
-                .setSmallIcon(R.drawable.ic_menu_bell)
+                .setSmallIcon(R.drawable.ic_notification_ceris)
                 .setContentTitle(message.title).setContentText(message.message)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(message.message))
                 .setContentIntent(pending).setAutoCancel(true).setOnlyAlertOnce(true)
