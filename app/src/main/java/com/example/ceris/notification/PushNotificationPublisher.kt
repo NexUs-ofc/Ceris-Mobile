@@ -6,7 +6,11 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.os.Build
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.StyleSpan
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -44,11 +48,23 @@ class PushNotificationPublisher(private val context: Context, private val state:
             NotificationCompat.Builder(context, message.channel)
                 .setSmallIcon(R.drawable.ic_notification_ceris).setContentTitle(context.getString(R.string.app_name))
                 .setContentText(context.getString(R.string.notificacao_privada)).build()
+        val contentText = SpannableString(message.message)
+        if (message.type == "PRODUCT_EXPIRING") {
+            val productName = PRODUCT_EXPIRY_TEXT.matchEntire(message.message)?.groups?.get(1)
+            if (productName != null && productName.value.isNotBlank()) {
+                contentText.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    productName.range.first,
+                    productName.range.last + 1,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                )
+            }
+        }
         val notification =
             NotificationCompat.Builder(context, message.channel)
                 .setSmallIcon(R.drawable.ic_notification_ceris)
-                .setContentTitle(message.title).setContentText(message.message)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(message.message))
+                .setContentTitle(message.title).setContentText(contentText)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(contentText))
                 .setContentIntent(pending).setAutoCancel(true).setOnlyAlertOnce(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE).setPublicVersion(publicVersion)
                 .build()
@@ -76,5 +92,6 @@ class PushNotificationPublisher(private val context: Context, private val state:
 
     private companion object {
         const val TAG = "ceris.notify:"
+        val PRODUCT_EXPIRY_TEXT = Regex("O produto (.+) vence (?:hoje|amanhã|em \\d+ dias)\\.", RegexOption.DOT_MATCHES_ALL)
     }
 }
