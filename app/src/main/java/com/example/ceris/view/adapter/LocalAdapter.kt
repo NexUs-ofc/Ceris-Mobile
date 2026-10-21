@@ -17,28 +17,33 @@ import com.google.android.material.imageview.ShapeableImageView
  * Como o ProdutoAdapter, usa ListAdapter para atualizar por diferença: quando o
  * endereço muda e a lista é recalculada, só os cards afetados são redesenhados.
  *
- * A foto não é carregada aqui: o projeto ainda não tem biblioteca de imagem
- * remota. Enquanto não tiver, a moldura fica com a cor de superfície.
+ * A Core ainda nao fornece fotos de lojas. A moldura usa a cor de superficie
+ * como placeholder, mesmo com Glide disponivel no projeto.
  */
 class LocalAdapter(
-    private val aoTocar: (Local) -> Unit = {}
+    private val aoTocar: (Local) -> Unit = {},
 ) : ListAdapter<Local, LocalAdapter.LocalViewHolder>(Diferenca) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocalViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_local, parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): LocalViewHolder {
+        val view =
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_local, parent, false)
         return LocalViewHolder(view, aoTocar)
     }
 
-    override fun onBindViewHolder(holder: LocalViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: LocalViewHolder,
+        position: Int,
+    ) {
         holder.exibir(getItem(position))
     }
 
     class LocalViewHolder(
         itemView: View,
-        private val aoTocar: (Local) -> Unit
+        private val aoTocar: (Local) -> Unit,
     ) : RecyclerView.ViewHolder(itemView) {
-
         private val nome: TextView = itemView.findViewById(R.id.txt_nome_local)
         private val endereco: TextView = itemView.findViewById(R.id.txt_endereco_local)
         private val distancia: TextView = itemView.findViewById(R.id.selo_distancia)
@@ -56,7 +61,14 @@ class LocalAdapter(
     }
 
     private object Diferenca : DiffUtil.ItemCallback<Local>() {
-        override fun areItemsTheSame(anterior: Local, novo: Local) = anterior.id == novo.id
-        override fun areContentsTheSame(anterior: Local, novo: Local) = anterior == novo
+        override fun areItemsTheSame(
+            anterior: Local,
+            novo: Local,
+        ) = anterior.id == novo.id
+
+        override fun areContentsTheSame(
+            anterior: Local,
+            novo: Local,
+        ) = anterior == novo
     }
 }
