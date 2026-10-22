@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Detalhe do mercado (Figma > Protótipos > V1 > Screen - Detalhe Local):
+    voltar e nome, foto grande, cartao com endereco, horario e distancia, e
+    "Como chegar".
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/header_fundo"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/detalhe_margem"
+        android:paddingEnd="@dimen/detalhe_margem"
+        android:paddingBottom="@dimen/spacing_l">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detalhe_topo"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btn_voltar_mercado"
+                android:layout_width="@dimen/icone_voltar_size"
+                android:layout_height="@dimen/icone_voltar_size"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/lista_voltar"
+                android:padding="@dimen/spacing_s"
+                android:src="@drawable/ic_menu_arrow_left"
+                app:tint="@color/md_theme_primary" />
+
+            <TextView
+                android:id="@+id/txt_nome_mercado"
+                style="@style/TituloTela"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_s"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/card_titulo"
+                tools:text="Supermercado Extra" />
+
+        </LinearLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_mercado"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/mercado_foto_altura"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:background="@color/md_theme_surfaceVariant"
+            android:contentDescription="@string/locais_imagem"
+            android:padding="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_menu_store"
+            app:shapeAppearanceOverlay="@style/FormaFotoMercado" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_m"
+            app:cardBackgroundColor="@color/ceris_white"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/card_contorno"
+            app:strokeWidth="@dimen/card_stroke_width">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/divisor_tabela"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/spacing_m"
+                android:paddingEnd="@dimen/spacing_m"
+                android:showDividers="middle">
+
+                <include
+                    android:id="@+id/linha_endereco"
+                    layout="@layout/item_info_mercado" />
+
+                <include
+                    android:id="@+id/linha_horario"
+                    layout="@layout/item_info_mercado" />
+
+                <include
+                    android:id="@+id/linha_distancia"
+                    layout="@layout/item_info_mercado" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_como_chegar"
+            style="@style/BotaoPrincipal"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:text="@string/mercado_como_chegar" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -56,8 +56,20 @@ class NutricaoRepositoryTest {
     }
 
     @Test
-    fun semMarcaOuSemNomeNaoBusca() {
+    fun semNomeNaoBusca() {
         assertNull(escolher("", "Piracanjuba", resposta))
-        assertNull(escolher("Leite Integral 1L", "", resposta))
+    }
+
+    @Test
+    fun semMarcaCasaSoPeloNome() {
+        val nutricao = escolher("Leite Desnatado", null, resposta)
+
+        assertEquals(35.0, nutricao?.energiaKcal ?: -1.0, 0.0)
+    }
+
+    @Test
+    fun semMarcaUmaPalavraSoNaoBasta() {
+        // "Leite" casaria com qualquer leite da base.
+        assertNull(escolher("Leite", "", resposta))
     }
 }

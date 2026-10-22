@@ -1,49 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Perfil (Figma > Protótipos > V1, node 625:1428).
+    Perfil (Figma > Protótipos > V1 > ProfileScreen).
 
-    Raiz em CoordinatorLayout por causa do encaixe do botão de scan na barra.
-    O conteúdo ainda não foi montado: falta ler as propriedades da tela no Figma.
-    O botão de sair está aqui sozinho por enquanto — é o único jeito de trocar
-    de conta sem desinstalar o app.
-
-    TODO conteúdo: montar a partir do node 625:1428.
+    Foto redonda com contorno roxo e selo de camera, nome e e-mail, e a lista
+    de opcoes em cartoes: Personalizacao (abre a edicao), Privacidade, Termos
+    de Uso, Sobre o App e Sair em vermelho.
 -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/raiz_perfil"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/header_fundo"
+    android:fillViewport="true"
     tools:context=".view.fragment.PerfilFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/conteudo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:paddingStart="@dimen/screen_margin_horizontal"
-        android:paddingEnd="@dimen/screen_margin_horizontal">
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:paddingBottom="@dimen/spacing_l">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_sair"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_perfil"
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size"
             android:layout_marginTop="@dimen/spacing_xl"
-            android:backgroundTint="@color/md_theme_primary"
-            android:text="@string/perfil_sair"
-            android:textColor="@color/md_theme_onPrimary"
-            android:textSize="@dimen/text_size_18"
+            android:background="@color/stepper_fundo"
+            android:contentDescription="@string/perfil_foto"
+            android:padding="@dimen/perfil_foto_contorno"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_menu_user"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_max="@dimen/content_max_width" />
+            app:shapeAppearanceOverlay="@style/FormaCirculo"
+            app:strokeColor="@color/md_theme_primary"
+            app:strokeWidth="@dimen/perfil_foto_contorno" />
+
+        <ImageView
+            android:id="@+id/selo_camera"
+            android:layout_width="@dimen/perfil_selo"
+            android:layout_height="@dimen/perfil_selo"
+            android:background="@drawable/bg_selo_camera"
+            android:contentDescription="@string/perfil_editar"
+            android:padding="@dimen/spacing_xs"
+            android:src="@drawable/ic_menu_camera"
+            app:layout_constraintBottom_toBottomOf="@id/img_perfil"
+            app:layout_constraintEnd_toEndOf="@id/img_perfil"
+            app:tint="@color/ceris_white" />
+
+        <TextView
+            android:id="@+id/txt_nome_perfil"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:fontFamily="@font/huninn"
+            android:gravity="center"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_22"
+            app:fontFamily="@font/huninn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_perfil"
+            tools:text="Maria Silva" />
+
+        <TextView
+            android:id="@+id/txt_email_perfil"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:gravity="center"
+            android:textColor="@color/ceris_cinza"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_nome_perfil"
+            tools:text="maria.silva@email.com" />
+
+        <LinearLayout
+            android:id="@+id/opcoes_perfil"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_email_perfil"
+            app:layout_constraintWidth_max="@dimen/content_max_width">
+
+            <include
+                android:id="@+id/opcao_personalizacao"
+                layout="@layout/item_opcao_perfil" />
+
+            <include
+                android:id="@+id/opcao_privacidade"
+                layout="@layout/item_opcao_perfil" />
+
+            <include
+                android:id="@+id/opcao_termos"
+                layout="@layout/item_opcao_perfil" />
+
+            <include
+                android:id="@+id/opcao_sobre"
+                layout="@layout/item_opcao_perfil" />
+
+            <include
+                android:id="@+id/btn_sair"
+                layout="@layout/item_opcao_perfil" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
