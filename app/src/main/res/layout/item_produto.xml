@@ -60,6 +60,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_m"
+            android:layout_marginEnd="@dimen/spacing_s"
             android:ellipsize="end"
             android:fontFamily="@font/montserrat_bold"
             app:fontFamily="@font/montserrat_bold"

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Um passo do modo de preparo: numero num circulo lilas e o texto ao lado. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/spacing_s"
+    android:paddingBottom="@dimen/spacing_s">
+
+    <TextView
+        android:id="@+id/numero_passo"
+        android:layout_width="@dimen/passo_numero"
+        android:layout_height="@dimen/passo_numero"
+        android:background="@drawable/bg_numero_passo"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:textColor="@color/md_theme_primary"
+        android:textSize="@dimen/text_size_12"
+        app:fontFamily="@font/montserrat_bold"
+        tools:text="1" />
+
+    <TextView
+        android:id="@+id/texto_passo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_m"
+        android:layout_weight="1"
+        android:textColor="@color/md_theme_onBackground"
+        android:textSize="@dimen/text_size_14"
+        tools:text="Corte o frango em cubos e tempere com sal e pimenta" />
+
+</LinearLayout>
