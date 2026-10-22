@@ -23,18 +23,22 @@ import com.example.ceris.model.UnidadeEmbalagem
 import com.example.ceris.repository.CodigoBarrasRepository
 import com.example.ceris.util.mensagemDeErro
 import com.example.ceris.util.mensagemDeFalha
+import com.example.ceris.view.utils.Seletor
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 /**
- * Cadastro de um produto lido pelo codigo de barras.
+ * Confirmar dados do produto, aberto quando a camera le um codigo de barras.
  *
- * Abre na hora com o codigo lido; os dados chegam da base aberta logo depois,
- * se ela tiver o produto. Quem decide e a pessoa: tudo fica editavel.
+ * Abre na hora com o que a pessoa precisa conferir: nome, validade e
+ * quantidade. O resto do cadastro (marca, embalagem, categoria, foto) vem da
+ * base aberta logo depois e segue para a Core sem aparecer na tela, como no
+ * Figma. Sem a base, vale embalagem de 1 unidade e categoria "Outros".
  */
 class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
 
@@ -46,17 +50,12 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
     private lateinit var repository: CodigoBarrasRepository
     private lateinit var gtin: String
 
-    private lateinit var situacao: TextView
     private lateinit var campoNome: EditText
-    private lateinit var campoMarca: EditText
-    private lateinit var campoEmbalagem: EditText
-    private lateinit var campoUnidade: MaterialAutoCompleteTextView
-    private lateinit var campoCategoria: MaterialAutoCompleteTextView
-    private lateinit var txtQuantidade: TextView
     private lateinit var campoValidade: TextView
+    private lateinit var quantidade: Seletor
     private lateinit var confirmar: MaterialButton
 
-    private var quantidade = 1
+    private var encontrado: ProdutoEncontrado? = null
     private var validade: String? = null
     private var salvou = false
 
@@ -78,68 +77,52 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
             }
         )
 
-        situacao = view.findViewById(R.id.txt_situacao_busca)
         campoNome = view.findViewById(R.id.campo_nome_codigo)
-        campoMarca = view.findViewById(R.id.campo_marca_codigo)
-        campoEmbalagem = view.findViewById(R.id.campo_embalagem_codigo)
-        campoUnidade = view.findViewById(R.id.campo_unidade_codigo)
-        campoCategoria = view.findViewById(R.id.campo_categoria_codigo)
-        txtQuantidade = view.findViewById(R.id.txt_quantidade_codigo)
         campoValidade = view.findViewById(R.id.campo_validade_codigo)
         confirmar = view.findViewById(R.id.btn_confirmar_codigo)
-
-        view.findViewById<TextView>(R.id.txt_codigo).text = getString(R.string.codigo_lido, gtin)
-
-        campoUnidade.setSimpleItems(UnidadeEmbalagem.rotulos().toTypedArray())
-        campoUnidade.setText(UnidadeEmbalagem.UNIDADE.rotulo, false)
-        campoCategoria.setSimpleItems(CategoriaAlimento.rotulos().toTypedArray())
-
-        mostrarQuantidade()
-        view.findViewById<View>(R.id.btn_diminuir_codigo).setOnClickListener {
-            if (quantidade > 1) quantidade -= 1
-            mostrarQuantidade()
-        }
-        view.findViewById<View>(R.id.btn_aumentar_codigo).setOnClickListener {
-            quantidade += 1
-            mostrarQuantidade()
-        }
+        quantidade = Seletor(view.findViewById(R.id.stepper_codigo))
 
         campoValidade.setOnClickListener { escolherValidade() }
         confirmar.setOnClickListener { salvar() }
         view.findViewById<View>(R.id.btn_cancelar_codigo).setOnClickListener { dismiss() }
 
-        situacao.setText(R.string.codigo_buscando)
-        repository.buscar(gtin) { encontrado -> view.post { preencher(encontrado) } }
+        // Ate a base responder, o botao espera: salvar antes mandaria categoria
+        // e embalagem genericas para um produto que a base conhece.
+        confirmar.isEnabled = false
+        confirmar.setText(R.string.codigo_buscando)
+        repository.buscar(gtin) { achado -> view.post { preencher(achado) } }
     }
 
-    private fun preencher(encontrado: ProdutoEncontrado?) {
+    override fun onStart() {
+        super.onStart()
+        // Aberto inteiro: com o sheet pela metade os botoes ficavam fora da tela.
+        (dialog as? BottomSheetDialog)?.behavior?.apply {
+            state = BottomSheetBehavior.STATE_EXPANDED
+            skipCollapsed = true
+        }
+    }
+
+    private fun preencher(achado: ProdutoEncontrado?) {
         if (!isAdded) return
-
-        if (encontrado == null) {
-            situacao.setText(R.string.codigo_nao_encontrado)
-            return
-        }
-
-        situacao.setText(R.string.codigo_encontrado)
-        // So preenche o que a pessoa ainda nao digitou.
-        if (campoNome.text.isBlank()) encontrado.nome?.let(campoNome::setText)
-        if (campoMarca.text.isBlank()) encontrado.marca?.let(campoMarca::setText)
-        if (campoEmbalagem.text.isBlank()) {
-            encontrado.quantidadeEmbalagem?.let { campoEmbalagem.setText(formatar(it)) }
-            encontrado.unidadeEmbalagem?.let { campoUnidade.setText(it.rotulo, false) }
-        }
+        encontrado = achado
+        confirmar.isEnabled = true
+        confirmar.setText(R.string.codigo_confirmar)
+        // So preenche se a pessoa ainda nao digitou.
+        if (campoNome.text.isBlank()) achado?.nome?.let(campoNome::setText)
     }
 
     private fun salvar() {
+        val base = encontrado
         val cadastro = CadastroPorCodigo.montar(
             gtin = gtin,
             nome = campoNome.text.toString(),
-            marca = campoMarca.text.toString(),
-            quantidadeEmbalagem = campoEmbalagem.text.toString(),
-            unidade = UnidadeEmbalagem.porRotulo(campoUnidade.text.toString()),
-            categoria = CategoriaAlimento.porRotulo(campoCategoria.text.toString()),
-            quantidade = quantidade,
-            validade = validade
+            marca = base?.marca.orEmpty(),
+            quantidadeEmbalagem = base?.quantidadeEmbalagem?.let(::formatar) ?: "1",
+            unidade = base?.unidadeEmbalagem ?: UnidadeEmbalagem.UNIDADE,
+            categoria = base?.categoria ?: CategoriaAlimento.OUTROS,
+            quantidade = quantidade.valor,
+            validade = validade,
+            imagemUrl = base?.imagemUrl
         ).getOrElse { problema ->
             avisar(problema.message.orEmpty())
             return
@@ -180,10 +163,6 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
             inicial.get(Calendar.MONTH),
             inicial.get(Calendar.DAY_OF_MONTH)
         ).show()
-    }
-
-    private fun mostrarQuantidade() {
-        txtQuantidade.text = quantidade.toString()
     }
 
     private fun avisar(mensagem: String) {
