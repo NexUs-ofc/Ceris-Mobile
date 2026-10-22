@@ -1,32 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Detalhe da Receita.
-
-    Estrutura adaptativa: o conteudo cresce ate content_max_width e centraliza,
-    em vez de esticar no tablet. Medidas sempre por @dimen.
-
-    TODO conteudo: montar a partir do Figma (Prototipos > V1 > Detalhe da Receita).
+    Detalhe da Receita (Figma > Protótipos > V1 > Screen - Detalhe Receita):
+    voltar e titulo, foto, faixa com tempo/porcoes/dificuldade, cartao de
+    ingredientes e cartao do modo de preparo com os passos numerados.
 -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/header_fundo"
+    android:fillViewport="true"
     tools:context=".view.DetalheReceitaActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/conteudo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:paddingStart="@dimen/screen_margin_horizontal"
-        android:paddingEnd="@dimen/screen_margin_horizontal"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="@dimen/content_max_width" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/detalhe_margem"
+        android:paddingEnd="@dimen/detalhe_margem"
+        android:paddingBottom="@dimen/spacing_l">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detalhe_topo"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btn_voltar_receita"
+                android:layout_width="@dimen/icone_voltar_size"
+                android:layout_height="@dimen/icone_voltar_size"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/lista_voltar"
+                android:padding="@dimen/spacing_s"
+                android:src="@drawable/ic_menu_arrow_left"
+                app:tint="@color/md_theme_primary" />
+
+            <TextView
+                android:id="@+id/txt_titulo_receita"
+                style="@style/TituloTela"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_s"
+                android:layout_weight="1"
+                android:textColor="@color/card_titulo"
+                tools:text="Frango ao molho" />
+
+        </LinearLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_detalhe_receita"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/mercado_foto_altura"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:background="@color/stepper_fundo"
+            android:contentDescription="@string/receita_imagem"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_menu_chef_hat"
+            app:shapeAppearanceOverlay="@style/FormaFotoMercado" />
+
+        <LinearLayout
+            android:id="@+id/faixa_dados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:background="@drawable/bg_detalhe_chip"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/spacing_s"
+            android:paddingBottom="@dimen/spacing_s">
+
+            <TextView
+                android:id="@+id/dado_tempo"
+                style="@style/DadoReceita"
+                app:drawableStartCompat="@drawable/ic_menu_clock"
+                tools:text="40 min" />
+
+            <TextView
+                android:id="@+id/dado_porcoes"
+                style="@style/DadoReceita"
+                app:drawableStartCompat="@drawable/ic_menu_users"
+                tools:text="Serve 4" />
+
+            <TextView
+                android:id="@+id/dado_dificuldade"
+                style="@style/DadoReceita"
+                app:drawableStartCompat="@drawable/ic_menu_gauge"
+                tools:text="Fácil" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bloco_ingredientes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TituloBlocoDetalhe"
+                android:text="@string/receita_ingredientes" />
+
+            <LinearLayout
+                android:id="@+id/lista_ingredientes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:background="@drawable/bg_detalhe_chip"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/spacing_m"
+                android:paddingTop="@dimen/spacing_s"
+                android:paddingEnd="@dimen/spacing_m"
+                android:paddingBottom="@dimen/spacing_s" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bloco_passos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TituloBlocoDetalhe"
+                android:text="@string/receita_modo_preparo" />
+
+            <LinearLayout
+                android:id="@+id/lista_passos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:background="@drawable/bg_detalhe_chip"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/spacing_m"
+                android:paddingTop="@dimen/spacing_s"
+                android:paddingEnd="@dimen/spacing_m"
+                android:paddingBottom="@dimen/spacing_s" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

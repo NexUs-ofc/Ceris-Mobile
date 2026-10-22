@@ -5,6 +5,23 @@
 -->
 <resources>
 
+    <style name="TituloSheet">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/huninn</item>
+        <item name="fontFamily">@font/huninn</item>
+        <item name="android:textColor">@color/md_theme_onBackground</item>
+        <item name="android:textSize">@dimen/text_size_22</item>
+    </style>
+
+    <!-- Campo do "Confirmar dados do produto": contorno lilas e texto em semi bold. -->
+    <style name="CampoConfirmacao" parent="CampoFormulario">
+        <item name="android:background">@drawable/bg_campo_confirmacao</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textColor">@color/card_titulo</item>
+    </style>
+
     <style name="BotaoPrincipal" parent="Widget.Material3.Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/button_height</item>
@@ -18,4 +35,152 @@
         <item name="backgroundTint">@color/md_theme_primary</item>
         <item name="cornerRadius">@dimen/botao_radius</item>
     </style>
+
+    <style name="BotaoContorno" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:fontFamily">@font/montserrat_medium</item>
+        <item name="fontFamily">@font/montserrat_medium</item>
+        <item name="android:textColor">@color/md_theme_primary</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="strokeColor">@color/md_theme_primary</item>
+        <item name="strokeWidth">@dimen/botao_contorno</item>
+        <item name="cornerRadius">@dimen/botao_radius</item>
+    </style>
+
+    <!-- "Cancelar" dos popups: texto sublinhado, sem caixa. O sublinhado vem da string. -->
+    <style name="LinkCancelar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:padding">@dimen/spacing_s</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:text">@string/item_form_cancelar</item>
+        <item name="android:textColor">@color/md_theme_primary</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <!-- "-" e "+" do seletor de quantidade: quadrado lilas com o sinal em negrito. -->
+    <style name="BotaoStepper">
+        <item name="android:layout_width">@dimen/stepper_tecla</item>
+        <item name="android:layout_height">@dimen/stepper_tecla</item>
+        <item name="android:background">@drawable/bg_stepper_botao</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/md_theme_primary</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <!-- "Produto" do card da nota: pilula cinza com seta, sem rotulo flutuante. -->
+    <style name="PilulaProduto" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxCornerRadiusBottomEnd">@dimen/pilula_raio</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/pilula_raio</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/pilula_raio</item>
+        <item name="boxCornerRadiusTopStart">@dimen/pilula_raio</item>
+        <item name="boxStrokeColor">@color/pilula_produto_borda</item>
+        <item name="boxStrokeWidth">@dimen/botao_contorno</item>
+        <item name="hintEnabled">false</item>
+        <item name="endIconTint">@color/md_theme_primary</item>
+    </style>
+
+    <!-- Modo da camera: pilula branca de contorno; a escolhida fica roxa. -->
+    <style name="BotaoModoCamera" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/ceris_white</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="backgroundTint">@color/selecao_modo_camera</item>
+        <item name="strokeColor">@color/ceris_white</item>
+    </style>
+
+    <!-- Popup de editar perfil: rotulo cinza sem caixa alta e campo de fundo cinza. -->
+    <style name="RotuloPerfil">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textColor">@color/ceris_cinza</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+
+    <style name="CampoPerfil" parent="CampoFormulario">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@drawable/bg_campo_perfil</item>
+    </style>
+
+    <!-- Restricao alimentar escolhida: pilula lilas com X para tirar. -->
+    <style name="ChipRestricao" parent="Widget.MaterialComponents.Chip.Entry">
+        <item name="android:checkable">false</item>
+        <item name="android:textColor">@color/md_theme_primary</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="chipBackgroundColor">@color/stepper_fundo</item>
+        <item name="closeIconTint">@color/md_theme_primary</item>
+        <item name="closeIcon">@drawable/ic_menu_circle_x</item>
+        <item name="chipStrokeWidth">0dp</item>
+    </style>
+
+    <!-- "Adicionar +": pilula de contorno tracejado. O traco vem do drawable de fundo. -->
+    <style name="ChipAdicionar" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="android:textColor">@color/ceris_cinza</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="chipBackgroundColor">@android:color/transparent</item>
+        <item name="chipStrokeColor">@color/campo_perfil_borda</item>
+        <item name="chipStrokeWidth">1dp</item>
+    </style>
+
+    <!-- Rotulo miudo cinza em caixa alta: "ENDERECOS SALVOS". -->
+    <style name="RotuloSecaoMiuda">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/ceris_cinza</item>
+        <item name="android:textSize">@dimen/campo_rotulo_text</item>
+    </style>
+
+    <style name="FormaFotoMercado">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/card_corner_radius</item>
+    </style>
+
+    <!-- Tempo, porcoes e dificuldade do detalhe da receita: icone roxo e texto em negrito. -->
+    <style name="DadoReceita">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:drawablePadding">@dimen/spacing_xs</item>
+        <item name="drawableTint">@color/md_theme_primary</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/card_titulo</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+
+    <!-- "Ingredientes", "Modo de Preparo": titulo de bloco em Huninn. -->
+    <style name="TituloBlocoDetalhe">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/spacing_l</item>
+        <item name="android:fontFamily">@font/huninn</item>
+        <item name="fontFamily">@font/huninn</item>
+        <item name="android:textColor">@color/card_titulo</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+    </style>
+
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Quadrado cinza claro atras do icone de cada endereco salvo. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/campo_perfil_fundo" />
+    <corners android:radius="@dimen/campo_radius" />
+</shape>
