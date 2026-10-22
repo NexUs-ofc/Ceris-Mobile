@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Receitas salvas (Figma > Protótipos > V1 > Screen - Receitas, node 625:1757).
-
-    A barra de navegação não está aqui: ela pertence à MainActivity.
--->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,7 +6,7 @@
     android:id="@+id/raiz_receitas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/receita_fundo"
     tools:context=".view.fragment.ReceitasFragment">
 
     <TextView
@@ -19,21 +14,22 @@
         style="@style/TituloTela"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_xl"
+        android:layout_marginTop="@dimen/receita_topo"
         android:paddingStart="@dimen/screen_margin_horizontal"
         android:paddingEnd="@dimen/screen_margin_horizontal"
         android:text="@string/receitas_titulo"
+        android:textColor="@color/card_titulo"
         android:textSize="@dimen/text_size_28"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="@dimen/content_max_width" />
+        app:layout_constraintWidth_max="@dimen/receita_content_max_width" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lista_receitas"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/spacing_l"
+        android:layout_marginTop="@dimen/receita_lista_espaco_titulo"
         android:clipToPadding="false"
         android:paddingStart="@dimen/screen_margin_horizontal"
         android:paddingEnd="@dimen/screen_margin_horizontal"
@@ -43,8 +39,100 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titulo_receitas"
-        app:layout_constraintWidth_max="@dimen/content_max_width"
+        app:layout_constraintWidth_max="@dimen/receita_content_max_width"
         tools:itemCount="4"
         tools:listitem="@layout/item_receita" />
+
+    <ProgressBar
+        android:id="@+id/progresso_receitas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titulo_receitas" />
+
+    <LinearLayout
+        android:id="@+id/estado_receitas_vazio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/screen_margin_horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titulo_receitas"
+        app:layout_constraintWidth_max="@dimen/receita_content_max_width">
+
+        <ImageView
+            android:id="@+id/img_receitas_vazia"
+            android:layout_width="@dimen/receita_mascote_largura"
+            android:layout_height="@dimen/receita_mascote_altura"
+            android:importantForAccessibility="no"
+            android:src="@drawable/img_receitas_vazia"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/txt_receitas_vazia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:gravity="center"
+            android:text="@string/receitas_vazia"
+            android:textColor="@color/card_titulo"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:id="@+id/link_gerar_receita"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center"
+            android:minHeight="@dimen/icone_voltar_size"
+            android:text="@string/receitas_gerar"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_14" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/estado_receitas_erro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/screen_margin_horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titulo_receitas"
+        app:layout_constraintWidth_max="@dimen/receita_content_max_width">
+
+        <TextView
+            android:id="@+id/txt_receitas_erro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/receitas_erro"
+            android:textColor="@color/card_titulo"
+            android:textSize="@dimen/text_size_14" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_tentar_receitas"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:text="@string/erro_tentar" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

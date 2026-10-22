@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Detalhe da Receita.
-
-    Estrutura adaptativa: o conteudo cresce ate content_max_width e centraliza,
-    em vez de esticar no tablet. Medidas sempre por @dimen.
-
-    TODO conteudo: montar a partir do Figma (Prototipos > V1 > Detalhe da Receita).
--->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,19 +6,305 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/receita_fundo"
     tools:context=".view.DetalheReceitaActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/conteudo"
+    <LinearLayout
+        android:id="@+id/cabecalho_receita"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/receita_topo"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingStart="@dimen/screen_margin_horizontal"
         android:paddingEnd="@dimen/screen_margin_horizontal"
-        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="@dimen/content_max_width" />
+        app:layout_constraintWidth_max="@dimen/receita_content_max_width">
+
+        <ImageButton
+            android:id="@+id/btn_receita_voltar"
+            android:layout_width="@dimen/field_height"
+            android:layout_height="@dimen/fab_secundario_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/receita_voltar"
+            android:padding="@dimen/spacing_m"
+            android:scaleType="center"
+            android:src="@drawable/ic_menu_arrow_left"
+            app:tint="@color/md_theme_primary" />
+
+        <TextView
+            android:id="@+id/titulo_receita"
+            style="@style/TituloTela"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_xs"
+            android:layout_weight="1"
+            android:textColor="@color/card_titulo"
+            android:textSize="@dimen/text_size_28"
+            tools:text="Frango ao molho" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/conteudo_receita"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_m"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cabecalho_receita"
+        app:layout_constraintWidth_max="@dimen/receita_content_max_width"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/conteudo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/screen_margin_horizontal"
+            android:paddingEnd="@dimen/screen_margin_horizontal"
+            android:paddingBottom="@dimen/spacing_xl">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/grupo_imagem_receita"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/img_detalhe_receita"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:contentDescription="@string/receita_imagem"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="392:217"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/ReceitaImagem" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_resumo_receita"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/receita_resumo_altura"
+                android:layout_marginTop="@dimen/receita_painel_raio"
+                app:cardBackgroundColor="@color/ceris_white"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
+                app:strokeColor="@color/ceris_cinza_claro"
+                app:strokeWidth="@dimen/card_stroke_width">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/receita_card_espaco"
+                    android:paddingEnd="@dimen/receita_card_espaco">
+
+                    <LinearLayout
+                        android:id="@+id/grupo_tempo_receita"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/text_size_16"
+                            android:layout_height="@dimen/text_size_16"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_menu_clock"
+                            app:tint="@color/md_theme_primary" />
+
+                        <TextView
+                            android:id="@+id/txt_detalhe_tempo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_xs"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/card_titulo"
+                            android:textSize="@dimen/text_size_13"
+                            tools:text="40 min" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/grupo_porcoes_receita"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/text_size_16"
+                            android:layout_height="@dimen/text_size_16"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_receita_porcoes"
+                            app:tint="@color/md_theme_primary" />
+
+                        <TextView
+                            android:id="@+id/txt_detalhe_porcoes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_xs"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/card_titulo"
+                            android:textSize="@dimen/text_size_13"
+                            tools:text="Serve 4" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/grupo_dificuldade_receita"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/text_size_16"
+                            android:layout_height="@dimen/text_size_16"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_receita_dificuldade"
+                            app:tint="@color/md_theme_primary" />
+
+                        <TextView
+                            android:id="@+id/txt_detalhe_dificuldade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_xs"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/card_titulo"
+                            android:textSize="@dimen/text_size_13"
+                            tools:text="Fácil" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/titulo_ingredientes_receita"
+                style="@style/TituloTela"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/receita_painel_raio"
+                android:text="@string/receita_ingredientes"
+                android:textColor="@color/card_titulo"
+                android:textSize="@dimen/text_size_18" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_ingredientes_receita"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/receita_card_espaco"
+                app:cardBackgroundColor="@color/ceris_white"
+                app:cardCornerRadius="@dimen/receita_painel_raio"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
+                app:strokeColor="@color/ceris_cinza_claro"
+                app:strokeWidth="@dimen/card_stroke_width">
+
+                <LinearLayout
+                    android:id="@+id/ingredientes_receita"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_m"
+                    tools:layout_height="158dp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/titulo_preparo_receita"
+                style="@style/TituloTela"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/receita_painel_raio"
+                android:text="@string/receita_preparo"
+                android:textColor="@color/card_titulo"
+                android:textSize="@dimen/text_size_18" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_preparo_receita"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/receita_card_espaco"
+                app:cardBackgroundColor="@color/ceris_white"
+                app:cardCornerRadius="@dimen/receita_painel_raio"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
+                app:strokeColor="@color/ceris_cinza_claro"
+                app:strokeWidth="@dimen/card_stroke_width">
+
+                <LinearLayout
+                    android:id="@+id/passos_receita"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_m"
+                    tools:layout_height="239dp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/progresso_detalhe_receita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cabecalho_receita" />
+
+    <LinearLayout
+        android:id="@+id/estado_detalhe_receita_erro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/screen_margin_horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cabecalho_receita"
+        app:layout_constraintWidth_max="@dimen/receita_content_max_width">
+
+        <TextView
+            android:id="@+id/txt_detalhe_receita_erro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/receita_detalhe_erro"
+            android:textColor="@color/card_titulo"
+            android:textSize="@dimen/text_size_14" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_tentar_detalhe_receita"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:text="@string/erro_tentar" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

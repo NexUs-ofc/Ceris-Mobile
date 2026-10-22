@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="receita_fundo">#FAFAFA</color>
+    <color name="receita_tempo_texto">#8E8E93</color>
+    <color name="receita_passo_fundo">#F2EDFA</color>
+    <dimen name="receita_content_max_width">440dp</dimen>
+    <dimen name="receita_topo">64dp</dimen>
+    <dimen name="receita_lista_espaco_titulo">36dp</dimen>
+    <dimen name="receita_card_imagem">64dp</dimen>
+    <dimen name="receita_card_altura">88dp</dimen>
+    <dimen name="receita_card_espaco">12dp</dimen>
+    <dimen name="receita_imagem_raio">28dp</dimen>
+    <dimen name="receita_painel_raio">20dp</dimen>
+    <dimen name="receita_resumo_altura">40dp</dimen>
+    <dimen name="receita_passo_numero_size">24dp</dimen>
+    <dimen name="receita_mascote_largura">180dp</dimen>
+    <dimen name="receita_mascote_altura">240dp</dimen>
+    <dimen name="receita_ingrediente_espaco">10dp</dimen>
+    <string name="receitas_vazia">Você ainda não tem receitas salvas! Peça para mim que crio uma receita para você!</string>
+    <string name="receitas_gerar">Gerar receita com a Cerita</string>
+    <string name="receitas_erro">Não foi possível carregar suas receitas.</string>
+    <string name="receita_detalhe_erro">Não foi possível carregar esta receita.</string>
+    <string name="receita_voltar">Voltar às receitas</string>
+    <string name="receita_porcoes">Serve %1$d</string>
+    <string name="receita_sem_ingredientes">Ingredientes não informados.</string>
+    <string name="receita_sem_preparo">Modo de preparo não informado.</string>
+    <string name="receita_ingredientes">Ingredientes</string>
+    <string name="receita_preparo">Modo de Preparo</string>
+    <string name="receita_porcoes_icone">Porções</string>
+    <string name="receita_dificuldade_icone">Dificuldade</string>
+    <style name="ReceitaImagem">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/receita_imagem_raio</item>
+    </style>
+</resources>
