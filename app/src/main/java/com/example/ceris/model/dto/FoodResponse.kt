@@ -7,5 +7,6 @@ data class FoodResponse(
     val categoryName: String? = null,
     val productBrand: String? = null,
     val packageQuantity: Double? = null,
-    val unitOfMeasure: String? = null
+    val unitOfMeasure: String? = null,
+    val foodImageUrl: String? = null
 )

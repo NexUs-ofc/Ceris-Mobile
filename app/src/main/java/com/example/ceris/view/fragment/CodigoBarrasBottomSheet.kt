@@ -58,6 +58,7 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
 
     private var quantidade = 1
     private var validade: String? = null
+    private var imagemUrl: String? = null
     private var salvou = false
 
     override fun getTheme(): Int = R.style.TemaBottomSheet
@@ -69,6 +70,7 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         gtin = requireArguments().getString(ARG_GTIN).orEmpty()
+        imagemUrl = savedInstanceState?.getString(IMAGEM_URL)
         val sessao = SessionManager(requireContext())
         repository = CodigoBarrasRepository(
             baseAberta = OpenFoodFactsClient.api,
@@ -121,6 +123,7 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         }
 
         situacao.setText(R.string.codigo_encontrado)
+        imagemUrl = encontrado.imagemUrl
         // So preenche o que a pessoa ainda nao digitou.
         if (campoNome.text.isBlank()) encontrado.nome?.let(campoNome::setText)
         if (campoMarca.text.isBlank()) encontrado.marca?.let(campoMarca::setText)
@@ -139,7 +142,8 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
             unidade = UnidadeEmbalagem.porRotulo(campoUnidade.text.toString()),
             categoria = CategoriaAlimento.porRotulo(campoCategoria.text.toString()),
             quantidade = quantidade,
-            validade = validade
+            validade = validade,
+            imagemUrl = imagemUrl
         ).getOrElse { problema ->
             avisar(problema.message.orEmpty())
             return
@@ -195,9 +199,15 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         (parentFragment as? Listener)?.aoFecharCadastroCodigo(salvou)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(IMAGEM_URL, imagemUrl)
+        super.onSaveInstanceState(outState)
+    }
+
     companion object {
         const val TAG = "CodigoBarrasBottomSheet"
         private const val ARG_GTIN = "gtin"
+        private const val IMAGEM_URL = "imagem_url"
 
         private val ISO = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         private val CURTA = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))

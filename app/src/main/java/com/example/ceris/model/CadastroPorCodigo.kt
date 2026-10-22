@@ -32,7 +32,8 @@ data class ProdutoEncontrado(
     val nome: String?,
     val marca: String?,
     val quantidadeEmbalagem: Double?,
-    val unidadeEmbalagem: UnidadeEmbalagem?
+    val unidadeEmbalagem: UnidadeEmbalagem?,
+    val imagemUrl: String? = null
 )
 
 object CadastroPorCodigo {
@@ -57,9 +58,10 @@ object CadastroPorCodigo {
         val marca = detalhe.brands?.split(",")?.firstOrNull()?.trim()?.takeIf { it.isNotEmpty() }
         val unidade = UnidadeEmbalagem.daBase(detalhe.productQuantityUnit)
         val quantidade = detalhe.productQuantity?.takeIf { it > 0 && unidade != null }
+        val imagem = detalhe.imageFrontUrl?.trim()?.takeIf { it.isNotEmpty() }
 
-        if (nome == null && marca == null && quantidade == null) return null
-        return ProdutoEncontrado(nome, marca, quantidade, unidade.takeIf { quantidade != null })
+        if (nome == null && marca == null && quantidade == null && imagem == null) return null
+        return ProdutoEncontrado(nome, marca, quantidade, unidade.takeIf { quantidade != null }, imagem)
     }
 
     /**
@@ -75,7 +77,8 @@ object CadastroPorCodigo {
         unidade: UnidadeEmbalagem?,
         categoria: CategoriaAlimento?,
         quantidade: Int,
-        validade: String?
+        validade: String?,
+        imagemUrl: String? = null
     ): Result<FoodRegistrationRequest> {
         val embalagem = quantidadeEmbalagem.trim().replace(',', '.').toDoubleOrNull()
 
@@ -99,7 +102,8 @@ object CadastroPorCodigo {
                 unitOfMeasure = unidade!!.core,
                 gpcCode = categoria!!.gpc,
                 quantity = quantidade,
-                expiryDate = validade
+                expiryDate = validade,
+                foodImageUrl = imagemUrl?.trim()?.takeIf { it.isNotEmpty() }
             )
         )
     }

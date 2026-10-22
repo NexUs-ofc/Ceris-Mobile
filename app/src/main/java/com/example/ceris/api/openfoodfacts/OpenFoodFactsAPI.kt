@@ -9,8 +9,8 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
- * Open Food Facts: base aberta e gratuita, sem chave. Usada so para a tabela
- * nutricional do detalhe; a Core continua sendo a dona do estoque.
+ * Open Food Facts: base aberta e gratuita, sem chave. Preenche o cadastro por
+ * codigo de barras e a nutricao do detalhe; a Core continua sendo a dona do estoque.
  */
 interface OpenFoodFactsAPI {
 
@@ -35,6 +35,6 @@ interface OpenFoodFactsAPI {
 
         const val CAMPOS = "code,product_name,brands,image_front_url,nutriments"
 
-        const val CAMPOS_PRODUTO = "product_name,brands,product_quantity,product_quantity_unit"
+        const val CAMPOS_PRODUTO = "product_name,brands,product_quantity,product_quantity_unit,image_front_url"
     }
 }

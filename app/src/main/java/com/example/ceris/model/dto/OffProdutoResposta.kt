@@ -15,5 +15,7 @@ data class OffProdutoDetalhe(
     @SerializedName("product_quantity")
     val productQuantity: Double? = null,
     @SerializedName("product_quantity_unit")
-    val productQuantityUnit: String? = null
+    val productQuantityUnit: String? = null,
+    @SerializedName("image_front_url")
+    val imageFrontUrl: String? = null
 )

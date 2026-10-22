@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.ceris.R
 import com.example.ceris.model.Produto
 import com.example.ceris.model.SituacaoProduto
@@ -19,8 +20,8 @@ import com.example.ceris.model.SituacaoProduto
  * Usa ListAdapter para que a lista se atualize por diferença, em vez de
  * redesenhar tudo a cada mudança de filtro.
  *
- * A foto do produto não é carregada aqui: o projeto ainda não tem biblioteca de
- * imagem remota. Enquanto não tiver, o card mostra o espaço da imagem vazio.
+ * Carrega a foto enviada pela Core e usa um placeholder quando nao ha foto
+ * ou quando o arquivo nao pode ser carregado.
  */
 class ProdutoAdapter(
     private val aoTocar: (Produto) -> Unit = {}
@@ -46,13 +47,19 @@ class ProdutoAdapter(
         private val quantidade: TextView = itemView.findViewById(R.id.txt_quantidade)
         private val selo: TextView = itemView.findViewById(R.id.selo_situacao)
 
-        @Suppress("unused")
         private val imagem: ImageView = itemView.findViewById(R.id.img_produto)
 
         fun exibir(produto: Produto) {
             val contexto = itemView.context
 
             nome.text = produto.nome
+            Glide.with(itemView)
+                .load(produto.imagemUrl?.trim()?.takeIf { it.isNotEmpty() })
+                .placeholder(R.drawable.ic_menu_image)
+                .fallback(R.drawable.ic_menu_image)
+                .error(R.drawable.ic_menu_image)
+                .fitCenter()
+                .into(imagem)
             validade.text = if (produto.validade.isBlank()) {
                 contexto.getString(R.string.produto_sem_validade)
             } else {
