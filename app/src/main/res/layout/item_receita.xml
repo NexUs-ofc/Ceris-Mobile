@@ -27,7 +27,7 @@
             android:id="@+id/img_receita"
             android:layout_width="@dimen/receita_card_imagem"
             android:layout_height="@dimen/receita_card_imagem"
-            android:background="@color/receita_fundo"
+            android:background="@color/md_theme_background"
             android:contentDescription="@string/receita_imagem"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"

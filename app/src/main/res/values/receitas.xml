@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="receita_fundo">#FAFAFA</color>
     <color name="receita_tempo_texto">#8E8E93</color>
     <color name="receita_passo_fundo">#F2EDFA</color>
     <dimen name="receita_content_max_width">440dp</dimen>
@@ -13,8 +12,6 @@
     <dimen name="receita_painel_raio">20dp</dimen>
     <dimen name="receita_resumo_altura">40dp</dimen>
     <dimen name="receita_passo_numero_size">24dp</dimen>
-    <dimen name="receita_mascote_largura">180dp</dimen>
-    <dimen name="receita_mascote_altura">240dp</dimen>
     <dimen name="receita_ingrediente_espaco">10dp</dimen>
     <string name="receitas_vazia">Você ainda não tem receitas salvas! Peça para mim que crio uma receita para você!</string>
     <string name="receitas_gerar">Gerar receita com a Cerita</string>

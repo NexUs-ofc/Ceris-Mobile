@@ -6,7 +6,7 @@
     android:id="@+id/raiz_receitas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/receita_fundo"
+    android:background="@color/md_theme_background"
     tools:context=".view.fragment.ReceitasFragment">
 
     <TextView
@@ -69,10 +69,11 @@
 
         <ImageView
             android:id="@+id/img_receitas_vazia"
-            android:layout_width="@dimen/receita_mascote_largura"
-            android:layout_height="@dimen/receita_mascote_altura"
+            android:layout_width="@dimen/lista_ilustracao_size"
+            android:layout_height="@dimen/lista_ilustracao_size"
+            android:adjustViewBounds="true"
             android:importantForAccessibility="no"
-            android:src="@drawable/img_receitas_vazia"
+            android:src="@drawable/coelho_curioso"
             android:scaleType="fitCenter" />
 
         <TextView
