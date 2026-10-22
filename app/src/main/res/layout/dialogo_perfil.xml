@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Editar perfil (Figma > Protótipos > V1 > ProfileScreen, popup): nome,
+    idade, restricoes alimentares em chips com "Adicionar +", Salvar e Cancelar.
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialogo">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dialogo_padding">
+
+        <TextView
+            style="@style/RotuloPerfil"
+            android:text="@string/perfil_nome" />
+
+        <EditText
+            android:id="@+id/campo_nome_perfil"
+            style="@style/CampoPerfil"
+            android:hint="@string/perfil_nome"
+            android:importantForAutofill="no"
+            android:inputType="textCapWords" />
+
+        <TextView
+            style="@style/RotuloPerfil"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:text="@string/perfil_idade" />
+
+        <EditText
+            android:id="@+id/campo_idade_perfil"
+            style="@style/CampoPerfil"
+            android:hint="@string/perfil_idade"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLength="3" />
+
+        <TextView
+            style="@style/RotuloPerfil"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:text="@string/perfil_restricoes" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/grupo_restricoes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_adicionar_restricao"
+                style="@style/ChipAdicionar"
+                android:text="@string/perfil_adicionar" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_salvar_perfil"
+            style="@style/BotaoPrincipal"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:text="@string/perfil_salvar" />
+
+        <TextView
+            android:id="@+id/btn_cancelar_perfil"
+            style="@style/LinkCancelar"
+            android:layout_marginTop="@dimen/spacing_s" />
+
+    </LinearLayout>
+
+</ScrollView>
