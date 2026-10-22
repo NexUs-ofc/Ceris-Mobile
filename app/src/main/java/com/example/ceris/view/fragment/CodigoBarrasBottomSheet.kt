@@ -107,8 +107,20 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         encontrado = achado
         confirmar.isEnabled = true
         confirmar.setText(R.string.codigo_confirmar)
-        // So preenche se a pessoa ainda nao digitou.
-        if (campoNome.text.isBlank()) achado?.nome?.let(campoNome::setText)
+
+        // O nome que veio da base fica como esta, sem edicao. Sem o produto na
+        // base, o campo continua livre para a pessoa digitar.
+        val nome = achado?.nome ?: return
+        campoNome.setText(nome)
+        travar(campoNome)
+    }
+
+    private fun travar(campo: EditText) {
+        campo.keyListener = null
+        campo.isFocusable = false
+        campo.isCursorVisible = false
+        campo.isLongClickable = false
+        campo.setTextIsSelectable(false)
     }
 
     private fun salvar() {
