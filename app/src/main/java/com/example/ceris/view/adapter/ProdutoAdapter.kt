@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.ceris.R
 import com.example.ceris.model.Produto
 import com.example.ceris.model.SituacaoProduto
@@ -19,8 +20,8 @@ import com.example.ceris.model.SituacaoProduto
  * Usa ListAdapter para que a lista se atualize por diferença, em vez de
  * redesenhar tudo a cada mudança de filtro.
  *
- * A foto do produto não é carregada aqui: o projeto ainda não tem biblioteca de
- * imagem remota. Enquanto não tiver, o card mostra o espaço da imagem vazio.
+ * A foto vem da Core (foodImageUrl). Sem foto, o card mostra o ícone de
+ * produto no lugar, para a moldura não ficar vazia.
  */
 class ProdutoAdapter(
     private val aoTocar: (Produto) -> Unit = {}
@@ -46,7 +47,6 @@ class ProdutoAdapter(
         private val quantidade: TextView = itemView.findViewById(R.id.txt_quantidade)
         private val selo: TextView = itemView.findViewById(R.id.selo_situacao)
 
-        @Suppress("unused")
         private val imagem: ImageView = itemView.findViewById(R.id.img_produto)
 
         fun exibir(produto: Produto) {
@@ -63,6 +63,19 @@ class ProdutoAdapter(
             )
 
             itemView.setOnClickListener { aoTocar(produto) }
+
+            // Sempre limpa antes: o card e reciclado e mostraria a foto de outro produto.
+            Glide.with(imagem).clear(imagem)
+            if (produto.imagemUrl.isNullOrBlank()) {
+                imagem.setImageResource(R.drawable.ph_produto)
+            } else {
+                Glide.with(imagem)
+                    .load(produto.imagemUrl)
+                    .placeholder(R.drawable.ph_produto)
+                    .error(R.drawable.ph_produto)
+                    .fitCenter()
+                    .into(imagem)
+            }
 
             val (rotulo, fundo, texto) = aparencia(produto.situacao) ?: run {
                 selo.visibility = View.GONE
