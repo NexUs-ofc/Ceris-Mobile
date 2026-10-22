@@ -158,4 +158,8 @@
     <dimen name="chat_sugestao_radius">20dp</dimen>
     <dimen name="chat_sugestao_padding_h">14dp</dimen>
     <dimen name="chat_sugestao_altura">38dp</dimen>
+
+    <!-- Telas de entrada (login, cadastro, senha): distancia do titulo ao topo -->
+    <dimen name="entrada_topo">56dp</dimen>
+    <dimen name="icone_google">40dp</dimen>
 </resources>

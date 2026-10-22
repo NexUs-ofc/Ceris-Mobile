@@ -180,4 +180,28 @@ Tente novamente ou volte ao início.</string>
     <string name="detalhe_produto_nutricao">Informação Nutricional</string>
     <string name="detalhe_produto_consumido">Marcar como Consumido</string>
     <string name="chat_abertura">Oi! Posso ajudar a planejar compras, sugerir receitas ou conferir o que falta no estoque.</string>
+    <!-- Login. A quebra do titulo e a do Figma. -->
+    <string name="login_titulo">Bem-Vindo(a) de\nvolta!</string>
+    <string name="login_email">Endereço de e-mail</string>
+    <string name="login_senha">Senha</string>
+    <string name="login_esqueci">Esqueci minha senha</string>
+    <string name="login_entrar">Entrar</string>
+    <string name="login_sem_cadastro">"Ainda não é cadastrado? "</string>
+    <string name="login_cadastrar">Cadastrar-se</string>
+    <string name="login_ou">Ou</string>
+    <string name="login_entrar_com">Entrar com:</string>
+    <string name="login_google">Entrar com o Google</string>
+    <string name="cadastro_titulo">Bem-Vindo(a)!</string>
+    <string name="cadastro_subtitulo">Cadastre sua família!</string>
+    <string name="cadastro_nome">Nome da família</string>
+    <string name="cadastro_ja_tem">"Já é cadastrado? "</string>
+    <string name="cadastro_com">Cadastrar com:</string>
+    <string name="esqueci_titulo">Esqueceu a senha?</string>
+    <string name="esqueci_subtitulo">Informe o e-mail da sua conta e enviaremos um código de 6 dígitos para você redefinir a senha.</string>
+    <string name="esqueci_enviar">Enviar código</string>
+    <string name="esqueci_lembrou">"Lembrou a senha? "</string>
+    <string name="redefinir_titulo">Redefinir senha</string>
+    <string name="redefinir_subtitulo">Crie uma nova senha para acessar sua conta.</string>
+    <string name="redefinir_nova">Nova senha</string>
+    <string name="redefinir_confirmar">Confirme a nova senha</string>
 </resources>
