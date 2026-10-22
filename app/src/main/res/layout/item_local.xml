@@ -33,6 +33,7 @@
             android:layout_width="@dimen/local_imagem_size"
             android:layout_height="@dimen/local_imagem_size"
             android:background="@drawable/bg_local_placeholder"
+            android:clipToOutline="true"
             android:contentDescription="@string/locais_imagem"
             android:scaleType="centerInside"
             android:padding="@dimen/spacing_m"

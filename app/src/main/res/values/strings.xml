@@ -76,14 +76,25 @@
     <string name="estoque_sem_resultado">Nada encontrado com esse filtro.</string>
 
     <!-- Tela de Locais -->
-    <string name="locais_endereco_atual">Seu endereço atual</string>
-    <string name="locais_alterar">Alterar</string>
+    <string name="google_login_nao_configurado">Login com Google indisponível: configure o GOOGLE_WEB_CLIENT_ID.</string>
+    <string name="google_login_credencial_invalida">Não foi possível ler a credencial do Google. Tente novamente.</string>
+    <string name="google_login_sem_credencial">O Google não retornou uma credencial. Confira sua conta Google no aparelho e tente novamente.</string>
+    <string name="google_login_falha">Não foi possível entrar com o Google. Confira sua conexão e tente novamente.</string>
+    <string name="google_login_interrompido">A entrada com Google foi interrompida. Toque no Google para tentar novamente.</string>
+    <string name="locais_endereco_atual">Sua localização atual</string>
+    <string name="locais_atualizar">Atualizar</string>
+    <string name="locais_obtendo_localizacao">Obtendo localização…</string>
+    <string name="locais_origem_aparelho">Localização do aparelho</string>
+    <string name="locais_origem_perfil">Endereço do perfil (localização do aparelho indisponível)</string>
+    <string name="locais_vazio_perfil">Nenhum estabelecimento encontrado em até 5 km do endereço do seu perfil.</string>
+    <string name="locais_permissao_localizacao">Permita o acesso à localização para encontrar estabelecimentos próximos. A localização aproximada também funciona.</string>
+    <string name="locais_localizacao_indisponivel">Não foi possível obter sua localização. Confira se a localização do aparelho está ativada e toque em Atualizar para tentar novamente.</string>
+    <string name="locais_permitir_localizacao">Permitir localização</string>
+    <string name="locais_ajustar_localizacao">Configurar localização</string>
     <string name="locais_proximos">Supermercados próximos</string>
     <string name="locais_distancia">%1$s</string>
     <string name="locais_carregando">Buscando estabelecimentos próximos…</string>
-    <string name="locais_carregando_endereco">Carregando endereço…</string>
-    <string name="locais_endereco_indisponivel">Endereço não disponível</string>
-    <string name="locais_vazio">Nenhum estabelecimento encontrado em até 5 km do seu endereço.</string>
+    <string name="locais_vazio">Nenhum estabelecimento encontrado em até 5 km da sua localização atual.</string>
     <string name="locais_falha">Não foi possível carregar os locais. Confira sua conexão e tente novamente.</string>
     <string name="locais_sem_endereco">Cadastre um endereço no seu perfil para encontrar estabelecimentos próximos.</string>
     <string name="locais_sem_coordenadas">Não foi possível localizar seu endereço no mapa. Revise o endereço cadastrado no perfil.</string>
@@ -91,9 +102,8 @@
     <string name="locais_tentar">Tentar novamente</string>
     <string name="locais_entrar">Entrar novamente</string>
     <string name="locais_nome_indisponivel">Estabelecimento sem nome informado</string>
-    <string name="locais_edicao_indisponivel">A edição do endereço ainda não está disponível nesta versão. Você já pode consultar os estabelecimentos para o endereço cadastrado.</string>
     <string name="locais_imagem">Foto do estabelecimento</string>
-    <string name="locais_endereco_icone">Endereço atual</string>
+    <string name="locais_endereco_icone">Localização atual</string>
 
     <!-- Receitas -->
     <string name="receitas_titulo">Receitas salvas</string>

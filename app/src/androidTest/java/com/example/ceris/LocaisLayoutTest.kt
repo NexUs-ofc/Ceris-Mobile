@@ -56,13 +56,26 @@ class LocaisLayoutTest {
                             ),
                         ),
                         LocaisUiState(LocaisStatus.EMPTY, "Rua de teste, 123 - Centro"),
+                        LocaisUiState(LocaisStatus.EMPTY, usesProfileAddress = true),
                         LocaisUiState(LocaisStatus.ERROR),
                         LocaisUiState(LocaisStatus.ADDRESS_MISSING),
                         LocaisUiState(LocaisStatus.NOT_GEOCODED, "Rua de teste, 123"),
                         LocaisUiState(LocaisStatus.AUTH_REQUIRED),
+                        LocaisUiState(LocaisStatus.LOCATION_PERMISSION),
+                        LocaisUiState(LocaisStatus.LOCATION_UNAVAILABLE),
                     )
                 states.forEach { state ->
                     renderLocais(root, adapter, state)
+                    if (state.usesProfileAddress) {
+                        assertEquals(
+                            themed.getString(R.string.locais_origem_perfil),
+                            root.findViewById<TextView>(R.id.txt_endereco_atual).text.toString(),
+                        )
+                        assertEquals(
+                            themed.getString(R.string.locais_vazio_perfil),
+                            root.findViewById<TextView>(R.id.mensagem_locais).text.toString(),
+                        )
+                    }
                     root.measure(
                         View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
                         View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY),
@@ -77,13 +90,24 @@ class LocaisLayoutTest {
                         assertEquals(0, adapter.itemCount)
                     }
                     val retry = root.findViewById<View>(R.id.btn_tentar_locais)
+                    val retryable =
+                        state.status in
+                            setOf(
+                                LocaisStatus.ERROR,
+                                LocaisStatus.AUTH_REQUIRED,
+                                LocaisStatus.LOCATION_PERMISSION,
+                                LocaisStatus.LOCATION_UNAVAILABLE,
+                            )
                     assertEquals(
-                        if (state.status in setOf(LocaisStatus.ERROR, LocaisStatus.AUTH_REQUIRED)) View.VISIBLE else View.GONE,
+                        if (retryable) View.VISIBLE else View.GONE,
                         retry.visibility,
                     )
                     val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                     root.draw(Canvas(bitmap))
-                    File(folder, "$width-${state.status}.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+                    val origin = if (state.usesProfileAddress) "-perfil" else ""
+                    File(folder, "$width-${state.status}$origin.png").outputStream().use {
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+                    }
                     bitmap.recycle()
                 }
             }

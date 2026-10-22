@@ -31,6 +31,7 @@ fun StoreResponse.toLocal(): Local {
         nome = name?.trim().orEmpty(),
         endereco = address(street, number, neighborhood, city, state),
         distancia = formatDistance(distanceKm),
+        imagemUrl = profileImageUrl?.trim()?.takeIf { it.isNotEmpty() },
     )
 }
 

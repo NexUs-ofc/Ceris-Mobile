@@ -1,5 +1,6 @@
 package com.example.ceris.repository
 
+import android.util.Log
 import com.example.ceris.api.ApiBaseUrl
 import com.example.ceris.api.LocaisAPI
 import com.example.ceris.api.RetrofitClient
@@ -14,6 +15,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 sealed interface LocaisResult {
+    data class QueryStarted(val usesProfileAddress: Boolean) : LocaisResult
+
     data class Loaded(val address: String, val locais: List<Local>) : LocaisResult
 
     data class Empty(val address: String) : LocaisResult
@@ -25,6 +28,10 @@ sealed interface LocaisResult {
     data object SessionChanged : LocaisResult
 
     data class Failure(val statusCode: Int? = null) : LocaisResult
+
+    data object LocationPermissionRequired : LocaisResult
+
+    data object LocationUnavailable : LocaisResult
 }
 
 enum class AddressProblem { MISSING, NOT_GEOCODED }
@@ -61,9 +68,15 @@ class LocaisRepository(
 
     fun load(
         radiusKm: Double? = null,
+        latitude: Double? = null,
+        longitude: Double? = null,
+        useProfileFallback: Boolean = false,
         deliver: (LocaisResult) -> Unit,
     ): LocaisRequest {
         require(radiusKm == null || (radiusKm.isFinite() && radiusKm > 0 && radiusKm <= 100))
+        require((latitude == null) == (longitude == null))
+        require(latitude == null || (latitude.isFinite() && latitude in -90.0..90.0))
+        require(longitude == null || (longitude.isFinite() && longitude in -180.0..180.0))
         val request = LocaisRequest()
         val session = sessions.snapshot()
         if (session?.profileId == null) {
@@ -79,6 +92,26 @@ class LocaisRepository(
         }
 
         val authorization = "Bearer ${session.accessToken}"
+        // Com a origem do aparelho, o perfil nao precisa ter endereco ou coordenadas.
+        if ((latitude != null && longitude != null) || useProfileFallback) {
+            query(
+                api.nearby(authorization, session, latitude, longitude, radiusKm),
+                session,
+                request,
+                ::emit,
+                address = if (useProfileFallback) "" else null,
+            ) { stores ->
+                val locais = runCatching { stores.map { it.toLocal() } }.getOrNull()
+                emit(
+                    when {
+                        locais == null -> LocaisResult.Failure()
+                        locais.isEmpty() -> LocaisResult.Empty("")
+                        else -> LocaisResult.Loaded("", locais)
+                    },
+                )
+            }
+            return request
+        }
         query(api.profile(authorization, session), session, request, ::emit) { profile ->
             if (profile.id != session.profileId) {
                 emit(LocaisResult.Failure())

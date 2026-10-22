@@ -135,4 +135,56 @@ class LocaisViewModelTest {
         immediate.onVisible()
         assertEquals(LocaisStatus.CONTENT, immediate.state.value.status)
     }
+
+    @Test
+    fun sairDuranteCapturaCancelaERetomarIniciaUmaNovaConsulta() {
+        model.onVisible()
+        model.onNotVisible()
+        assertEquals(1, cancelled)
+        assertEquals(LocaisStatus.IDLE, model.state.value.status)
+        callbacks[0](content)
+        assertEquals(LocaisStatus.IDLE, model.state.value.status)
+        model.onVisible()
+        assertEquals(2, callbacks.size)
+    }
+
+    @Test
+    fun permissaoELocalizacaoIndisponivelTemEstadosProprios() {
+        mapOf(
+            LocaisResult.LocationPermissionRequired to LocaisStatus.LOCATION_PERMISSION,
+            LocaisResult.LocationUnavailable to LocaisStatus.LOCATION_UNAVAILABLE,
+        ).forEach { (result, status) ->
+            model.refresh()
+            callbacks.last()(result)
+            assertEquals(status, model.state.value.status)
+            assertTrue(model.state.value.locais.isEmpty())
+        }
+    }
+
+    @Test
+    fun sairDepoisDoSucessoParaGpsERetornarReiniciaCaptura() {
+        model.onVisible()
+        callbacks[0](content)
+        model.onNotVisible()
+        assertEquals(1, cancelled)
+        callbacks[0](LocaisResult.Empty("Resposta atrasada"))
+        assertEquals("Rua A", model.state.value.address)
+        model.onVisible()
+        assertEquals(2, callbacks.size)
+        callbacks[1](LocaisResult.Empty("Nova captura"))
+        assertEquals("Nova captura", model.state.value.address)
+    }
+
+    @Test
+    fun distingueOrigemFallbackEApagaCardsQuandoOrigemMuda() {
+        model.onVisible()
+        callbacks[0](LocaisResult.QueryStarted(true))
+        callbacks[0](LocaisResult.Loaded("", listOf(local)))
+        assertTrue(model.state.value.usesProfileAddress)
+        callbacks[0](LocaisResult.QueryStarted(false))
+        assertEquals(LocaisStatus.LOADING, model.state.value.status)
+        assertTrue(model.state.value.locais.isEmpty())
+        callbacks[0](LocaisResult.Empty(""))
+        assertEquals(LocaisUiState(LocaisStatus.EMPTY), model.state.value)
+    }
 }

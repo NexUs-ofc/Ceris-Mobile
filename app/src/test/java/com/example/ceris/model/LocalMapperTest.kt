@@ -11,13 +11,20 @@ class LocalMapperTest {
     private val store = StoreResponse(45, " Mercado ", " Rua A ", "10", "Centro", "Sao Paulo", "SP", null, null)
 
     @Test
-    fun preservaIdRealEFormataEnderecoSemFabricarFoto() {
+    fun preservaIdEFormataEnderecoSemFotoCadastrada() {
         val local = store.copy(distanceKm = 1.25).toLocal()
         assertEquals("45", local.id)
         assertEquals("Mercado", local.nome)
         assertEquals("Rua A, 10 - Centro - Sao Paulo / SP", local.endereco)
         assertEquals("1,2 km", local.distancia)
         assertNull(local.imagemUrl)
+    }
+
+    @Test
+    fun repassaUrlDaFotoDaCoreParaOTela() {
+        val local = store.copy(profileImageUrl = " https://img.example/loja.jpg ").toLocal()
+        assertEquals("https://img.example/loja.jpg", local.imagemUrl)
+        assertNull(store.copy(profileImageUrl = "  ").toLocal().imagemUrl)
     }
 
     @Test

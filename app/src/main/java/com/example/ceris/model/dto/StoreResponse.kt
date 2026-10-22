@@ -15,4 +15,5 @@ data class StoreResponse(
     val latitude: Double? = null,
     val longitude: Double? = null,
     val distanceKm: Double? = null,
+    val profileImageUrl: String? = null,
 )

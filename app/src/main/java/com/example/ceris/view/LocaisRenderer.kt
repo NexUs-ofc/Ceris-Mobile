@@ -13,10 +13,12 @@ fun renderLocais(
     state: LocaisUiState,
 ) {
     val noAddress =
-        if (state.status == LocaisStatus.LOADING) {
-            R.string.locais_carregando_endereco
+        if (state.usesProfileAddress) {
+            R.string.locais_origem_perfil
+        } else if (state.status == LocaisStatus.LOADING) {
+            R.string.locais_obtendo_localizacao
         } else {
-            R.string.locais_endereco_indisponivel
+            R.string.locais_origem_aparelho
         }
     view.findViewById<TextView>(R.id.txt_endereco_atual).text =
         state.address.ifBlank {
@@ -32,15 +34,29 @@ fun renderLocais(
     view.findViewById<TextView>(R.id.mensagem_locais).setText(
         when (state.status) {
             LocaisStatus.IDLE, LocaisStatus.LOADING -> R.string.locais_carregando
-            LocaisStatus.EMPTY -> R.string.locais_vazio
+            LocaisStatus.EMPTY -> if (state.usesProfileAddress) R.string.locais_vazio_perfil else R.string.locais_vazio
             LocaisStatus.ADDRESS_MISSING -> R.string.locais_sem_endereco
             LocaisStatus.NOT_GEOCODED -> R.string.locais_sem_coordenadas
             LocaisStatus.AUTH_REQUIRED -> R.string.locais_sessao_invalida
+            LocaisStatus.LOCATION_PERMISSION -> R.string.locais_permissao_localizacao
+            LocaisStatus.LOCATION_UNAVAILABLE -> R.string.locais_localizacao_indisponivel
             else -> R.string.locais_falha
         },
     )
     view.findViewById<TextView>(R.id.btn_tentar_locais).apply {
-        visibility = if (state.status in setOf(LocaisStatus.ERROR, LocaisStatus.AUTH_REQUIRED)) View.VISIBLE else View.GONE
-        setText(if (state.status == LocaisStatus.AUTH_REQUIRED) R.string.locais_entrar else R.string.locais_tentar)
+        val retryable =
+            state.status in
+                setOf(
+                    LocaisStatus.ERROR, LocaisStatus.AUTH_REQUIRED, LocaisStatus.LOCATION_PERMISSION, LocaisStatus.LOCATION_UNAVAILABLE,
+                )
+        visibility = if (retryable) View.VISIBLE else View.GONE
+        setText(
+            when (state.status) {
+                LocaisStatus.AUTH_REQUIRED -> R.string.locais_entrar
+                LocaisStatus.LOCATION_PERMISSION -> R.string.locais_permitir_localizacao
+                LocaisStatus.LOCATION_UNAVAILABLE -> R.string.locais_ajustar_localizacao
+                else -> R.string.locais_tentar
+            },
+        )
     }
 }

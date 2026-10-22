@@ -220,6 +220,64 @@ class LocaisRepositoryTest {
 
     private fun addressText() = "Rua A, 10 - Centro - Cidade / SP"
 
+    @Test
+    fun fallbackEnviaCoordenadasNulasDiretoParaNearbySemPreConsultaDePerfil() {
+        var calls = 0
+        val api =
+            Proxy.newProxyInstance(LocaisAPI::class.java.classLoader, arrayOf(LocaisAPI::class.java)) { _, method, args ->
+                calls++
+                assertEquals("nearby", method.name)
+                assertNull(args[2])
+                assertNull(args[3])
+                TestCall { Response.success(emptyList<StoreResponse>()) }
+            } as LocaisAPI
+        var received: LocaisResult? = null
+        LocaisRepository(api, sessions).load(useProfileFallback = true) { received = it }
+        assertEquals(1, calls)
+        assertEquals(LocaisResult.Empty(""), received)
+    }
+
+    @Test
+    fun fallbackAindaDistingueErroDeEnderecoDaApi() {
+        var received: LocaisResult? = null
+        LocaisRepository(
+            api(nearbyCall = TestCall { errorResponse(400, "Endereco do perfil nao possui latitude e longitude") }),
+            sessions,
+        ).load(useProfileFallback = true) { received = it }
+        assertEquals(LocaisResult.AddressRequired(AddressProblem.NOT_GEOCODED), received)
+    }
+
+    @Test
+    fun coordenadasDoAparelhoConsultamNearbySemDependerDoPerfil() {
+        val methods = mutableListOf<String>()
+        val api =
+            Proxy.newProxyInstance(LocaisAPI::class.java.classLoader, arrayOf(LocaisAPI::class.java)) { _, method, args ->
+                methods += method.name
+                assertEquals("nearby", method.name)
+                assertEquals(-23.5, args[2])
+                assertEquals(-46.6, args[3])
+                assertNull(args[4])
+                TestCall { Response.success(listOf(store)) }
+            } as LocaisAPI
+        var result: LocaisResult? = null
+        LocaisRepository(api, sessions).load(latitude = -23.5, longitude = -46.6) { result = it }
+        assertEquals(listOf("nearby"), methods)
+        assertTrue(result is LocaisResult.Loaded)
+        assertEquals("", (result as LocaisResult.Loaded).address)
+    }
+
+    @Test
+    fun coordenadasInvalidasOuIncompletasNaoDisparamConsulta() {
+        val api = testApi<LocaisAPI> { error("Nao consultar") }
+        listOf(null to 1.0, 1.0 to null, 91.0 to 0.0, 0.0 to -181.0, Double.NaN to 0.0).forEach { (lat, lon) ->
+            assertTrue(
+                runCatching {
+                    LocaisRepository(api, sessions).load(latitude = lat, longitude = lon) {}
+                }.exceptionOrNull() is IllegalArgumentException,
+            )
+        }
+    }
+
     private fun <T> errorResponse(
         code: Int,
         message: String = "Erro",
