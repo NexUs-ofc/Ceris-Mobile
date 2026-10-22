@@ -47,7 +47,7 @@ class LocaisAPITest {
             decode<StoreResponse>(
                 """{"id":45,"name":"Mercado","cnpj":"123","street":"Rua A","number":"10","neighborhood":"Centro",
                 "city":"Cidade","state":"SP","latitude":-23.5,"longitude":-46.6,"distanceKm":0.45,
-                "openingTime":"08:00","closingTime":"18:00","profileImageUrl":"https://img.example/loja.jpg"}""",
+                "openingTime":"08:00","closingTime":"18:00","storeImageUrl":"https://img.example/loja.jpg"}""",
             )
         assertEquals(45, store.id)
         assertEquals("123", store.cnpj)
@@ -56,7 +56,11 @@ class LocaisAPITest {
         assertEquals(0.45, store.distanceKm)
         assertEquals("08:00", store.openingTime)
         assertEquals("18:00", store.closingTime)
-        assertEquals("https://img.example/loja.jpg", store.profileImageUrl)
+        assertEquals("https://img.example/loja.jpg", store.storeImageUrl)
+        assertEquals(
+            "https://img.example/loja-antiga.jpg",
+            decode<StoreResponse>("""{"id":45,"profileImageUrl":"https://img.example/loja-antiga.jpg"}""").storeImageUrl,
+        )
         assertNull(decode<StoreResponse>("""{"id":45,"distanceKm":null}""").openingTime)
         assertNull(decode<StoreResponse>("""{"id":45}""").distanceKm)
         val profile =

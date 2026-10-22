@@ -1,5 +1,7 @@
 package com.example.ceris.model.dto
 
+import com.google.gson.annotations.SerializedName
+
 /** Contrato compartilhado por /stores/nearby e /stores/{id}. Horarios em HH:mm. */
 data class StoreResponse(
     val id: Int?,
@@ -15,5 +17,6 @@ data class StoreResponse(
     val latitude: Double? = null,
     val longitude: Double? = null,
     val distanceKm: Double? = null,
-    val profileImageUrl: String? = null,
+    @SerializedName(value = "storeImageUrl", alternate = ["profileImageUrl"])
+    val storeImageUrl: String? = null,
 )

@@ -22,9 +22,9 @@ class LocalMapperTest {
 
     @Test
     fun repassaUrlDaFotoDaCoreParaOTela() {
-        val local = store.copy(profileImageUrl = " https://img.example/loja.jpg ").toLocal()
+        val local = store.copy(storeImageUrl = " https://img.example/loja.jpg ").toLocal()
         assertEquals("https://img.example/loja.jpg", local.imagemUrl)
-        assertNull(store.copy(profileImageUrl = "  ").toLocal().imagemUrl)
+        assertNull(store.copy(storeImageUrl = "  ").toLocal().imagemUrl)
     }
 
     @Test
