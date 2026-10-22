@@ -23,6 +23,20 @@ interface OpenFoodFactsAPI {
         @Query("page_size") tamanho: Int = 30
     ): Call<OffBusca>
 
+    /**
+     * Busca por texto, para produto sem marca (os lidos da nota, quase sempre).
+     * E a busca antiga da base, a unica que procura no nome.
+     */
+    @Headers("User-Agent: Ceris-Mobile/1.0")
+    @GET("cgi/search.pl")
+    fun buscarPorNome(
+        @Query("search_terms") termos: String,
+        @Query("fields") campos: String = CAMPOS,
+        @Query("page_size") tamanho: Int = 30,
+        @Query("search_simple") simples: Int = 1,
+        @Query("json") json: Int = 1
+    ): Call<OffBusca>
+
     /** Produto pelo codigo de barras. 404 com status 0 quando a base nao tem. */
     @Headers("User-Agent: Ceris-Mobile/1.0")
     @GET("api/v2/product/{gtin}")

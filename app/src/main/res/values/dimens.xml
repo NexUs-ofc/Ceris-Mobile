@@ -165,6 +165,8 @@
     <dimen name="campo_confirmacao_radius">16dp</dimen>
     <dimen name="stepper_tecla">28dp</dimen>
     <dimen name="stepper_tecla_radius">6dp</dimen>
+    <dimen name="dialogo_radius">24dp</dimen>
+    <dimen name="dialogo_padding">28dp</dimen>
 
     <!-- Camera do scanner -->
     <dimen name="moldura_traco">5dp</dimen>
@@ -186,4 +188,15 @@
     <!-- Telas de entrada (login, cadastro, senha): distancia do titulo ao topo -->
     <dimen name="entrada_topo">56dp</dimen>
     <dimen name="icone_google">40dp</dimen>
+
+    <!-- Perfil -->
+    <dimen name="perfil_foto_contorno">3dp</dimen>
+    <dimen name="perfil_selo">28dp</dimen>
+    <dimen name="perfil_opcao_altura">52dp</dimen>
+    <dimen name="perfil_opcao_icone">20dp</dimen>
+
+    <!-- Locais -->
+    <dimen name="endereco_icone_caixa">44dp</dimen>
+    <dimen name="mercado_foto_altura">210dp</dimen>
+    <dimen name="passo_numero">26dp</dimen>
 </resources>

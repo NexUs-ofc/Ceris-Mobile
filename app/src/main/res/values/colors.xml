@@ -121,6 +121,12 @@
     <!-- Nome do item como saiu na nota: cinza escuro, abaixo do titulo -->
     <color name="nota_nome">#5C5A6B</color>
     <color name="pilula_produto_borda">#8E8E99</color>
+    <!-- Linhas pares da tabela nutricional -->
+    <color name="nutricao_linha_par">#F7F7FA</color>
     <!-- Fundo da dica sobre a camera e do modo nao escolhido -->
     <color name="camera_dica_fundo">#99000000</color>
+    <!-- Perfil: "Sair" em vermelho e o fundo cinza dos campos do popup -->
+    <color name="perfil_sair">#D63A5C</color>
+    <color name="campo_perfil_fundo">#F5F5F7</color>
+    <color name="campo_perfil_borda">#E2E2E9</color>
 </resources>
