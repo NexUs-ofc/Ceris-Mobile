@@ -113,4 +113,14 @@
     <!-- Creme do fundo com alfa: o padrão continua aparecendo sob o cabeçalho -->
     <color name="chat_header_fundo">#E6FAF8F0</color>
     <color name="chat_header_traco">#1A4F2078</color>
+    <!-- Contorno dos campos do popup de confirmar produto e dos steppers -->
+    <color name="campo_confirmacao">#D9C2EC</color>
+    <!-- Camera: escurece o que fica fora da moldura de leitura -->
+    <color name="mascara_camera">#99000000</color>
+    <color name="camera_botao_fundo">#E6FFFFFF</color>
+    <!-- Nome do item como saiu na nota: cinza escuro, abaixo do titulo -->
+    <color name="nota_nome">#5C5A6B</color>
+    <color name="pilula_produto_borda">#8E8E99</color>
+    <!-- Fundo da dica sobre a camera e do modo nao escolhido -->
+    <color name="camera_dica_fundo">#99000000</color>
 </resources>
