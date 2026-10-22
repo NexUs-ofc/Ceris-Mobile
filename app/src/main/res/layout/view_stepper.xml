@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Seletor de quantidade dos popups: "-" e "+" em quadrados lilas nas pontas,
+    o numero no meio. Quem inclui define largura, altura e margens.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/campo_altura"
+    android:background="@drawable/bg_campo_confirmacao"
+    android:paddingStart="@dimen/spacing_s"
+    android:paddingEnd="@dimen/spacing_s">
+
+    <TextView
+        android:id="@+id/btn_menos"
+        style="@style/BotaoStepper"
+        android:contentDescription="@string/item_form_diminuir"
+        android:text="@string/stepper_menos"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_valor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/card_titulo"
+        android:textSize="@dimen/text_size_15"
+        app:fontFamily="@font/montserrat_bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_mais"
+        app:layout_constraintStart_toEndOf="@id/btn_menos"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1" />
+
+    <TextView
+        android:id="@+id/btn_mais"
+        style="@style/BotaoStepper"
+        android:contentDescription="@string/item_form_aumentar"
+        android:text="@string/stepper_mais"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

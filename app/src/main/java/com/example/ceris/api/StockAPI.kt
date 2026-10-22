@@ -4,11 +4,15 @@ import com.example.ceris.model.dto.FoodRegistrationRequest
 import com.example.ceris.model.dto.FoodResponse
 import com.example.ceris.model.dto.StockItemRequest
 import com.example.ceris.model.dto.StockItemResponse
+import com.example.ceris.model.dto.StockItemUpdateRequest
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 // Bearer, como as listas: a Core tira a casa dona do estoque do subject do JWT.
@@ -42,4 +46,18 @@ interface StockAPI {
         @Header("Authorization") autorizacao: String,
         @Body item: StockItemRequest
     ): Call<StockItemResponse>
+
+    /** Quantidade nova do lote; a Core nao aceita zero, entao zerar e remover(). */
+    @PATCH("/api/stock/{id}")
+    fun atualizar(
+        @Header("Authorization") autorizacao: String,
+        @Path("id") id: Int,
+        @Body mudanca: StockItemUpdateRequest
+    ): Call<StockItemResponse>
+
+    @DELETE("/api/stock/{id}")
+    fun remover(
+        @Header("Authorization") autorizacao: String,
+        @Path("id") id: Int
+    ): Call<Unit>
 }

@@ -10,6 +10,8 @@ data class FoodRegistrationRequest(
     val gtin: String,
     val name: String,
     val productBrand: String?,
+    /** Foto da base aberta. A Core so grava quando o alimento ainda nao tem. */
+    val foodImageUrl: String? = null,
     val packageQuantity: Double,
     /** Enum da Core: g, kg, ml, l ou unit. */
     val unitOfMeasure: String,

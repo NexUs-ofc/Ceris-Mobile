@@ -159,7 +159,44 @@
     <dimen name="chat_sugestao_padding_h">14dp</dimen>
     <dimen name="chat_sugestao_altura">38dp</dimen>
 
+    <!-- Popups do Figma -->
+    <dimen name="text_size_22">22sp</dimen>
+    <dimen name="botao_contorno">1dp</dimen>
+    <dimen name="campo_confirmacao_radius">16dp</dimen>
+    <dimen name="stepper_tecla">28dp</dimen>
+    <dimen name="stepper_tecla_radius">6dp</dimen>
+    <dimen name="dialogo_radius">24dp</dimen>
+    <dimen name="dialogo_padding">28dp</dimen>
+
+    <!-- Camera do scanner -->
+    <dimen name="moldura_traco">5dp</dimen>
+    <dimen name="moldura_canto">36dp</dimen>
+    <dimen name="moldura_raio">4dp</dimen>
+    <dimen name="moldura_largura_max">420dp</dimen>
+    <dimen name="camera_controles_altura">120dp</dimen>
+    <dimen name="camera_botao">56dp</dimen>
+    <dimen name="camera_botao_icone">26dp</dimen>
+    <dimen name="camera_flash">40dp</dimen>
+
+    <!-- Card da nota -->
+    <dimen name="nota_card_radius">14dp</dimen>
+    <dimen name="pilula_altura">50dp</dimen>
+    <dimen name="pilula_raio">25dp</dimen>
+    <dimen name="moldura_espaco_topo">72dp</dimen>
+    <dimen name="moldura_espaco_dica">96dp</dimen>
+
     <!-- Telas de entrada (login, cadastro, senha): distancia do titulo ao topo -->
     <dimen name="entrada_topo">56dp</dimen>
     <dimen name="icone_google">40dp</dimen>
+
+    <!-- Perfil -->
+    <dimen name="perfil_foto_contorno">3dp</dimen>
+    <dimen name="perfil_selo">28dp</dimen>
+    <dimen name="perfil_opcao_altura">52dp</dimen>
+    <dimen name="perfil_opcao_icone">20dp</dimen>
+
+    <!-- Locais -->
+    <dimen name="endereco_icone_caixa">44dp</dimen>
+    <dimen name="mercado_foto_altura">210dp</dimen>
+    <dimen name="passo_numero">26dp</dimen>
 </resources>

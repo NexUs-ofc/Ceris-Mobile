@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Item lido da nota, na revisao. Mesmo cartao do item de lista (contorno,
-    sem sombra), com o que a pessoa precisa conferir: o produto do catalogo, a
-    quantidade e a validade.
+    Item lido da nota (Figma > Protótipos > V1 > nota fiscal): contorno roxo,
+    caixa de marcar e o nome como saiu na nota, o produto do catalogo numa
+    pilula com seta, e embaixo a quantidade e a validade em pilulas.
+
+    So o que estiver marcado vai para o estoque.
 -->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,12 +12,13 @@
     android:id="@+id/card_nota"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_s"
     android:layout_marginBottom="@dimen/spacing_s"
     app:cardBackgroundColor="@color/md_theme_surface"
-    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardCornerRadius="@dimen/nota_card_radius"
     app:cardElevation="0dp"
-    app:strokeColor="@color/card_contorno"
-    app:strokeWidth="@dimen/card_stroke_width">
+    app:strokeColor="@color/md_theme_primary"
+    app:strokeWidth="@dimen/botao_contorno">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -26,10 +29,12 @@
             android:id="@+id/check_incluir"
             android:layout_width="@dimen/item_check_size"
             android:layout_height="@dimen/item_check_size"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
             app:buttonTint="@color/check_item_tint"
+            app:layout_constraintBottom_toBottomOf="@id/txt_nome_nota"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/txt_nome_nota"
-            app:layout_constraintBottom_toBottomOf="@id/txt_nome_nota"
             app:useMaterialThemeColors="false" />
 
         <TextView
@@ -39,128 +44,78 @@
             android:layout_marginStart="@dimen/spacing_m"
             android:ellipsize="end"
             android:fontFamily="@font/montserrat_semibold"
-            app:fontFamily="@font/montserrat_semibold"
             android:maxLines="2"
-            android:textColor="@color/md_theme_onBackground"
-            android:textSize="@dimen/text_size_15"
+            android:textAllCaps="true"
+            android:textColor="@color/nota_nome"
+            android:textSize="@dimen/text_size_13"
+            app:fontFamily="@font/montserrat_semibold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/check_incluir"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="ALFACE CRESPA UN" />
-
-        <TextView
-            android:id="@+id/txt_conferir"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_xs"
-            android:text="@string/nota_conferir"
-            android:textColor="@color/campo_erro"
-            android:textSize="@dimen/text_size_13"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/txt_nome_nota"
-            app:layout_constraintTop_toBottomOf="@id/txt_nome_nota"
-            tools:visibility="visible" />
+            tools:text="Leite integral Piracanjuba 1L" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/caixa_produto"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/PilulaProduto"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_s"
-            android:hint="@string/nota_produto"
-            app:boxStrokeColor="@color/campo_borda"
+            android:layout_marginTop="@dimen/spacing_m"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_conferir">
+            app:layout_constraintTop_toBottomOf="@id/txt_nome_nota">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/campo_produto"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/pilula_altura"
                 android:completionThreshold="1"
+                android:fontFamily="@font/montserrat_bold"
+                android:hint="@string/nota_produto"
                 android:inputType="text|textNoSuggestions"
-                android:textColor="@color/md_theme_onBackground"
-                android:textSize="@dimen/text_size_14"
-                tools:text="Alface" />
+                android:maxLines="1"
+                android:paddingStart="@dimen/spacing_m"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:popupBackground="@color/md_theme_surface"
+                android:textColor="@color/md_theme_primary"
+                android:textColorHint="@color/md_theme_primary"
+                android:textSize="@dimen/text_size_15"
+                app:fontFamily="@font/montserrat_bold"
+                app:simpleItemSelectedColor="@color/selecao_item" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <include
             android:id="@+id/stepper_nota"
+            layout="@layout/view_stepper_pilula"
             android:layout_width="0dp"
-            android:layout_height="@dimen/campo_altura"
+            android:layout_height="@dimen/pilula_altura"
             android:layout_marginTop="@dimen/spacing_s"
             android:layout_marginEnd="@dimen/spacing_s"
-            android:background="@drawable/bg_campo_outline"
-            android:paddingStart="@dimen/spacing_s"
-            android:paddingEnd="@dimen/spacing_s"
             app:layout_constraintEnd_toStartOf="@id/txt_validade_nota"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/caixa_produto">
-
-            <ImageButton
-                android:id="@+id/btn_diminuir_nota"
-                android:layout_width="@dimen/stepper_botao_size"
-                android:layout_height="@dimen/stepper_botao_size"
-                android:background="@drawable/bg_stepper_botao"
-                android:contentDescription="@string/item_form_diminuir"
-                android:padding="@dimen/spacing_s"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_menu_minus"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/md_theme_primary" />
-
-            <TextView
-                android:id="@+id/txt_quantidade_nota"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_semibold"
-                app:fontFamily="@font/montserrat_semibold"
-                android:gravity="center"
-                android:textColor="@color/md_theme_onBackground"
-                android:textSize="@dimen/text_size_15"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_aumentar_nota"
-                app:layout_constraintStart_toEndOf="@id/btn_diminuir_nota"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="2 un" />
-
-            <ImageButton
-                android:id="@+id/btn_aumentar_nota"
-                android:layout_width="@dimen/stepper_botao_size"
-                android:layout_height="@dimen/stepper_botao_size"
-                android:background="@drawable/bg_stepper_botao"
-                android:contentDescription="@string/item_form_aumentar"
-                android:padding="@dimen/spacing_s"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_menu_plus"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/md_theme_primary" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@id/caixa_produto" />
 
         <TextView
             android:id="@+id/txt_validade_nota"
             android:layout_width="0dp"
-            android:layout_height="@dimen/campo_altura"
-            android:background="@drawable/bg_campo_outline"
+            android:layout_height="@dimen/pilula_altura"
+            android:background="@drawable/bg_pilula_roxa"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
+            android:maxLines="1"
             android:paddingStart="@dimen/spacing_s"
             android:paddingEnd="@dimen/spacing_s"
             android:textColor="@color/md_theme_onBackground"
-            android:textSize="@dimen/text_size_14"
+            android:textSize="@dimen/text_size_13"
             app:layout_constraintBottom_toBottomOf="@id/stepper_nota"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/stepper_nota"
             app:layout_constraintTop_toTopOf="@id/stepper_nota"
-            tools:text="Vence em 20/10" />
+            tools:text="Vence em 25/10" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

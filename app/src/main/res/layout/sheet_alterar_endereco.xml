@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Alterar endereco (Figma > Protótipos > V1 > Screen - Locais, popup): busca
+    por CEP, usar localizacao atual, enderecos salvos e adicionar novo.
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/sheet_padding"
+        android:paddingTop="@dimen/spacing_s"
+        android:paddingEnd="@dimen/sheet_padding"
+        android:paddingBottom="@dimen/sheet_padding_bottom">
+
+        <View
+            android:layout_width="@dimen/sheet_alca_largura"
+            android:layout_height="@dimen/sheet_alca_altura"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_sheet_alca" />
+
+        <TextView
+            style="@style/TituloSheet"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:text="@string/endereco_titulo" />
+
+        <EditText
+            android:id="@+id/campo_busca_endereco"
+            style="@style/CampoPerfil"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:drawablePadding="@dimen/spacing_s"
+            android:hint="@string/endereco_busca"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLength="9"
+            app:drawableStartCompat="@drawable/ic_menu_search"
+            app:drawableTint="@color/ceris_cinza" />
+
+        <TextView
+            android:id="@+id/btn_localizacao_atual"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/campo_altura"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:background="@drawable/bg_localizacao_atual"
+            android:clickable="true"
+            android:drawablePadding="@dimen/spacing_m"
+            android:focusable="true"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/spacing_m"
+            android:paddingEnd="@dimen/spacing_m"
+            android:text="@string/endereco_localizacao"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_14"
+            app:drawableStartCompat="@drawable/ic_menu_map_pin"
+            app:drawableTint="@color/md_theme_primary"
+            app:fontFamily="@font/montserrat_semibold" />
+
+        <TextView
+            android:id="@+id/rotulo_salvos"
+            style="@style/RotuloSecaoMiuda"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:text="@string/endereco_salvos" />
+
+        <LinearLayout
+            android:id="@+id/lista_enderecos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/btn_novo_endereco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawablePadding="@dimen/spacing_m"
+            android:focusable="true"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center_vertical"
+            android:paddingTop="@dimen/spacing_s"
+            android:paddingBottom="@dimen/spacing_s"
+            android:text="@string/endereco_novo"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="@dimen/text_size_14"
+            app:drawableStartCompat="@drawable/bg_icone_mais"
+            app:fontFamily="@font/montserrat_semibold" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

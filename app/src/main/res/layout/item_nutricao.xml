@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Uma linha da tabela nutricional: nome a esquerda, valor em negrito a direita. -->
+<!--
+    Uma linha da tabela nutricional: nome a esquerda, valor em negrito roxo a
+    direita. As linhas pares ganham fundo cinza pelo codigo, como no Figma.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -7,9 +10,9 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="@dimen/detalhe_padding_cartao"
+    android:paddingTop="@dimen/nutricao_linha_padding"
     android:paddingEnd="@dimen/detalhe_padding_cartao"
-    android:paddingTop="@dimen/spacing_s"
-    android:paddingBottom="@dimen/spacing_s">
+    android:paddingBottom="@dimen/nutricao_linha_padding">
 
     <TextView
         android:id="@+id/txt_nutriente"
@@ -17,15 +20,15 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="@color/card_titulo"
-        android:textSize="@dimen/text_size_13" />
+        android:textSize="@dimen/text_size_14" />
 
     <TextView
         android:id="@+id/txt_valor_nutriente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_bold"
-        app:fontFamily="@font/montserrat_bold"
-        android:textColor="@color/card_titulo"
-        android:textSize="@dimen/text_size_13" />
+        android:textColor="@color/md_theme_primary"
+        android:textSize="@dimen/text_size_14"
+        app:fontFamily="@font/montserrat_bold" />
 
 </LinearLayout>
