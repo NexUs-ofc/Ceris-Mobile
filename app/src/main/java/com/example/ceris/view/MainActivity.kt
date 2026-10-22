@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -65,13 +66,24 @@ class MainActivity : AppCompatActivity() {
         hideNavigationBar()
         setContentView(R.layout.activity_main)
 
+        val areaNavegacao = findViewById<View>(R.id.navegacao)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            // Teclado aberto: a barra some em vez de subir junto e esmagar a tela.
+            areaNavegacao.visibility =
+                if (insets.isVisible(WindowInsetsCompat.Type.ime())) View.GONE else View.VISIBLE
             insets
         }
 
         barra = findViewById(R.id.nav_destinos)
+
+        // A BottomNavigationView soma sozinha o recuo da barra do sistema ao
+        // proprio padding. Como a raiz ja recuou, a soma empurrava icones e
+        // rotulos para fora da faixa de altura fixa: em aparelho com botoes de
+        // navegacao (e no tablet, com a barra de tarefas) os destinos sumiam ou
+        // estouravam. Consumindo aqui, ela nao recua de novo.
+        ViewCompat.setOnApplyWindowInsetsListener(barra) { _, _ -> WindowInsetsCompat.CONSUMED }
 
         // O botao central e a leitura de nota: o primeiro toque abre a camera
         // aqui mesmo, entre as abas, e com ela aberta o toque tira a foto.
