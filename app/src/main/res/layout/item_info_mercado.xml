@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uma linha do cartao do mercado: icone roxo, titulo em negrito e o valor em cinza. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/spacing_m"
+    android:paddingBottom="@dimen/spacing_m">
+
+    <ImageView
+        android:id="@+id/icone_info"
+        android:layout_width="@dimen/perfil_opcao_icone"
+        android:layout_height="@dimen/perfil_opcao_icone"
+        android:importantForAccessibility="no"
+        app:tint="@color/md_theme_primary"
+        tools:src="@drawable/ic_menu_map_pin" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_m"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titulo_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/card_titulo"
+            android:textSize="@dimen/text_size_14"
+            app:fontFamily="@font/montserrat_semibold"
+            tools:text="Endereço" />
+
+        <TextView
+            android:id="@+id/valor_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:textColor="@color/ceris_cinza"
+            android:textSize="@dimen/text_size_13"
+            tools:text="Av. Paulista, 1500 - Bela Vista, São Paulo - SP" />
+
+    </LinearLayout>
+
+</LinearLayout>
