@@ -5,6 +5,8 @@ import java.io.Serializable
 /**
  * Estabelecimento proximo, como a tela de Locais e o detalhe precisam dele.
  *
+ * O mapper formata a distancia em pt-BR, incluindo m/km. Texto vazio indica
+ * dado ausente e imagemUrl permanece nula quando a loja nao tem foto cadastrada.
  * Os textos vem ja formatados porque quem decide arredondamento e unidade e a
  * origem do dado, nao a View. Serializable para ir inteiro ao detalhe.
  */

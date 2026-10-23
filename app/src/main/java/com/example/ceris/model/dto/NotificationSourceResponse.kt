@@ -9,17 +9,8 @@ data class StockNotificationSource(
     val expiryDate: String?,
 )
 
-data class StoreNotificationSource(
-    val id: Int?,
-    val name: String?,
-    val street: String?,
-    val number: String?,
-    val neighborhood: String?,
-    val city: String?,
-    val state: String?,
-    val openingTime: String?,
-    val closingTime: String?,
-)
+// Mantem o nome usado pelas notificacoes com o mesmo contrato de lojas.
+typealias StoreNotificationSource = StoreResponse
 
 data class EventNotificationSource(
     val id: String?,

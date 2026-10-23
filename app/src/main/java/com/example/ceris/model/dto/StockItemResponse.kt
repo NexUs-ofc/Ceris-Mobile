@@ -11,5 +11,6 @@ data class StockItemResponse(
     val unitOfMeasure: String? = null,
     val quantity: Int = 0,
     /** ISO yyyy-MM-dd, ou nulo quando o produto nao tem validade cadastrada. */
-    val expiryDate: String? = null
+    val expiryDate: String? = null,
+    val foodImageUrl: String? = null
 )

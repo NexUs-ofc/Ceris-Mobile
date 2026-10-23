@@ -18,5 +18,6 @@ data class FoodRegistrationRequest(
     val gpcCode: String,
     val quantity: Int,
     /** yyyy-MM-dd, ou nulo para produto sem validade. */
-    val expiryDate: String?
+    val expiryDate: String?,
+    val foodImageUrl: String? = null
 )
