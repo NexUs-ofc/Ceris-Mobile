@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Cadastro pelo codigo de barras, aberto por cima da camera.
+    Confirmar dados do produto (Figma > Protótipos > qr code), aberto por cima
+    da camera quando ela le um codigo de barras.
 
-    Mesmos estilos do formulario de item da lista. Rola por dentro: com o
-    teclado aberto o botao de confirmar precisa continuar alcancavel.
+    So o que o desenho mostra: nome, validade e quantidade. Marca, embalagem,
+    categoria e foto vem da base aberta e seguem para a Core sem ocupar a tela.
+    Rola por dentro: com o teclado aberto o botao de confirmar continua
+    alcancavel.
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -29,207 +32,31 @@
             android:background="@drawable/bg_sheet_alca" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/TituloSheet"
             android:layout_marginTop="@dimen/spacing_l"
-            android:fontFamily="@font/huninn"
-            app:fontFamily="@font/huninn"
-            android:text="@string/codigo_titulo"
-            android:textColor="@color/md_theme_onBackground"
-            android:textSize="@dimen/text_size_20" />
+            android:text="@string/codigo_titulo" />
 
         <TextView
-            android:id="@+id/txt_codigo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_xs"
+            android:text="@string/codigo_subtitulo"
             android:textColor="@color/md_secundary_text"
-            android:textSize="@dimen/text_size_13"
-            tools:text="Código 7891000100103" />
-
-        <TextView
-            android:id="@+id/txt_situacao_busca"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_xs"
-            android:textColor="@color/card_destaque"
-            android:textSize="@dimen/text_size_13"
-            tools:text="Buscando o produto…" />
+            android:textSize="@dimen/text_size_13" />
 
         <TextView
             style="@style/RotuloCampo"
-            android:layout_marginTop="@dimen/spacing_l"
+            android:layout_marginTop="@dimen/spacing_m"
             android:text="@string/codigo_nome" />
 
         <EditText
             android:id="@+id/campo_nome_codigo"
-            style="@style/CampoFormulario"
+            style="@style/CampoConfirmacao"
             android:layout_width="match_parent"
             android:hint="@string/codigo_nome_hint"
-            android:imeOptions="actionNext"
+            android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="textCapSentences" />
-
-        <TextView
-            style="@style/RotuloCampo"
-            android:layout_marginTop="@dimen/spacing_m"
-            android:text="@string/codigo_marca" />
-
-        <EditText
-            android:id="@+id/campo_marca_codigo"
-            style="@style/CampoFormulario"
-            android:layout_width="match_parent"
-            android:hint="@string/codigo_marca_hint"
-            android:imeOptions="actionNext"
-            android:importantForAutofill="no"
-            android:inputType="textCapWords" />
-
-        <TextView
-            style="@style/RotuloCampo"
-            android:layout_marginTop="@dimen/spacing_m"
-            android:text="@string/codigo_embalagem" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/campo_embalagem_codigo"
-                style="@style/CampoFormulario"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:hint="@string/codigo_embalagem_hint"
-                android:imeOptions="actionNext"
-                android:importantForAutofill="no"
-                android:inputType="numberDecimal" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_s"
-                android:layout_marginTop="@dimen/spacing_s"
-                android:layout_weight="1"
-                app:boxCornerRadiusBottomEnd="@dimen/campo_radius"
-                app:boxCornerRadiusBottomStart="@dimen/campo_radius"
-                app:boxCornerRadiusTopEnd="@dimen/campo_radius"
-                app:boxCornerRadiusTopStart="@dimen/campo_radius"
-                app:boxStrokeColor="@color/campo_contorno"
-                app:hintEnabled="false">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/campo_unidade_codigo"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/campo_altura"
-                    android:gravity="center_vertical"
-                    android:inputType="none"
-                    android:maxLines="1"
-                    android:paddingTop="0dp"
-                    android:paddingBottom="0dp"
-                    android:popupBackground="@color/md_theme_surface"
-                    android:textColor="@color/md_theme_onBackground"
-                    android:textSize="@dimen/text_size_15"
-                    app:simpleItemSelectedColor="@color/selecao_item"
-                    tools:text="g" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-        <TextView
-            style="@style/RotuloCampo"
-            android:layout_marginTop="@dimen/spacing_m"
-            android:text="@string/codigo_categoria" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_s"
-            app:boxCornerRadiusBottomEnd="@dimen/campo_radius"
-            app:boxCornerRadiusBottomStart="@dimen/campo_radius"
-            app:boxCornerRadiusTopEnd="@dimen/campo_radius"
-            app:boxCornerRadiusTopStart="@dimen/campo_radius"
-            app:boxStrokeColor="@color/campo_contorno"
-            app:hintEnabled="false">
-
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/campo_categoria_codigo"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/campo_altura"
-                android:gravity="center_vertical"
-                android:hint="@string/codigo_categoria_hint"
-                android:inputType="none"
-                android:maxLines="1"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:popupBackground="@color/md_theme_surface"
-                android:textColor="@color/md_theme_onBackground"
-                android:textColorHint="@color/md_theme_hint"
-                android:textSize="@dimen/text_size_15"
-                app:simpleItemSelectedColor="@color/selecao_item" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            style="@style/RotuloCampo"
-            android:layout_marginTop="@dimen/spacing_m"
-            android:text="@string/codigo_quantidade" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/campo_altura"
-            android:layout_marginTop="@dimen/spacing_s"
-            android:background="@drawable/bg_campo_outline"
-            android:paddingStart="@dimen/spacing_s"
-            android:paddingEnd="@dimen/spacing_s">
-
-            <ImageButton
-                android:id="@+id/btn_diminuir_codigo"
-                android:layout_width="@dimen/stepper_botao_size"
-                android:layout_height="@dimen/stepper_botao_size"
-                android:background="@drawable/bg_stepper_botao"
-                android:contentDescription="@string/item_form_diminuir"
-                android:padding="@dimen/spacing_s"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_menu_minus"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/md_theme_primary" />
-
-            <TextView
-                android:id="@+id/txt_quantidade_codigo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_semibold"
-                app:fontFamily="@font/montserrat_semibold"
-                android:gravity="center"
-                android:textColor="@color/md_theme_onBackground"
-                android:textSize="@dimen/text_size_15"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_aumentar_codigo"
-                app:layout_constraintStart_toEndOf="@id/btn_diminuir_codigo"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="1" />
-
-            <ImageButton
-                android:id="@+id/btn_aumentar_codigo"
-                android:layout_width="@dimen/stepper_botao_size"
-                android:layout_height="@dimen/stepper_botao_size"
-                android:background="@drawable/bg_stepper_botao"
-                android:contentDescription="@string/item_form_aumentar"
-                android:padding="@dimen/spacing_s"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_menu_plus"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/md_theme_primary" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             style="@style/RotuloCampo"
@@ -238,37 +65,40 @@
 
         <TextView
             android:id="@+id/campo_validade_codigo"
-            style="@style/CampoFormulario"
+            style="@style/CampoConfirmacao"
             android:layout_width="match_parent"
+            android:background="@drawable/bg_campo_confirmacao"
+            android:clickable="true"
+            android:drawablePadding="@dimen/spacing_s"
+            android:focusable="true"
             android:gravity="center_vertical"
-            android:text="@string/codigo_sem_validade" />
+            android:hint="@string/codigo_sem_validade"
+            app:drawableEndCompat="@drawable/ic_menu_calendar"
+            app:drawableTint="@color/md_theme_primary" />
+
+        <TextView
+            style="@style/RotuloCampo"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:text="@string/codigo_quantidade" />
+
+        <include
+            android:id="@+id/stepper_codigo"
+            layout="@layout/view_stepper"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/campo_altura"
+            android:layout_marginTop="@dimen/spacing_s" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_confirmar_codigo"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
+            style="@style/BotaoPrincipal"
             android:layout_marginTop="@dimen/spacing_l"
-            android:fontFamily="@font/montserrat_semibold"
-            app:fontFamily="@font/montserrat_semibold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="@string/codigo_confirmar"
-            android:textColor="@color/md_theme_onPrimary"
-            android:textSize="@dimen/text_size_15"
-            app:backgroundTint="@color/md_theme_primary"
-            app:cornerRadius="@dimen/botao_radius" />
+            android:text="@string/codigo_confirmar" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cancelar_codigo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            style="@style/BotaoContorno"
             android:layout_marginTop="@dimen/spacing_s"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="@dimen/spacing_s"
-            android:text="@string/codigo_cancelar"
-            android:textColor="@color/md_theme_primary"
-            android:textSize="@dimen/text_size_14" />
+            android:text="@string/codigo_cancelar" />
 
     </LinearLayout>
 

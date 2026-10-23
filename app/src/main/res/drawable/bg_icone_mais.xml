@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "+" do "Adicionar novo endereco": quadrado lilas com o sinal roxo por cima. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="@dimen/endereco_icone_caixa"
+        android:height="@dimen/endereco_icone_caixa">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/stepper_fundo" />
+            <corners android:radius="@dimen/campo_radius" />
+        </shape>
+    </item>
+    <item
+        android:width="@dimen/perfil_opcao_icone"
+        android:height="@dimen/perfil_opcao_icone"
+        android:drawable="@drawable/ic_menu_plus_roxo"
+        android:gravity="center" />
+</layer-list>

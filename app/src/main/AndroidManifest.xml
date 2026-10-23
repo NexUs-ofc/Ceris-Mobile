@@ -67,6 +67,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".view.DetalheMercadoActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.DetalheEventoActivity"
             android:exported="false" />
         <activity

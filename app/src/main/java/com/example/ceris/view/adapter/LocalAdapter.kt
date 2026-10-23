@@ -18,7 +18,7 @@ import com.example.ceris.model.Local
  * Como o ProdutoAdapter, usa ListAdapter para atualizar por diferença: quando o
  * endereço muda e a lista é recalculada, só os cards afetados são redesenhados.
  *
- * A foto de perfil da loja vem da Core; o icone de mapa fica como placeholder.
+ * A foto vem da Core (storeImageUrl); sem ela, a moldura mostra o icone de loja.
  */
 class LocalAdapter(
     private val aoTocar: ((Local) -> Unit)? = null,

@@ -33,7 +33,8 @@ data class ProdutoEncontrado(
     val marca: String?,
     val quantidadeEmbalagem: Double?,
     val unidadeEmbalagem: UnidadeEmbalagem?,
-    val imagemUrl: String? = null
+    val imagemUrl: String? = null,
+    val categoria: CategoriaAlimento? = null
 )
 
 object CadastroPorCodigo {
@@ -61,8 +62,49 @@ object CadastroPorCodigo {
         val imagem = detalhe.imageFrontUrl?.trim()?.takeIf { it.isNotEmpty() }
 
         if (nome == null && marca == null && quantidade == null && imagem == null) return null
-        return ProdutoEncontrado(nome, marca, quantidade, unidade.takeIf { quantidade != null }, imagem)
+
+        return ProdutoEncontrado(
+            nome = nome,
+            marca = marca,
+            quantidadeEmbalagem = quantidade,
+            unidadeEmbalagem = unidade.takeIf { quantidade != null },
+            imagemUrl = imagem,
+            categoria = categoriaDaBase(detalhe.categoriesTags)
+        )
     }
+
+    /**
+     * Categoria do app a partir das etiquetas da base aberta. As etiquetas vem
+     * do geral para o especifico, entao a busca anda de tras para frente: a mais
+     * especifica que a gente reconhece decide ("en:milks" antes de
+     * "en:beverages", que tambem aparece no leite).
+     */
+    fun categoriaDaBase(etiquetas: List<String>?): CategoriaAlimento? =
+        etiquetas.orEmpty().asReversed().firstNotNullOfOrNull { etiqueta ->
+            val nome = etiqueta.substringAfter(':').lowercase()
+            PALAVRAS_CATEGORIA.firstOrNull { (palavras, _) -> palavras.any { nome.contains(it) } }?.second
+        }
+
+    /** Pedacos de etiqueta do Open Food Facts por categoria, das mais especificas primeiro. */
+    private val PALAVRAS_CATEGORIA: List<Pair<List<String>, CategoriaAlimento>> = listOf(
+        listOf("frozen") to CategoriaAlimento.CONGELADOS,
+        listOf("milk", "dairies", "dairy", "cheese", "yogurt", "butter", "cream", "eggs") to CategoriaAlimento.LATICINIOS,
+        listOf("meat", "poultry", "chicken", "beef", "pork", "fish", "seafood", "sausage") to CategoriaAlimento.CARNES,
+        listOf("pasta", "noodle") to CategoriaAlimento.MASSAS,
+        listOf("flour", "yeast", "baking-mix") to CategoriaAlimento.FARINHAS,
+        listOf("bread", "cake", "pastr") to CategoriaAlimento.PADARIA,
+        listOf("biscuit", "cookie", "cracker", "snack", "chip") to CategoriaAlimento.BISCOITOS,
+        listOf("chocolate", "candies", "confectioner", "dessert", "sweet-spread", "jam") to CategoriaAlimento.DOCES,
+        listOf("sugar", "sweetener", "honey") to CategoriaAlimento.ACUCARES,
+        listOf("oil", "fats", "margarine") to CategoriaAlimento.OLEOS,
+        listOf("sauce", "condiment", "spice", "seasoning", "salt", "vinegar", "ketchup", "mayonnaise") to
+            CategoriaAlimento.MOLHOS,
+        listOf("canned", "preserve") to CategoriaAlimento.CONSERVAS,
+        listOf("meal", "pizza", "soup") to CategoriaAlimento.PRONTOS,
+        listOf("rice", "bean", "cereal", "grain", "legume", "oat", "corn") to CategoriaAlimento.CEREAIS,
+        listOf("fruit", "vegetable", "salad") to CategoriaAlimento.HORTIFRUTI,
+        listOf("beverage", "drink", "juice", "water", "soda", "coffee", "teas") to CategoriaAlimento.BEBIDAS
+    )
 
     /**
      * Monta o pedido ou devolve o que falta, na ordem em que aparece na tela.
@@ -98,6 +140,7 @@ object CadastroPorCodigo {
                 gtin = gtin,
                 name = nome.trim(),
                 productBrand = marca.trim().takeIf { it.isNotEmpty() },
+                foodImageUrl = imagemUrl?.takeIf { it.isNotBlank() },
                 packageQuantity = embalagem!!,
                 unitOfMeasure = unidade!!.core,
                 gpcCode = categoria!!.gpc,

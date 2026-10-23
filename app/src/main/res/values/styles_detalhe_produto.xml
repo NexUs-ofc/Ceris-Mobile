@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="detalhe_produto_imagem_altura">280dp</dimen>
+    <dimen name="detalhe_produto_imagem_altura">300dp</dimen>
     <dimen name="detalhe_raio">12dp</dimen>
+    <dimen name="detalhe_cartao_raio">20dp</dimen>
     <dimen name="detalhe_padding_cartao">16dp</dimen>
+    <dimen name="detalhe_margem">20dp</dimen>
+    <dimen name="detalhe_topo">40dp</dimen>
+    <dimen name="nutricao_linha_padding">12dp</dimen>
 
-    <!-- Chip de validade, quantidade e status do Detalhe do Item. -->
+    <!-- Cartoes de validade, quantidade e status do Detalhe do Item. -->
     <style name="DetalheProdutoChip">
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
@@ -19,7 +23,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@color/md_secundary_text</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:textColor">@color/ceris_cinza</item>
         <item name="android:textSize">@dimen/text_size_10</item>
     </style>
 
@@ -29,7 +34,7 @@
         <item name="android:layout_marginTop">@dimen/spacing_xs</item>
         <item name="android:fontFamily">@font/montserrat_bold</item>
         <item name="fontFamily">@font/montserrat_bold</item>
-        <item name="android:textColor">@color/card_titulo</item>
-        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:textColor">@color/md_theme_primary</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
     </style>
 </resources>

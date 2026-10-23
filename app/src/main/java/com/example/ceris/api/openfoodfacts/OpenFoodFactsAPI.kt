@@ -9,8 +9,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
- * Open Food Facts: base aberta e gratuita, sem chave. Preenche o cadastro por
- * codigo de barras e a nutricao do detalhe; a Core continua sendo a dona do estoque.
+ * Open Food Facts: base aberta e gratuita, sem chave. Preenche o cadastro pelo
+ * codigo de barras e da a tabela nutricional do detalhe; a Core continua sendo
+ * a dona do estoque.
  */
 interface OpenFoodFactsAPI {
 
@@ -20,6 +21,20 @@ interface OpenFoodFactsAPI {
         @Query("brands") marca: String,
         @Query("fields") campos: String = CAMPOS,
         @Query("page_size") tamanho: Int = 30
+    ): Call<OffBusca>
+
+    /**
+     * Busca por texto, para produto sem marca (os lidos da nota, quase sempre).
+     * E a busca antiga da base, a unica que procura no nome.
+     */
+    @Headers("User-Agent: Ceris-Mobile/1.0")
+    @GET("cgi/search.pl")
+    fun buscarPorNome(
+        @Query("search_terms") termos: String,
+        @Query("fields") campos: String = CAMPOS,
+        @Query("page_size") tamanho: Int = 30,
+        @Query("search_simple") simples: Int = 1,
+        @Query("json") json: Int = 1
     ): Call<OffBusca>
 
     /** Produto pelo codigo de barras. 404 com status 0 quando a base nao tem. */
@@ -35,6 +50,7 @@ interface OpenFoodFactsAPI {
 
         const val CAMPOS = "code,product_name,brands,image_front_url,nutriments"
 
-        const val CAMPOS_PRODUTO = "product_name,brands,product_quantity,product_quantity_unit,image_front_url"
+        const val CAMPOS_PRODUTO =
+            "product_name,brands,product_quantity,product_quantity_unit,image_front_url,categories_tags"
     }
 }

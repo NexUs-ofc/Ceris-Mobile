@@ -6,6 +6,8 @@ data class StockItemResponse(
     val foodId: Int? = null,
     val foodName: String? = null,
     val productBrand: String? = null,
+    /** Foto do alimento no catalogo; nula quando ninguem cadastrou. */
+    val foodImageUrl: String? = null,
     val unitOfMeasure: String? = null,
     val quantity: Int = 0,
     /** ISO yyyy-MM-dd, ou nulo quando o produto nao tem validade cadastrada. */

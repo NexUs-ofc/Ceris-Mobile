@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uma opcao do Perfil: cartao branco com icone, texto e seta. O PerfilFragment preenche. -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_s"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/ceris_white"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/card_contorno"
+    app:strokeWidth="@dimen/card_stroke_width">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/perfil_opcao_altura"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_m"
+        android:paddingEnd="@dimen/spacing_m">
+
+        <ImageView
+            android:id="@+id/icone_opcao"
+            android:layout_width="@dimen/perfil_opcao_icone"
+            android:layout_height="@dimen/perfil_opcao_icone"
+            android:importantForAccessibility="no"
+            app:tint="@color/ceris_cinza"
+            tools:src="@drawable/ic_menu_user" />
+
+        <TextView
+            android:id="@+id/txt_opcao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:layout_weight="1"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_14"
+            tools:text="Personalização" />
+
+        <ImageView
+            android:id="@+id/seta_opcao"
+            android:layout_width="@dimen/perfil_opcao_icone"
+            android:layout_height="@dimen/perfil_opcao_icone"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_menu_chevron_right"
+            app:tint="@color/ceris_cinza" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

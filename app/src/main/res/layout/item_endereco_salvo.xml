@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Endereco salvo no popup de alterar endereco: icone, nome, endereco e o check do atual. -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_s"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/ceris_white"
+    app:cardCornerRadius="@dimen/campo_radius"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/campo_perfil_borda"
+    app:strokeWidth="@dimen/card_stroke_width">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_s">
+
+        <ImageView
+            android:id="@+id/icone_endereco"
+            android:layout_width="@dimen/endereco_icone_caixa"
+            android:layout_height="@dimen/endereco_icone_caixa"
+            android:background="@drawable/bg_icone_endereco"
+            android:importantForAccessibility="no"
+            android:padding="@dimen/spacing_s"
+            app:tint="@color/md_theme_primary"
+            tools:src="@drawable/ic_menu_house" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_m"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_titulo_endereco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="@color/card_titulo"
+                android:textSize="@dimen/text_size_14"
+                app:fontFamily="@font/montserrat_bold"
+                tools:text="Casa" />
+
+            <TextView
+                android:id="@+id/txt_endereco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/ceris_cinza"
+                android:textSize="@dimen/text_size_13"
+                tools:text="Rua das Flores, 123 - Centro" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/check_endereco"
+            android:layout_width="@dimen/perfil_opcao_icone"
+            android:layout_height="@dimen/perfil_opcao_icone"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_menu_check"
+            app:tint="@color/md_theme_primary" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

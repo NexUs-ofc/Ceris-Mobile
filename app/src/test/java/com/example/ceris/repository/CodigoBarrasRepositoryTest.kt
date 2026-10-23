@@ -110,7 +110,14 @@ class CodigoBarrasRepositoryTest {
     }
 
     private val pedido = FoodRegistrationRequest(
-        "7891000100103", "Leite Condensado", "Nestlé", 395.0, "g", "10000025", 2, "2027-01-10"
+        gtin = "7891000100103",
+        name = "Leite Condensado",
+        productBrand = "Nestlé",
+        packageQuantity = 395.0,
+        unitOfMeasure = "g",
+        gpcCode = "10000025",
+        quantity = 2,
+        expiryDate = "2027-01-10"
     )
 
     @Test

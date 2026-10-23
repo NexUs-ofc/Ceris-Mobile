@@ -20,8 +20,8 @@ import com.example.ceris.model.SituacaoProduto
  * Usa ListAdapter para que a lista se atualize por diferença, em vez de
  * redesenhar tudo a cada mudança de filtro.
  *
- * Carrega a foto enviada pela Core e usa um placeholder quando nao ha foto
- * ou quando o arquivo nao pode ser carregado.
+ * A foto vem da Core (foodImageUrl). Sem foto, o card mostra o ícone de
+ * produto no lugar, para a moldura não ficar vazia.
  */
 class ProdutoAdapter(
     private val aoTocar: (Produto) -> Unit = {}
@@ -70,6 +70,19 @@ class ProdutoAdapter(
             )
 
             itemView.setOnClickListener { aoTocar(produto) }
+
+            // Sempre limpa antes: o card e reciclado e mostraria a foto de outro produto.
+            Glide.with(imagem).clear(imagem)
+            if (produto.imagemUrl.isNullOrBlank()) {
+                imagem.setImageResource(R.drawable.ph_produto)
+            } else {
+                Glide.with(imagem)
+                    .load(produto.imagemUrl)
+                    .placeholder(R.drawable.ph_produto)
+                    .error(R.drawable.ph_produto)
+                    .fitCenter()
+                    .into(imagem)
+            }
 
             val (rotulo, fundo, texto) = aparencia(produto.situacao) ?: run {
                 selo.visibility = View.GONE
