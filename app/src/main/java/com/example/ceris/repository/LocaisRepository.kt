@@ -7,6 +7,7 @@ import com.example.ceris.api.RetrofitClient
 import com.example.ceris.local.SessionManager
 import com.example.ceris.local.SessionSnapshot
 import com.example.ceris.model.Local
+import com.example.ceris.model.dto.AddressDto
 import com.example.ceris.model.dto.ApiError
 import com.example.ceris.model.formattedAddress
 import com.example.ceris.model.toLocal
@@ -64,6 +65,18 @@ class LocaisRepository(
     companion object {
         fun create(sessions: SessionManager): LocaisRepository =
             LocaisRepository(RetrofitClient.getApiAutenticada(ApiBaseUrl.core, LocaisAPI::class.java), sessions)
+
+        /** Endereço resumido exibido entre os endereços salvos. */
+        fun enderecoCurto(endereco: AddressDto?): String? {
+            endereco ?: return null
+            val rua = listOfNotNull(endereco.street, endereco.number)
+                .filter { it.isNotBlank() }
+                .joinToString(", ")
+            return listOf(rua, endereco.neighborhood.orEmpty())
+                .filter { it.isNotBlank() }
+                .joinToString(" - ")
+                .ifBlank { null }
+        }
     }
 
     fun load(

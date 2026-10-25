@@ -57,7 +57,6 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
 
     private var encontrado: ProdutoEncontrado? = null
     private var validade: String? = null
-    private var imagemUrl: String? = null
     private var salvou = false
 
     override fun getTheme(): Int = R.style.TemaBottomSheet
@@ -69,7 +68,6 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         gtin = requireArguments().getString(ARG_GTIN).orEmpty()
-        imagemUrl = savedInstanceState?.getString(IMAGEM_URL)
         val sessao = SessionManager(requireContext())
         repository = CodigoBarrasRepository(
             baseAberta = OpenFoodFactsClient.api,
@@ -117,15 +115,12 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         travar(campoNome)
     }
 
-        situacao.setText(R.string.codigo_encontrado)
-        imagemUrl = encontrado.imagemUrl
-        // So preenche o que a pessoa ainda nao digitou.
-        if (campoNome.text.isBlank()) encontrado.nome?.let(campoNome::setText)
-        if (campoMarca.text.isBlank()) encontrado.marca?.let(campoMarca::setText)
-        if (campoEmbalagem.text.isBlank()) {
-            encontrado.quantidadeEmbalagem?.let { campoEmbalagem.setText(formatar(it)) }
-            encontrado.unidadeEmbalagem?.let { campoUnidade.setText(it.rotulo, false) }
-        }
+    private fun travar(campo: EditText) {
+        campo.keyListener = null
+        campo.isFocusable = false
+        campo.isCursorVisible = false
+        campo.isLongClickable = false
+        campo.setTextIsSelectable(false)
     }
 
     private fun salvar() {
@@ -133,13 +128,13 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         val cadastro = CadastroPorCodigo.montar(
             gtin = gtin,
             nome = campoNome.text.toString(),
-            marca = campoMarca.text.toString(),
-            quantidadeEmbalagem = campoEmbalagem.text.toString(),
-            unidade = UnidadeEmbalagem.porRotulo(campoUnidade.text.toString()),
-            categoria = CategoriaAlimento.porRotulo(campoCategoria.text.toString()),
-            quantidade = quantidade,
+            marca = base?.marca.orEmpty(),
+            quantidadeEmbalagem = base?.quantidadeEmbalagem?.let(::formatar) ?: "1",
+            unidade = base?.unidadeEmbalagem ?: UnidadeEmbalagem.UNIDADE,
+            categoria = base?.categoria ?: CategoriaAlimento.OUTROS,
+            quantidade = quantidade.valor,
             validade = validade,
-            imagemUrl = imagemUrl
+            imagemUrl = base?.imagemUrl
         ).getOrElse { problema ->
             avisar(problema.message.orEmpty())
             return
@@ -191,15 +186,9 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         (parentFragment as? Listener)?.aoFecharCadastroCodigo(salvou)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(IMAGEM_URL, imagemUrl)
-        super.onSaveInstanceState(outState)
-    }
-
     companion object {
         const val TAG = "CodigoBarrasBottomSheet"
         private const val ARG_GTIN = "gtin"
-        private const val IMAGEM_URL = "imagem_url"
 
         private val ISO = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         private val CURTA = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))

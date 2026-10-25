@@ -140,7 +140,6 @@ object CadastroPorCodigo {
                 gtin = gtin,
                 name = nome.trim(),
                 productBrand = marca.trim().takeIf { it.isNotEmpty() },
-                foodImageUrl = imagemUrl?.takeIf { it.isNotBlank() },
                 packageQuantity = embalagem!!,
                 unitOfMeasure = unidade!!.core,
                 gpcCode = categoria!!.gpc,

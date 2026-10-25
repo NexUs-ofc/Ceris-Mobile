@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ceris.R
 import com.example.ceris.local.SessionManager
 import com.example.ceris.location.DeviceLocationSource
+import com.example.ceris.view.DetalheMercadoActivity
 import com.example.ceris.view.LoginActivity
 import com.example.ceris.view.adapter.LocalAdapter
 import com.example.ceris.view.renderLocais
@@ -42,7 +43,7 @@ class LocaisFragment : Fragment(R.layout.fragment_locais) {
         permissionRequested = savedInstanceState?.getBoolean(PERMISSION_REQUESTED) ?: permissionRequested
         viewModel.init(SessionManager(requireContext()), DeviceLocationSource(requireContext()))
         viewModel.allowPermissionFallback(permissionRequested && !hasLocationPermission())
-        val adapter = LocalAdapter()
+        val adapter = LocalAdapter { local -> context?.let { DetalheMercadoActivity.abrir(it, local) } }
         view.findViewById<RecyclerView>(R.id.lista_locais).adapter = adapter
         adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         view.findViewById<View>(R.id.btn_tentar_locais).setOnClickListener {

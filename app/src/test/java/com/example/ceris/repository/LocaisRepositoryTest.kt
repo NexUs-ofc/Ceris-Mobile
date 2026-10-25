@@ -2,7 +2,7 @@ package com.example.ceris.repository
 
 import com.example.ceris.api.LocaisAPI
 import com.example.ceris.local.SessionManager
-import com.example.ceris.model.dto.ProfileAddressResponse
+import com.example.ceris.model.dto.AddressDto
 import com.example.ceris.model.dto.ProfileResponse
 import com.example.ceris.model.dto.StoreResponse
 import com.example.ceris.support.MemoryPreferences
@@ -25,9 +25,17 @@ import java.lang.reflect.Proxy
 
 class LocaisRepositoryTest {
     private val sessions = SessionManager(MemoryPreferences()).apply { startSession(jwt(), "refresh") }
-    private val address = ProfileAddressResponse("Rua A", "10", "Centro", "01001000", "Cidade", "SP")
-    private val profile = ProfileResponse(12, address)
-    private val store = StoreResponse(45, "Mercado", "Rua B", "20", null, "Cidade", "SP", null, null, distanceKm = 0.45)
+    private val address = AddressDto("Rua A", "10", "Centro", "01001000", "Cidade", "SP")
+    private val profile = ProfileResponse(id = 12, address = address)
+    private val store = StoreResponse(
+        id = 45,
+        name = "Mercado",
+        street = "Rua B",
+        number = "20",
+        city = "Cidade",
+        state = "SP",
+        distanceKm = 0.45,
+    )
 
     private fun api(
         profileCall: Call<ProfileResponse> = TestCall { Response.success(profile) },
