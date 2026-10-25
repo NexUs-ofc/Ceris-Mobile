@@ -59,14 +59,16 @@ object CadastroPorCodigo {
         val marca = detalhe.brands?.split(",")?.firstOrNull()?.trim()?.takeIf { it.isNotEmpty() }
         val unidade = UnidadeEmbalagem.daBase(detalhe.productQuantityUnit)
         val quantidade = detalhe.productQuantity?.takeIf { it > 0 && unidade != null }
+        val imagem = detalhe.imageFrontUrl?.trim()?.takeIf { it.isNotEmpty() }
 
-        if (nome == null && marca == null && quantidade == null) return null
+        if (nome == null && marca == null && quantidade == null && imagem == null) return null
+
         return ProdutoEncontrado(
             nome = nome,
             marca = marca,
             quantidadeEmbalagem = quantidade,
             unidadeEmbalagem = unidade.takeIf { quantidade != null },
-            imagemUrl = detalhe.imageFrontUrl?.trim()?.takeIf { it.startsWith("http") && it.length <= 500 },
+            imagemUrl = imagem,
             categoria = categoriaDaBase(detalhe.categoriesTags)
         )
     }
@@ -138,12 +140,12 @@ object CadastroPorCodigo {
                 gtin = gtin,
                 name = nome.trim(),
                 productBrand = marca.trim().takeIf { it.isNotEmpty() },
-                foodImageUrl = imagemUrl?.takeIf { it.isNotBlank() },
                 packageQuantity = embalagem!!,
                 unitOfMeasure = unidade!!.core,
                 gpcCode = categoria!!.gpc,
                 quantity = quantidade,
-                expiryDate = validade
+                expiryDate = validade,
+                foodImageUrl = imagemUrl?.trim()?.takeIf { it.isNotEmpty() }
             )
         )
     }

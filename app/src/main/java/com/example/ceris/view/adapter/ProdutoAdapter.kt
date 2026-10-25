@@ -53,6 +53,13 @@ class ProdutoAdapter(
             val contexto = itemView.context
 
             nome.text = produto.nome
+            Glide.with(itemView)
+                .load(produto.imagemUrl?.trim()?.takeIf { it.isNotEmpty() })
+                .placeholder(R.drawable.ic_menu_image)
+                .fallback(R.drawable.ic_menu_image)
+                .error(R.drawable.ic_menu_image)
+                .fitCenter()
+                .into(imagem)
             validade.text = if (produto.validade.isBlank()) {
                 contexto.getString(R.string.produto_sem_validade)
             } else {
