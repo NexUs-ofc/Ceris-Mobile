@@ -3,6 +3,7 @@ package com.example.ceris.repository
 import com.example.ceris.api.RecipeAPI
 import com.example.ceris.local.SessionManager
 import com.example.ceris.local.SessionSnapshot
+import com.example.ceris.model.PassoReceita
 import com.example.ceris.model.Receita
 import com.example.ceris.model.dto.RecipeResponse
 import retrofit2.Call
@@ -101,8 +102,7 @@ fun RecipeResponse.paraReceita() =
                 ).joinToString(" ")
             },
         passos =
-            instructions.orEmpty().lineSequence()
-                .map { it.trim().replace(Regex("^(?:\\d+[.)](?:\\s+|$)|[-*•]\\s+)"), "").trim() }
-                .filter { it.isNotEmpty() }
-                .toList(),
+            steps.orEmpty().filterNotNull()
+                .map { PassoReceita(it.title.orEmpty().trim(), it.description.orEmpty().trim()) }
+                .filter { it.titulo.isNotEmpty() || it.descricao.isNotEmpty() },
     )

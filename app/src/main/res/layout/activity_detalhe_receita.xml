@@ -220,11 +220,28 @@
                 android:textColor="@color/card_titulo"
                 android:textSize="@dimen/text_size_18" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_preparo_receita"
+            <TextView
+                android:id="@+id/subtitulo_preparo_receita"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/receita_card_espaco"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:text="@string/receita_preparo_descricao"
+                android:textColor="@color/receita_passo_texto_secundario"
+                android:textSize="@dimen/text_size_12" />
+
+            <LinearLayout
+                android:id="@+id/passos_receita"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_m"
+                android:orientation="vertical" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_preparo_vazio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_m"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/ceris_white"
                 app:cardCornerRadius="@dimen/receita_painel_raio"
                 app:cardElevation="0dp"
@@ -232,13 +249,13 @@
                 app:strokeColor="@color/ceris_cinza_claro"
                 app:strokeWidth="@dimen/card_stroke_width">
 
-                <LinearLayout
-                    android:id="@+id/passos_receita"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:padding="@dimen/spacing_m"
-                    tools:layout_height="239dp" />
+                    android:text="@string/receita_sem_preparo"
+                    android:textColor="@color/card_titulo"
+                    android:textSize="@dimen/text_size_13" />
 
             </com.google.android.material.card.MaterialCardView>
 

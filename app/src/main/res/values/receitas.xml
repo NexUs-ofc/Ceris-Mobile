@@ -2,6 +2,8 @@
 <resources>
     <color name="receita_tempo_texto">#8E8E93</color>
     <color name="receita_passo_fundo">#F2EDFA</color>
+    <color name="receita_passo_texto_secundario">#8E859F</color>
+    <color name="receita_passo_texto_secundario_expandido">#B3FFFFFF</color>
     <dimen name="receita_content_max_width">440dp</dimen>
     <dimen name="receita_topo">64dp</dimen>
     <dimen name="receita_lista_espaco_titulo">36dp</dimen>
@@ -9,7 +11,11 @@
     <dimen name="receita_card_espaco">12dp</dimen>
     <dimen name="receita_painel_raio">20dp</dimen>
     <dimen name="receita_resumo_altura">60dp</dimen>
-    <dimen name="receita_passo_numero_size">24dp</dimen>
+    <dimen name="receita_passo_numero_size">32dp</dimen>
+    <dimen name="receita_passo_card_altura">88dp</dimen>
+    <dimen name="receita_passo_cabecalho_altura">48dp</dimen>
+    <dimen name="receita_passo_linha_espaco">2dp</dimen>
+    <dimen name="receita_passo_dica_tamanho">11sp</dimen>
     <dimen name="receita_ingrediente_espaco">10dp</dimen>
     <string name="receitas_vazia">Você ainda não tem receitas salvas! Peça para mim que crio uma receita para você!</string>
     <string name="receitas_gerar">Gerar receita com a Cerita</string>
@@ -20,7 +26,15 @@
     <string name="receita_sem_ingredientes">Ingredientes não informados.</string>
     <string name="receita_sem_preparo">Modo de preparo não informado.</string>
     <string name="receita_ingredientes">Ingredientes</string>
-    <string name="receita_preparo">Modo de Preparo</string>
+    <string name="receita_preparo">Modo de preparo</string>
+    <string name="receita_preparo_descricao">Acompanhe a receita, um passo de cada vez.</string>
+    <string name="receita_passo_abrir">Toque para ver os detalhes</string>
+    <string name="receita_passo_detalhes">Passo a passo</string>
+    <string name="receita_passo_titulo">Etapa %1$d</string>
+    <string name="receita_passo_sem_detalhes">Detalhes desta etapa não informados.</string>
+    <string name="receita_passo_acessibilidade">Etapa %1$d: %2$s</string>
+    <string name="receita_passo_expandido">Expandido</string>
+    <string name="receita_passo_recolhido">Recolhido</string>
     <string name="receita_porcoes_icone">Porções</string>
     <string name="receita_dificuldade_icone">Dificuldade</string>
 </resources>

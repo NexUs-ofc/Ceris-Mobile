@@ -7,5 +7,5 @@ data class Receita(
     val porcoes: Int? = null,
     val dificuldade: RecipeDifficulty? = null,
     val ingredientes: List<String> = emptyList(),
-    val passos: List<String> = emptyList(),
+    val passos: List<PassoReceita> = emptyList(),
 )

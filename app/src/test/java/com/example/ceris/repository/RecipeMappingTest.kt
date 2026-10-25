@@ -1,8 +1,10 @@
 package com.example.ceris.repository
 
+import com.example.ceris.model.PassoReceita
 import com.example.ceris.model.RecipeDifficulty
 import com.example.ceris.model.dto.RecipeIngredientResponse
 import com.example.ceris.model.dto.RecipeResponse
+import com.example.ceris.model.dto.RecipeStepResponse
 import com.google.gson.Gson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -28,7 +30,10 @@ class RecipeMappingTest {
                     "mandatory": true,
                     "possibleSubstitutes": [13]
                   }],
-                  "instructions": "1. Corte o frango.\n2. Cozinhe em fogo baixo.",
+                  "steps": [
+                    {"title": "Cortar o frango", "description": "Corte o frango em cubos."},
+                    {"title": "Cozinhar", "description": "Cozinhe em fogo baixo."}
+                  ],
                   "createdBy": "ai"
                 }
                 """.trimIndent(),
@@ -42,7 +47,10 @@ class RecipeMappingTest {
         assertEquals("40 min", receita.tempoPreparo)
         assertEquals(RecipeDifficulty.EASY, receita.dificuldade)
         assertEquals(listOf("500g peito de frango"), receita.ingredientes)
-        assertEquals(listOf("Corte o frango.", "Cozinhe em fogo baixo."), receita.passos)
+        assertEquals(
+            listOf(PassoReceita("Cortar o frango", "Corte o frango em cubos."), PassoReceita("Cozinhar", "Cozinhe em fogo baixo.")),
+            receita.passos,
+        )
         assertEquals(12, dto.ingredients?.single()?.foodId)
         assertEquals(listOf(13), dto.ingredients?.single()?.possibleSubstitutes)
     }
@@ -115,42 +123,96 @@ class RecipeMappingTest {
     }
 
     @Test
-    fun passoEmTextoLivreNaoPerdePontuacaoNemTempoDeCozimento() {
+    fun descricaoPreservaParagrafosPontuacaoEQuantidades() {
+        val descricao = "Misture 1,5 litro de água.\n\nCozinhe por 15 minutos."
         val receita =
             RecipeResponse(
                 id = "recipe",
-                instructions = "Misture 1,5 litro de água. Cozinhe por 15 minutos.",
+                steps = listOf(RecipeStepResponse("Misturar e cozinhar", descricao)),
             ).paraReceita()
 
-        assertEquals(listOf("Misture 1,5 litro de água. Cozinhe por 15 minutos."), receita.passos)
+        assertEquals(listOf(PassoReceita("Misturar e cozinhar", descricao)), receita.passos)
     }
 
     @Test
-    fun passosNumeradosComParentesesELinhasVaziasNaoDuplicamNumeracao() {
+    fun passosEstruturadosPreservamOrdemETitulosRepetidos() {
         val receita =
             RecipeResponse(
                 id = "recipe",
-                instructions = "\n1) Corte o frango em cubos.\n\n2) Misture bem.\n",
+                steps =
+                    listOf(
+                        RecipeStepResponse("Misturar", "Misture os ingredientes secos."),
+                        RecipeStepResponse("Misturar", "Acrescente o leite e misture novamente."),
+                    ),
             ).paraReceita()
 
-        assertEquals(listOf("Corte o frango em cubos.", "Misture bem."), receita.passos)
+        assertEquals(
+            listOf(
+                PassoReceita("Misturar", "Misture os ingredientes secos."),
+                PassoReceita("Misturar", "Acrescente o leite e misture novamente."),
+            ),
+            receita.passos,
+        )
     }
 
     @Test
-    fun quantidadeDecimalNoInicioDoPreparoNaoPerdeParteDoNumero() {
+    fun removeApenasEspacosExternosSemAlterarOTituloOuADescricao() {
         val receita =
             RecipeResponse(
                 id = "recipe",
-                instructions = "1.5 litros de água devem ferver antes de adicionar o arroz.",
+                steps = listOf(RecipeStepResponse("  Preparar 1.5 litros de água  ", " \nFerva a água.\nMisture bem. \n")),
             ).paraReceita()
 
-        assertEquals(listOf("1.5 litros de água devem ferver antes de adicionar o arroz."), receita.passos)
+        assertEquals(listOf(PassoReceita("Preparar 1.5 litros de água", "Ferva a água.\nMisture bem.")), receita.passos)
     }
 
     @Test
-    fun preparoVazioNaoCriaPassoEmBranco() {
-        val receita = RecipeResponse(id = "recipe", instructions = " \n\n ").paraReceita()
+    fun respostaSemStepsNaoInventaTitulosAPartirDeInstructions() {
+        val receita =
+            Gson().fromJson(
+                """{"id":"recipe","instructions":"1. Corte o frango.\n2. Cozinhe."}""",
+                RecipeResponse::class.java,
+            ).paraReceita()
 
         assertTrue(receita.passos.isEmpty())
+    }
+
+    @Test
+    fun entradasNulasOuTotalmenteVaziasNaoCriamCardsSemConteudo() {
+        val receita =
+            Gson().fromJson(
+                """{"id":"recipe","steps":[null,{}, {"title":" ","description":" \n "}]}""",
+                RecipeResponse::class.java,
+            ).paraReceita()
+
+        assertTrue(receita.passos.isEmpty())
+    }
+
+    @Test
+    fun etapasParciaisPreservamTodoConteudoRecebido() {
+        val receita =
+            RecipeResponse(
+                id = "recipe",
+                steps = listOf(RecipeStepResponse(title = "Cortar"), RecipeStepResponse(description = "Refogue a cebola.")),
+            ).paraReceita()
+
+        assertEquals(listOf(PassoReceita("Cortar", ""), PassoReceita("", "Refogue a cebola.")), receita.passos)
+    }
+
+    @Test
+    fun stepsTemPrioridadeSobreCampoLegadoNoMesmoDocumento() {
+        val receita =
+            Gson().fromJson(
+                """
+                {
+                  "id":"recipe",
+                  "instructions":"Texto antigo",
+                  "steps":[{"title":"Cortar","description":"Corte em cubos."}]
+                }
+                """.trimIndent(),
+                RecipeResponse::class.java,
+            ).paraReceita()
+
+        assertEquals(listOf(PassoReceita("Cortar", "Corte em cubos.")), receita.passos)
     }
 }

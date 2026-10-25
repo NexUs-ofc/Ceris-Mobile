@@ -9,8 +9,13 @@ data class RecipeResponse(
     val estimatedTime: String? = null,
     val difficulty: RecipeDifficulty? = null,
     val ingredients: List<RecipeIngredientResponse>? = null,
-    val instructions: String? = null,
+    val steps: List<RecipeStepResponse?>? = null,
     val createdBy: String? = null,
+)
+
+data class RecipeStepResponse(
+    val title: String? = null,
+    val description: String? = null,
 )
 
 data class RecipeIngredientResponse(
