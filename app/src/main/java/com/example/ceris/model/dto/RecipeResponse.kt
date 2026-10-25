@@ -1,9 +1,13 @@
 package com.example.ceris.model.dto
 
+import com.example.ceris.model.RecipeDifficulty
+
 data class RecipeResponse(
     val id: String,
     val title: String? = null,
     val servingSize: Int? = null,
+    val estimatedTime: String? = null,
+    val difficulty: RecipeDifficulty? = null,
     val ingredients: List<RecipeIngredientResponse>? = null,
     val instructions: String? = null,
     val createdBy: String? = null,

@@ -90,7 +90,9 @@ fun RecipeResponse.paraReceita() =
     Receita(
         id = id,
         nome = title?.trim()?.takeIf { it.isNotEmpty() } ?: "Receita sem título",
+        tempoPreparo = estimatedTime?.trim()?.takeIf { it.isNotEmpty() },
         porcoes = servingSize?.takeIf { it > 0 },
+        dificuldade = difficulty,
         ingredientes =
             ingredients.orEmpty().map { ingrediente ->
                 listOfNotNull(

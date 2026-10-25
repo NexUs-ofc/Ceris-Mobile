@@ -71,31 +71,10 @@
             android:paddingEnd="@dimen/screen_margin_horizontal"
             android:paddingBottom="@dimen/spacing_xl">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/grupo_imagem_receita"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/img_detalhe_receita"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:contentDescription="@string/receita_imagem"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="392:217"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/ReceitaImagem" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_resumo_receita"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/receita_resumo_altura"
-                android:layout_marginTop="@dimen/receita_painel_raio"
+                android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/ceris_white"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="0dp"
@@ -105,16 +84,19 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:minHeight="@dimen/receita_resumo_altura"
                     android:orientation="horizontal"
                     android:paddingStart="@dimen/receita_card_espaco"
-                    android:paddingEnd="@dimen/receita_card_espaco">
+                    android:paddingTop="@dimen/spacing_s"
+                    android:paddingEnd="@dimen/receita_card_espaco"
+                    android:paddingBottom="@dimen/spacing_s">
 
                     <LinearLayout
                         android:id="@+id/grupo_tempo_receita"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="horizontal">
@@ -141,7 +123,7 @@
                     <LinearLayout
                         android:id="@+id/grupo_porcoes_receita"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="horizontal">
@@ -168,7 +150,7 @@
                     <LinearLayout
                         android:id="@+id/grupo_dificuldade_receita"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="horizontal">

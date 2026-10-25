@@ -5,12 +5,10 @@
     <dimen name="receita_content_max_width">440dp</dimen>
     <dimen name="receita_topo">64dp</dimen>
     <dimen name="receita_lista_espaco_titulo">36dp</dimen>
-    <dimen name="receita_card_imagem">64dp</dimen>
     <dimen name="receita_card_altura">88dp</dimen>
     <dimen name="receita_card_espaco">12dp</dimen>
-    <dimen name="receita_imagem_raio">28dp</dimen>
     <dimen name="receita_painel_raio">20dp</dimen>
-    <dimen name="receita_resumo_altura">40dp</dimen>
+    <dimen name="receita_resumo_altura">60dp</dimen>
     <dimen name="receita_passo_numero_size">24dp</dimen>
     <dimen name="receita_ingrediente_espaco">10dp</dimen>
     <string name="receitas_vazia">Você ainda não tem receitas salvas! Peça para mim que crio uma receita para você!</string>
@@ -25,8 +23,4 @@
     <string name="receita_preparo">Modo de Preparo</string>
     <string name="receita_porcoes_icone">Porções</string>
     <string name="receita_dificuldade_icone">Dificuldade</string>
-    <style name="ReceitaImagem">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/receita_imagem_raio</item>
-    </style>
 </resources>

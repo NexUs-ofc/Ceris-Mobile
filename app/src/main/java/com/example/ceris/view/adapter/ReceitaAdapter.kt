@@ -8,10 +8,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.ceris.R
 import com.example.ceris.model.Receita
-import com.google.android.material.imageview.ShapeableImageView
 
 class ReceitaAdapter(
     private val aoTocar: (Receita) -> Unit = {},
@@ -40,15 +38,12 @@ class ReceitaAdapter(
         private val nome: TextView = itemView.findViewById(R.id.txt_nome_receita)
         private val tempo: TextView = itemView.findViewById(R.id.txt_tempo_receita)
 
-        private val imagem: ShapeableImageView = itemView.findViewById(R.id.img_receita)
         private val grupoTempo: View = itemView.findViewById(R.id.grupo_tempo)
 
         fun exibir(receita: Receita) {
             nome.text = receita.nome
             tempo.text = receita.tempoPreparo
             grupoTempo.isVisible = !receita.tempoPreparo.isNullOrBlank()
-            imagem.isVisible = !receita.imagemUrl.isNullOrBlank()
-            Glide.with(itemView).load(receita.imagemUrl).into(imagem)
 
             itemView.setOnClickListener { aoTocar(receita) }
         }

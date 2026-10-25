@@ -3,6 +3,7 @@ package com.example.ceris
 import android.app.Activity
 import android.graphics.Bitmap
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -10,7 +11,9 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -18,14 +21,17 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.ceris.debug.ReceitasTestActivity
 import com.example.ceris.model.Receita
+import com.example.ceris.model.RecipeDifficulty
 import com.example.ceris.view.ChatbotActivity
 import com.example.ceris.view.DetalheReceitaActivity
 import com.example.ceris.view.fragment.ReceitasFragment
 import com.example.ceris.viewmodel.DetalheReceitaViewModel
 import com.example.ceris.viewmodel.ReceitasViewModel
+import com.google.android.material.imageview.ShapeableImageView
 import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
@@ -87,8 +93,17 @@ class ReceitasTest {
     @Test
     fun tocarReceitaAbreDetalheComIdSelecionado() {
         ActivityScenario.launch(ReceitasTestActivity::class.java).use { scenario ->
-            scenario.onActivity { fragment(it).estadoAtualizado(ReceitasViewModel.Estado.Conteudo(listOf(receita))) }
+            val receitas =
+                listOf(
+                    receita.copy(tempoPreparo = "45 min"),
+                    receita.copy(id = "507f1f77bcf86cd799439012", nome = "Bolo de cenoura", tempoPreparo = "45 min"),
+                    receita.copy(id = "507f1f77bcf86cd799439013", nome = "Strogonoff de frango", tempoPreparo = "30 min"),
+                    receita.copy(id = "507f1f77bcf86cd799439014", nome = "Lasanha à bolonhesa", tempoPreparo = "1h 20min"),
+                )
+            scenario.onActivity { fragment(it).estadoAtualizado(ReceitasViewModel.Estado.Conteudo(receitas)) }
             onView(withText("Frango ao molho")).check(matches(isDisplayed()))
+            onView(withText("1h 20min")).check(matches(isDisplayed()))
+            onView(isAssignableFrom(ShapeableImageView::class.java)).check(doesNotExist())
             screenshot("receitas-lista")
             navigate(DetalheReceitaActivity::class.java, { activity ->
                 assertEquals(receita.id, activity.intent.getStringExtra(DetalheReceitaActivity.EXTRA_RECEITA_ID))
@@ -107,14 +122,67 @@ class ReceitasTest {
                 val passos = activity.findViewById<LinearLayout>(R.id.passos_receita)
                 assertEquals(5, passos.childCount)
                 assertEquals("1", passos.getChildAt(0).findViewById<TextView>(R.id.numero_passo).text.toString())
-                assertEquals(View.GONE, activity.findViewById<View>(R.id.img_detalhe_receita).visibility)
                 assertEquals(View.GONE, activity.findViewById<View>(R.id.grupo_tempo_receita).visibility)
                 assertEquals(View.GONE, activity.findViewById<View>(R.id.grupo_dificuldade_receita).visibility)
+                assertEquals(R.id.card_resumo_receita, activity.findViewById<ViewGroup>(R.id.conteudo).getChildAt(0).id)
             }
             onView(withText("Frango ao molho")).check(matches(isDisplayed()))
             onView(withText("Serve 4")).check(matches(isDisplayed()))
             onView(withText("500g de peito de frango")).check(matches(isDisplayed()))
-            screenshot("receitas-detalhe")
+            onView(isAssignableFrom(ShapeableImageView::class.java)).check(doesNotExist())
+            screenshot("receitas-detalhe-sem-metadados")
+        }
+    }
+
+    @Test
+    fun detalheMostraTempoPorcoesEDificuldadeEmPortuguesSemFoto() {
+        ActivityScenario.launch<DetalheReceitaActivity>(DetalheReceitaActivity.intent(context, "")).use { scenario ->
+            RecipeDifficulty.entries.forEach { dificuldade ->
+                scenario.onActivity { activity ->
+                    activity.estadoAtualizado(
+                        DetalheReceitaViewModel.Estado.Conteudo(receita.copy(tempoPreparo = "40 min", dificuldade = dificuldade)),
+                    )
+                }
+                onView(withText("40 min")).check(matches(isDisplayed()))
+                onView(withText("Serve 4")).check(matches(isDisplayed()))
+                onView(withText(dificuldade.rotulo)).check(matches(isDisplayed()))
+                onView(isAssignableFrom(ShapeableImageView::class.java)).check(doesNotExist())
+                screenshot("receitas-detalhe-${dificuldade.name.lowercase()}")
+            }
+        }
+    }
+
+    @Test
+    fun detalheSemMetadadosEscondeResumoInteiro() {
+        ActivityScenario.launch<DetalheReceitaActivity>(DetalheReceitaActivity.intent(context, "")).use { scenario ->
+            scenario.onActivity { activity ->
+                activity.estadoAtualizado(DetalheReceitaViewModel.Estado.Conteudo(receita.copy(porcoes = null)))
+            }
+            onView(withId(R.id.card_resumo_receita)).check(matches(not(isDisplayed())))
+            onView(withText("500g de peito de frango")).check(matches(isDisplayed()))
+            screenshot("receitas-detalhe-sem-resumo")
+        }
+    }
+
+    @Test
+    fun tempoExtensoCabeNoResumoSemCortarTexto() {
+        ActivityScenario.launch<DetalheReceitaActivity>(DetalheReceitaActivity.intent(context, "")).use { scenario ->
+            scenario.onActivity { activity ->
+                activity.estadoAtualizado(
+                    DetalheReceitaViewModel.Estado.Conteudo(
+                        receita.copy(tempoPreparo = "1 hora e 30 minutos", dificuldade = RecipeDifficulty.MEDIUM),
+                    ),
+                )
+            }
+            onView(withText("1 hora e 30 minutos")).check(matches(isDisplayed()))
+            scenario.onActivity { activity ->
+                val tempo = activity.findViewById<TextView>(R.id.txt_detalhe_tempo)
+                val resumo = activity.findViewById<View>(R.id.card_resumo_receita)
+                assertTrue(tempo.height >= tempo.layout.height)
+                assertTrue(tempo.right <= (tempo.parent as View).width)
+                assertTrue(resumo.height >= tempo.height)
+            }
+            screenshot("receitas-detalhe-tempo-extenso")
         }
     }
 

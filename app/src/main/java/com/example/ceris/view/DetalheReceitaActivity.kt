@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import com.bumptech.glide.Glide
 import com.example.ceris.R
 import com.example.ceris.local.SessionManager
 import com.example.ceris.model.Receita
@@ -57,17 +55,14 @@ class DetalheReceitaActivity : AppCompatActivity(), DetalheReceitaViewModel.List
 
     private fun preencher(receita: Receita) {
         findViewById<TextView>(R.id.titulo_receita).text = receita.nome
-        val imagem = findViewById<ImageView>(R.id.img_detalhe_receita)
-        imagem.isVisible = !receita.imagemUrl.isNullOrBlank()
-        Glide.with(this).load(receita.imagemUrl).into(imagem)
-        findViewById<View>(R.id.grupo_tempo_receita).isVisible = receita.tempoPreparo != null
+        findViewById<View>(R.id.grupo_tempo_receita).isVisible = !receita.tempoPreparo.isNullOrBlank()
         findViewById<TextView>(R.id.txt_detalhe_tempo).text = receita.tempoPreparo
         findViewById<View>(R.id.grupo_porcoes_receita).isVisible = receita.porcoes != null
         findViewById<TextView>(R.id.txt_detalhe_porcoes).text = receita.porcoes?.let { getString(R.string.receita_porcoes, it) }
         findViewById<View>(R.id.grupo_dificuldade_receita).isVisible = receita.dificuldade != null
-        findViewById<TextView>(R.id.txt_detalhe_dificuldade).text = receita.dificuldade
+        findViewById<TextView>(R.id.txt_detalhe_dificuldade).text = receita.dificuldade?.rotulo
         findViewById<View>(R.id.card_resumo_receita).isVisible =
-            receita.tempoPreparo != null || receita.porcoes != null || receita.dificuldade != null
+            !receita.tempoPreparo.isNullOrBlank() || receita.porcoes != null || receita.dificuldade != null
         val ingredientes = findViewById<LinearLayout>(R.id.ingredientes_receita)
         ingredientes.removeAllViews()
         val ingredientesExibidos = receita.ingredientes.ifEmpty { listOf(getString(R.string.receita_sem_ingredientes)) }
