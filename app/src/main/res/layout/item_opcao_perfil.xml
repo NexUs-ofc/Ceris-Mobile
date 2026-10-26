@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/spacing_s"
+    android:layout_marginBottom="@dimen/perfil_opcao_espaco"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/ceris_white"
     app:cardCornerRadius="@dimen/card_corner_radius"
     app:cardElevation="0dp"
-    app:strokeColor="@color/card_contorno"
+    app:strokeColor="@color/campo_perfil_borda"
     app:strokeWidth="@dimen/card_stroke_width">
 
     <LinearLayout
@@ -38,7 +38,7 @@
             android:layout_marginStart="@dimen/spacing_m"
             android:layout_weight="1"
             android:textColor="@color/md_theme_onBackground"
-            android:textSize="@dimen/text_size_14"
+            android:textSize="@dimen/text_size_16"
             tools:text="Personalização" />
 
         <ImageView

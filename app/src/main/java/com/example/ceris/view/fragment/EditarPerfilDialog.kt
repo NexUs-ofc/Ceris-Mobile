@@ -6,7 +6,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.InputType
+import android.view.Gravity
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -62,11 +64,24 @@ class EditarPerfilDialog : DialogFragment() {
         return Dialog(requireContext()).apply {
             setContentView(conteudo)
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            window?.setLayout(
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setDimAmount(0.4f)
+            addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            setGravity(Gravity.CENTER)
+            setLayout(
                 (resources.displayMetrics.widthPixels * FRACAO_LARGURA).toInt()
                     .coerceAtMost(resources.getDimensionPixelSize(R.dimen.content_max_width)),
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
+            if (resources.displayMetrics.heightPixels / resources.displayMetrics.density > 700f) {
+                attributes = attributes.apply { y = -resources.getDimensionPixelSize(R.dimen.perfil_dialogo_deslocamento) }
+            }
         }
     }
 
@@ -119,13 +134,12 @@ class EditarPerfilDialog : DialogFragment() {
         val contexto = requireContext()
         val token = SessionManager(contexto).bearer() ?: return
 
-        guardarIdade(contexto, idade.trim())
-
         botao.isEnabled = false
         RetrofitClient.getApiAutenticada(ApiBaseUrl.core, ProfileAPI::class.java)
             .atualizar(token, ProfileUpdateRequest(name = nome.trim(), dietaryRestrictions = restricoes.toList()))
             .aoTerminar(
                 onSucesso = { atualizado ->
+                    guardarIdade(contexto, idade.trim())
                     if (atualizado != null) (parentFragment as? Listener)?.perfilSalvo(atualizado)
                     if (isAdded) dismiss()
                 },

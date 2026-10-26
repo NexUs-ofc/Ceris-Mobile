@@ -201,6 +201,12 @@ Tente novamente ou volte ao início.</string>
     <string name="perfil_fechar">Fechar</string>
     <string name="perfil_carregando">Carregando o perfil, tente de novo em instantes.</string>
     <string name="perfil_salvo">Perfil atualizado.</string>
+    <string name="perfil_escolher_foto">Alterar foto de perfil</string>
+    <string name="perfil_tirar_foto">Tirar foto</string>
+    <string name="perfil_galeria">Escolher da galeria</string>
+    <string name="perfil_foto_salva">Foto de perfil atualizada.</string>
+    <string name="perfil_foto_falha">Não foi possível salvar a foto. Tente novamente.</string>
+    <string name="perfil_camera_sem_permissao">Permita o acesso à câmera para tirar uma foto.</string>
     <string name="perfil_nome">Nome</string>
     <string name="perfil_nome_vazio">Informe o nome.</string>
     <string name="perfil_idade">Idade</string>
