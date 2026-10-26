@@ -76,6 +76,9 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
                 (activity as? MainActivity)?.voltarAoEstoque()
             }
         }.also { requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, it) }
+        view.findViewById<View>(R.id.btn_voltar_perfil).setOnClickListener {
+            (activity as? MainActivity)?.voltarAoEstoque()
+        }
 
         opcao(view, R.id.opcao_personalizacao, R.drawable.ic_menu_user, R.string.perfil_personalizacao) { editar() }
         opcao(view, R.id.opcao_privacidade, R.drawable.ic_menu_lock, R.string.perfil_privacidade) {

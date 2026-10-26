@@ -23,6 +23,19 @@
         android:paddingEnd="@dimen/screen_margin_horizontal"
         android:paddingBottom="@dimen/spacing_l">
 
+        <ImageButton
+            android:id="@+id/btn_voltar_perfil"
+            android:layout_width="@dimen/icone_voltar_size"
+            android:layout_height="@dimen/icone_voltar_size"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/voltar"
+            android:padding="@dimen/spacing_s"
+            android:src="@drawable/ic_menu_arrow_left"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/md_theme_primary" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_perfil"
             android:layout_width="@dimen/avatar_size"
