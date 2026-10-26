@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Produto sem foto: o icone de pacote menor, com folga em volta, para nao ocupar a moldura inteira. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_menu_package_claro"
+    android:inset="22%" />

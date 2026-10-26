@@ -112,6 +112,7 @@ class StockRepository(
         quantidade = item.quantity,
         validade = validade?.let { SimpleDateFormat("dd/MM", Locale("pt", "BR")).format(it) }.orEmpty(),
         situacao = situacao(validade),
+        imagemUrl = item.foodImageUrl?.trim()?.takeIf { it.isNotEmpty() },
         unidade = unidadeNaTela(item.unitOfMeasure) ?: "un",
         categoria = categoria,
         marca = item.productBrand?.takeIf { it.isNotBlank() }

@@ -2,17 +2,23 @@ package com.example.ceris.view.fragment
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
@@ -32,6 +38,7 @@ import com.example.ceris.model.ItemNota
 import com.example.ceris.model.dto.FoodResponse
 import com.example.ceris.view.MainActivity
 import com.example.ceris.view.adapter.ItemNotaAdapter
+import com.example.ceris.view.utils.MascaraLeituraView
 import com.example.ceris.viewmodel.NotaFiscalViewModel
 import com.example.ceris.viewmodel.NotaFiscalViewModel.Estado
 import com.example.ceris.model.CadastroPorCodigo
@@ -48,9 +55,12 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 /**
- * Leitura de nota fiscal: camera com moldura, espera e revisao, no mesmo
- * fragment da barra. Quem tira a foto e o botao central da barra, que a
- * MainActivity repassa para capturar().
+ * Scanner: camera com moldura, espera e revisao, no mesmo fragment da barra.
+ *
+ * Dois modos, cada um com a sua moldura. Na nota, a foto sai pelo botao
+ * central da barra (a MainActivity repassa para capturar()) ou sozinha quando
+ * a nota fica parada e inteira na moldura. No codigo de barras a leitura e
+ * automatica e abre o "Confirmar dados do produto".
  */
 class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalViewModel.Listener,
     CodigoBarrasBottomSheet.Listener {
@@ -65,10 +75,21 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     private lateinit var preview: PreviewView
     private lateinit var semPermissao: TextView
     private lateinit var andamento: TextView
-    private lateinit var loja: TextView
+    private lateinit var quantos: TextView
+    private lateinit var flash: ImageButton
 
     private var cameraProvider: ProcessCameraProvider? = null
     private var captura: ImageCapture? = null
+    private var camera: Camera? = null
+
+    private var lenteTraseira = true
+    private var flashLigado = false
+
+    /** Modo da camera: nota fiscal (foto e leitura no ms-ia) ou codigo de barras. */
+    @Volatile private var modoCodigo = false
+
+    private lateinit var mascara: MascaraLeituraView
+    private lateinit var dica: TextView
 
     private val reconhecedor = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
@@ -90,16 +111,16 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
             .build()
     )
 
-    /** Modo da camera: nota fiscal (foto e leitura no ms-ia) ou codigo de barras. */
-    @Volatile private var modoCodigo = false
-
     /** Cadastro aberto: a camera para de ler para nao abrir outro por cima. */
     @Volatile private var cadastroAberto = false
 
-    private lateinit var dica: TextView
-
     /** JPEG e rotacao fora da thread principal: a foto inteira pesa megas. */
     private lateinit var trabalho: ExecutorService
+
+    /** Foto da galeria: codigo de barras se tiver, senao vai como nota. */
+    private val escolherFoto = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        uri?.let(::lerDaGaleria)
+    }
 
     private val pedirCamera = registerForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->
         semPermissao.visibility = if (ok) View.GONE else View.VISIBLE
@@ -115,7 +136,8 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
         preview = view.findViewById(R.id.preview)
         semPermissao = view.findViewById(R.id.sem_permissao)
         andamento = view.findViewById(R.id.txt_andamento)
-        loja = view.findViewById(R.id.txt_loja)
+        quantos = view.findViewById(R.id.txt_quantos)
+        flash = view.findViewById(R.id.btn_flash)
 
         view.findViewById<RecyclerView>(R.id.lista_itens_nota).adapter = adapter
 
@@ -128,11 +150,22 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
 
         trabalho = Executors.newSingleThreadExecutor()
 
+        mascara = view.findViewById(R.id.mascara)
         dica = view.findViewById(R.id.dica)
         view.findViewById<MaterialButtonToggleGroup>(R.id.grupo_modo)
             .addOnButtonCheckedListener { _, id, marcado ->
                 if (marcado) aplicarModo(id == R.id.modo_codigo)
             }
+
+        flash.setOnClickListener { alternarFlash() }
+        view.findViewById<View>(R.id.btn_trocar_camera).setOnClickListener {
+            lenteTraseira = !lenteTraseira
+            flashLigado = false
+            ligarCamera()
+        }
+        view.findViewById<View>(R.id.btn_galeria).setOnClickListener {
+            escolherFoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
 
         viewModel.listener = this
         viewModel.init(SessionManager(requireContext()))
@@ -226,14 +259,87 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
             disparoAutomatico = false
             centradaDesde = 0L
 
+            val lente = if (lenteTraseira) CameraSelector.DEFAULT_BACK_CAMERA else CameraSelector.DEFAULT_FRONT_CAMERA
+
             provider.unbindAll()
-            provider.bindToLifecycle(viewLifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, previa, foto, analise)
+            camera = runCatching {
+                provider.bindToLifecycle(viewLifecycleOwner, lente, previa, foto, analise)
+            }.getOrElse { erro ->
+                // Aparelho sem a camera da frente (emulador, tablet antigo): volta para a de tras.
+                Log.w(TAG, "camera indisponivel", erro)
+                lenteTraseira = true
+                provider.bindToLifecycle(viewLifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, previa, foto, analise)
+            }
+            mostrarFlash()
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
     private fun desligarCamera() {
         cameraProvider?.unbindAll()
         captura = null
+        camera = null
+        flashLigado = false
+    }
+
+    /** A moldura encolhe para o codigo de barras; a dica so faz sentido na nota. */
+    private fun aplicarModo(codigo: Boolean) {
+        modoCodigo = codigo
+        cadastroAberto = false
+        disparoAutomatico = false
+        centradaDesde = 0L
+        mascara.mudarModo(nota = !codigo)
+        dica.visibility = if (codigo) View.GONE else View.VISIBLE
+    }
+
+    private fun alternarFlash() {
+        val atual = camera ?: return
+        if (!atual.cameraInfo.hasFlashUnit()) {
+            makeText(getString(R.string.camera_sem_flash))
+            return
+        }
+        flashLigado = !flashLigado
+        atual.cameraControl.enableTorch(flashLigado)
+        mostrarFlash()
+    }
+
+    private fun mostrarFlash() {
+        flash.setImageResource(if (flashLigado) R.drawable.ic_menu_zap else R.drawable.ic_menu_zap_off)
+    }
+
+    /**
+     * Foto escolhida na galeria: procura codigo de barras primeiro, que e
+     * leitura local e instantanea; sem codigo, manda como nota.
+     */
+    private fun lerDaGaleria(uri: Uri) {
+        if (viewModel.estado != Estado.CAMERA || cadastroAberto) return
+        val contexto = context ?: return
+
+        val entrada = runCatching { InputImage.fromFilePath(contexto, uri) }.getOrElse {
+            makeText(getString(R.string.nota_falha_foto))
+            return
+        }
+
+        leitorCodigo.process(entrada)
+            .addOnSuccessListener { codigos ->
+                val gtin = codigos.mapNotNull { it.rawValue }.firstOrNull(CadastroPorCodigo::gtinValido)
+                if (gtin != null) {
+                    achouCodigo(listOf(gtin))
+                } else {
+                    trabalho.execute {
+                        val jpeg = runCatching { jpegDaGaleria(contexto, uri) }.getOrNull()
+                        view?.post {
+                            if (jpeg == null) makeText(getString(R.string.nota_falha_foto)) else viewModel.ler(jpeg)
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { makeText(getString(R.string.camera_sem_leitura)) }
+    }
+
+    private fun jpegDaGaleria(contexto: Context, uri: Uri): ByteArray {
+        val bitmap = contexto.contentResolver.openInputStream(uri).use { BitmapFactory.decodeStream(it) }
+            ?: error("foto ilegivel")
+        return comprimir(bitmap)
     }
 
     /**
@@ -251,14 +357,6 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     override fun aoFecharCadastroCodigo(salvou: Boolean) {
         // Volta a ler: da para cadastrar varios produtos em sequencia.
         cadastroAberto = false
-    }
-
-    private fun aplicarModo(codigo: Boolean) {
-        modoCodigo = codigo
-        cadastroAberto = false
-        disparoAutomatico = false
-        centradaDesde = 0L
-        dica.setText(if (codigo) R.string.codigo_dica else R.string.nota_dica)
     }
 
     /**
@@ -357,6 +455,11 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matriz, true)
         }
 
+        return comprimir(bitmap)
+    }
+
+    private fun comprimir(original: Bitmap): ByteArray {
+        var bitmap = original
         val maior = maxOf(bitmap.width, bitmap.height)
         if (maior > LADO_MAXIMO) {
             val escala = LADO_MAXIMO.toFloat() / maior
@@ -390,8 +493,7 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     }
 
     override fun itensLidos(loja: String?, itens: List<ItemNota>, catalogo: List<FoodResponse>) {
-        val quantos = resources.getQuantityString(R.plurals.nota_itens_lidos, itens.size, itens.size)
-        this.loja.text = listOfNotNull(loja?.takeIf { it.isNotBlank() }, quantos).joinToString(" · ")
+        quantos.text = resources.getQuantityString(R.plurals.nota_itens_lidos, itens.size, itens.size)
         adapter.trocar(itens, catalogo)
     }
 

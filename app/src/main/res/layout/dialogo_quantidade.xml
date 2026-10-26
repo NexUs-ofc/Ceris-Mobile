@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    "Quantas unidades foram consumidas/descartadas" (Figma > Protótipos > V1 >
+    detalhe-produto): cartao branco no meio da tela, seletor, Salvar e Cancelar.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialogo"
+    android:orientation="vertical"
+    android:padding="@dimen/dialogo_padding">
+
+    <TextView
+        android:id="@+id/titulo_dialogo"
+        style="@style/TituloSheet"
+        tools:text="Quantas unidades foram consumidas" />
+
+    <include
+        android:id="@+id/stepper_dialogo"
+        layout="@layout/view_stepper"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/campo_altura"
+        android:layout_marginTop="@dimen/spacing_l" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_salvar_dialogo"
+        style="@style/BotaoPrincipal"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:text="@string/detalhe_baixa_salvar" />
+
+    <TextView
+        android:id="@+id/btn_cancelar_dialogo"
+        style="@style/LinkCancelar"
+        android:layout_marginTop="@dimen/spacing_s" />
+
+</LinearLayout>

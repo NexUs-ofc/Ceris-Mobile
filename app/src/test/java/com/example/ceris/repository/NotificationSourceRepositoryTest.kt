@@ -53,7 +53,12 @@ class NotificationSourceRepositoryTest {
 
     @Test
     fun lojaEEventoBuscamRegistroPeloId() {
-        val store = StoreNotificationSource(45, "Mercado", null, null, null, null, null, "08:00", "18:00")
+        val store = StoreNotificationSource(
+            id = 45,
+            name = "Mercado",
+            openingTime = "08:00",
+            closingTime = "18:00",
+        )
         val event = EventNotificationSource("45", "Jantar", "Familia", "2026-10-19T19:00:00", 60, "Casa", 4)
         val api =
             testApi<NotificationSourceAPI> {

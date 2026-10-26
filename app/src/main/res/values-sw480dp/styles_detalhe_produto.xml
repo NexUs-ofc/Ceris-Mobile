@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tablet: foto maior e margem que deixa o conteudo perto de content_max_width. -->
+<resources>
+    <dimen name="detalhe_produto_imagem_altura">380dp</dimen>
+    <dimen name="detalhe_cartao_raio">24dp</dimen>
+    <dimen name="detalhe_padding_cartao">20dp</dimen>
+    <dimen name="detalhe_margem">48dp</dimen>
+    <dimen name="detalhe_topo">48dp</dimen>
+    <dimen name="nutricao_linha_padding">16dp</dimen>
+</resources>

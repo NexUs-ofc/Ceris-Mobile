@@ -14,27 +14,42 @@ import java.text.Normalizer
 /**
  * Tabela nutricional do produto, pela busca publica do Open Food Facts.
  *
- * So devolve dado quando o casamento com o produto do estoque e seguro: a
- * marca bate e quase todas as palavras do nome aparecem no produto encontrado.
- * Na duvida, devolve nulo e a tela nao mostra a tabela.
+ * Com marca, busca pela marca; sem marca (ou se a marca nao achar), busca pelo
+ * nome. So devolve dado quando o casamento e seguro: quase todas as palavras do
+ * nome aparecem no produto encontrado e, havendo marca, ela bate. Na duvida,
+ * devolve nulo e a tela nao mostra a tabela.
  */
 class NutricaoRepository(private val api: OpenFoodFactsAPI) {
 
     fun buscar(nome: String, marca: String?, aoTerminar: (Nutricao?) -> Unit) {
-        if (marca.isNullOrBlank()) return aoTerminar(null)
+        if (palavras(nome).isEmpty()) return aoTerminar(null)
 
-        api.buscarPorMarca(marca).enqueue(object : Callback<OffBusca> {
+        val pelaMarca = marca?.takeIf { it.isNotBlank() }
+        if (pelaMarca == null) return buscarPeloNome(nome, null, aoTerminar)
+
+        api.buscarPorMarca(pelaMarca).enqueue(
+            retorno(nome, pelaMarca) { achado ->
+                if (achado != null) aoTerminar(achado) else buscarPeloNome(nome, pelaMarca, aoTerminar)
+            }
+        )
+    }
+
+    private fun buscarPeloNome(nome: String, marca: String?, aoTerminar: (Nutricao?) -> Unit) {
+        val termos = listOfNotNull(nome, marca).joinToString(" ")
+        api.buscarPorNome(termos).enqueue(retorno(nome, marca, aoTerminar))
+    }
+
+    private fun retorno(nome: String, marca: String?, aoTerminar: (Nutricao?) -> Unit) =
+        object : Callback<OffBusca> {
             override fun onResponse(call: Call<OffBusca>, response: Response<OffBusca>) {
-                val produtos = response.body()?.products.orEmpty()
-                aoTerminar(escolher(nome, marca, produtos))
+                aoTerminar(escolher(nome, marca, response.body()?.products.orEmpty()))
             }
 
             override fun onFailure(call: Call<OffBusca>, t: Throwable) {
                 Log.w(TAG, "tabela nutricional indisponivel", t)
                 aoTerminar(null)
             }
-        })
-    }
+        }
 
     private companion object {
         const val TAG = "NutricaoRepo"
@@ -44,20 +59,25 @@ class NutricaoRepository(private val api: OpenFoodFactsAPI) {
 /** Fracao minima das palavras do nome que precisa aparecer no produto encontrado. */
 internal const val COBERTURA_MINIMA = 0.7
 
+/** Sem marca, o nome precisa de pelo menos isto de palavras para o casamento valer. */
+internal const val MIN_PALAVRAS_SEM_MARCA = 2
+
 /**
  * Escolhe o produto da lista que corresponde ao item do estoque. Funcao pura,
  * para os testes cobrirem o casamento sem rede.
  */
-internal fun escolher(nome: String, marca: String, produtos: List<OffProduto>): Nutricao? {
+internal fun escolher(nome: String, marca: String?, produtos: List<OffProduto>): Nutricao? {
     val termos = palavras(nome)
-    val marcaPalavras = palavras(marca)
-    if (termos.isEmpty() || marcaPalavras.isEmpty()) return null
+    val marcaPalavras = marca?.let(::palavras).orEmpty()
+    if (termos.isEmpty()) return null
+    // Sem marca, uma palavra so ("Leite") casaria com qualquer leite.
+    if (marcaPalavras.isEmpty() && termos.size < MIN_PALAVRAS_SEM_MARCA) return null
 
     return produtos
         .mapNotNull { produto ->
             val encontradas = palavras("${produto.productName.orEmpty()} ${produto.brands.orEmpty()}")
             val cobertura = termos.count { it in encontradas }.toDouble() / termos.size
-            val marcaConfere = marcaPalavras.any { it in encontradas }
+            val marcaConfere = marcaPalavras.isEmpty() || marcaPalavras.any { it in encontradas }
 
             // Sem energia cadastrada a tabela nao serve para nada.
             val temTabela = produto.nutriments?.numero("energy-kcal_100g") != null

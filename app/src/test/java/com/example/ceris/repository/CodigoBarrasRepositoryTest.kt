@@ -1,12 +1,19 @@
 package com.example.ceris.repository
 
+import android.content.SharedPreferences
 import com.example.ceris.api.StockAPI
 import com.example.ceris.api.openfoodfacts.OpenFoodFactsAPI
+import com.example.ceris.local.SessionManager
+import com.example.ceris.model.CadastroPorCodigo
+import com.example.ceris.model.CategoriaAlimento
+import com.example.ceris.model.Produto
 import com.example.ceris.model.ProdutoEncontrado
 import com.example.ceris.model.dto.FoodRegistrationRequest
 import com.example.ceris.model.dto.StockItemResponse
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -16,6 +23,7 @@ import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.InetSocketAddress
+import java.lang.reflect.Proxy
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -25,6 +33,8 @@ class CodigoBarrasRepositoryTest {
     private lateinit var servidor: HttpServer
     private var corpoRecebido = ""
     private var tokenRecebido: String? = null
+    private var camposConsultados: String? = null
+    private val foto = "https://img.example/leite.jpg"
     private var respostaCore: Pair<Int, String> =
         201 to "{\"id\":9,\"foodId\":3,\"foodName\":\"Leite Condensado\",\"quantity\":2}"
 
@@ -32,11 +42,12 @@ class CodigoBarrasRepositoryTest {
     fun subir() {
         servidor = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0)
         servidor.createContext("/api/v2/product/") { troca ->
+            camposConsultados = troca.requestURI.query
             if (troca.requestURI.path.endsWith("7891000100103")) {
                 responder(
                     troca, 200,
                     "{\"status\":1,\"product\":{\"product_name\":\"Leite Condensado\",\"brands\":\"Nestlé, Moça\"," +
-                        "\"product_quantity\":395,\"product_quantity_unit\":\"g\"}}"
+                        "\"product_quantity\":395,\"product_quantity_unit\":\"g\",\"image_front_url\":\"$foto\"}}"
                 )
             } else {
                 responder(troca, 404, "{\"status\":0,\"status_verbose\":\"product not found\"}")
@@ -46,6 +57,12 @@ class CodigoBarrasRepositoryTest {
             tokenRecebido = troca.requestHeaders.getFirst("Authorization")
             corpoRecebido = troca.requestBody.readBytes().decodeToString()
             responder(troca, respostaCore.first, respostaCore.second)
+        }
+        servidor.createContext("/api/stock/foods") { troca ->
+            responder(troca, 200, """[{"id":3,"name":"Leite Condensado","categoryName":"Laticínios","foodImageUrl":"$foto"}]""")
+        }
+        servidor.createContext("/api/stock") { troca ->
+            responder(troca, 200, "[${respostaCore.second}]")
         }
         servidor.start()
     }
@@ -83,6 +100,8 @@ class CodigoBarrasRepositoryTest {
         val achado = buscar("7891000100103")!!
         assertEquals("Leite Condensado", achado.nome)
         assertEquals("Nestlé", achado.marca)
+        assertEquals(foto, achado.imagemUrl)
+        assertTrue(camposConsultados.orEmpty().contains("image_front_url"))
     }
 
     @Test
@@ -91,7 +110,14 @@ class CodigoBarrasRepositoryTest {
     }
 
     private val pedido = FoodRegistrationRequest(
-        "7891000100103", "Leite Condensado", "Nestlé", 395.0, "g", "10000025", 2, "2027-01-10"
+        gtin = "7891000100103",
+        name = "Leite Condensado",
+        productBrand = "Nestlé",
+        packageQuantity = 395.0,
+        unitOfMeasure = "g",
+        gpcCode = "10000025",
+        quantity = 2,
+        expiryDate = "2027-01-10"
     )
 
     @Test
@@ -106,6 +132,54 @@ class CodigoBarrasRepositoryTest {
         assertTrue(corpoRecebido, corpoRecebido.contains("\"gtin\":\"7891000100103\""))
         assertTrue(corpoRecebido, corpoRecebido.contains("\"unitOfMeasure\":\"g\""))
         assertTrue(corpoRecebido, corpoRecebido.contains("\"expiryDate\":\"2027-01-10\""))
+    }
+
+    @Test
+    fun imagemDaConsultaVaiParaCoreEVoltaNoCardAoListar() {
+        val encontrado = buscar("7891000100103")!!
+        val cadastro = CadastroPorCodigo.montar(
+            "7891000100103", encontrado.nome!!, encontrado.marca.orEmpty(), "395",
+            encontrado.unidadeEmbalagem, CategoriaAlimento.LATICINIOS, 2, null,
+            imagemUrl = encontrado.imagemUrl,
+        ).getOrThrow()
+        respostaCore = 201 to """{"id":9,"foodId":3,"foodName":"Leite Condensado","quantity":2,"foodImageUrl":"$foto"}"""
+        val cadastroFinalizado = CountDownLatch(1)
+        var salvo: StockItemResponse? = null
+        repo().registrar(cadastro, { salvo = it; cadastroFinalizado.countDown() }, { _, _ -> cadastroFinalizado.countDown() }, { cadastroFinalizado.countDown() })
+        assertTrue(cadastroFinalizado.await(5, TimeUnit.SECONDS))
+        assertEquals(foto, Gson().fromJson(corpoRecebido, JsonObject::class.java)["foodImageUrl"].asString)
+        assertEquals(foto, salvo?.foodImageUrl)
+
+        assertEquals(foto, listarCards().single().imagemUrl)
+    }
+
+    @Test
+    fun listagemDeEstoqueAntigoSemFotoContinuaFuncionando() {
+        val produto = listarCards().single()
+        assertEquals("Leite Condensado", produto.nome)
+        assertNull(produto.imagemUrl)
+    }
+
+    private fun listarCards(): List<Produto> {
+        val preferencias = Proxy.newProxyInstance(
+            SharedPreferences::class.java.classLoader,
+            arrayOf(SharedPreferences::class.java),
+        ) { _, method, _ ->
+            if (method.name == "getString") "abc" else error("Preferencia inesperada: ${method.name}")
+        } as SharedPreferences
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://127.0.0.1:${servidor.address.port}/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val fim = CountDownLatch(1)
+        var produtos: List<Produto>? = null
+        StockRepository(retrofit.create(StockAPI::class.java), SessionManager(preferencias)).listar(
+            { produtos = it; fim.countDown() },
+            { _, _ -> fim.countDown() },
+            { fim.countDown() },
+        )
+        assertTrue(fim.await(5, TimeUnit.SECONDS))
+        return requireNotNull(produtos)
     }
 
     @Test

@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- A camera e pedida, mas nao exigida: sem ela o app instala e so a
          leitura de nota fica indisponivel. -->
@@ -64,6 +66,9 @@
                 <data android:scheme="ceris" android:host="notification" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.DetalheMercadoActivity"
+            android:exported="false" />
         <activity
             android:name=".view.DetalheEventoActivity"
             android:exported="false" />
