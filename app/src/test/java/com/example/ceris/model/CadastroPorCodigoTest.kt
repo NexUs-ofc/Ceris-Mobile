@@ -105,6 +105,16 @@ class CadastroPorCodigoTest {
     }
 
     @Test
+    fun incluiFoodImageUrlNoContratoDaCoreQuandoAConsultaTemFoto() {
+        val pedido = CadastroPorCodigo.montar(
+            "7891000100103", "Leite Moça", "Nestlé", "395", UnidadeEmbalagem.GRAMA,
+            CategoriaAlimento.LATICINIOS, 1, null, imagemUrl = " https://img.example/leite.jpg ",
+        ).getOrThrow()
+        val json = Gson().toJsonTree(pedido).asJsonObject
+        assertEquals("https://img.example/leite.jpg", json["foodImageUrl"].asString)
+    }
+
+    @Test
     fun cada_categoria_tem_um_codigo_gpc_proprio_de_8_digitos() {
         CategoriaAlimento.entries.forEach { assertTrue(it.name, Regex("\\d{8}").matches(it.gpc)) }
         assertEquals(CategoriaAlimento.entries.size, CategoriaAlimento.entries.map { it.gpc }.toSet().size)

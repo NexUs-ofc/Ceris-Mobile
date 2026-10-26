@@ -88,7 +88,7 @@
             android:paddingTop="@dimen/selo_padding_v"
             android:paddingEnd="@dimen/selo_padding_h"
             android:paddingBottom="@dimen/selo_padding_v"
-            android:text="@string/locais_alterar"
+            android:text="@string/locais_atualizar"
             android:textColor="@color/md_theme_primary"
             android:textSize="@dimen/text_size_13"
             app:layout_constraintBottom_toBottomOf="@id/icone_endereco"
@@ -138,20 +138,44 @@
         tools:itemCount="4"
         tools:listitem="@layout/item_local" />
 
-    <TextView
-        android:id="@+id/txt_sem_locais"
+    <LinearLayout
+        android:id="@+id/estado_locais"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_xl"
+        android:layout_height="0dp"
+        android:orientation="vertical"
         android:gravity="center"
-        android:paddingStart="@dimen/screen_margin_horizontal"
-        android:paddingEnd="@dimen/screen_margin_horizontal"
-        android:text="@string/locais_vazio"
-        android:textColor="@color/md_secundary_text"
-        android:textSize="@dimen/text_size_14"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="@dimen/screen_margin_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/titulo_proximos"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titulo_proximos" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_max="@dimen/content_max_width">
+
+        <ProgressBar
+            android:id="@+id/carregando_locais"
+            android:layout_width="@dimen/fab_secundario_size"
+            android:layout_height="@dimen/fab_secundario_size"
+            android:contentDescription="@string/locais_carregando" />
+
+        <TextView
+            android:id="@+id/mensagem_locais"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:gravity="center"
+            android:text="@string/locais_carregando"
+            android:textColor="@color/md_secundary_text"
+            android:textSize="@dimen/text_size_14"
+            android:accessibilityLiveRegion="polite" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_tentar_locais"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/button_height"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:text="@string/locais_tentar"
+            android:visibility="gone" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
