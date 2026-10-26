@@ -125,10 +125,8 @@
     <string name="mercado_sem_mapa">Nenhum app de mapas instalado.</string>
     <!-- Receitas -->
     <string name="receitas_titulo">Receitas salvas</string>
-    <string name="receita_imagem">Foto da receita</string>
     <string name="receita_tempo_icone">Tempo de preparo</string>
     <string name="receita_serve">Serve %1$d</string>
-    <string name="receita_ingredientes">Ingredientes</string>
     <string name="receita_modo_preparo">Modo de Preparo</string>
     <string name="receitas_vazio">Você ainda não salvou receitas. Peça uma para a Cerita!</string>
 
@@ -161,7 +159,6 @@
     <string name="item_form_nome_hint">Ex: Tomate</string>
     <string name="item_form_quantidade">QUANTIDADE</string>
     <string name="item_form_unidade">UNIDADE</string>
-    <string name="item_form_categoria">CATEGORIA</string>
     <string name="item_form_valor">VALOR (R$)</string>
     <string name="item_form_valor_hint">Ex: 12,90</string>
     <string name="item_form_confirmar">Adicionar à lista</string>
@@ -306,4 +303,5 @@ Tente novamente ou volte ao início.</string>
     <string name="redefinir_subtitulo">Crie uma nova senha para acessar sua conta.</string>
     <string name="redefinir_nova">Nova senha</string>
     <string name="redefinir_confirmar">Confirme a nova senha</string>
+    <string name="lista_item_somente_consulta">%1$s · Somente consulta</string>
 </resources>

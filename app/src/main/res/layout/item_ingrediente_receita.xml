@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/txt_ingrediente"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/receita_ingrediente_espaco"
+    android:textColor="@color/card_titulo"
+    android:textSize="@dimen/text_size_13"
+    tools:text="500g de peito de frango" />

@@ -189,53 +189,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/rotulo_categoria"
-            style="@style/RotuloCampo"
-            android:layout_marginTop="@dimen/spacing_m"
-            android:text="@string/item_form_categoria"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/caixa_unidade" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/caixa_categoria"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_s"
-            app:hintEnabled="false"
-            app:boxCornerRadiusBottomEnd="@dimen/campo_radius"
-            app:boxCornerRadiusBottomStart="@dimen/campo_radius"
-            app:boxCornerRadiusTopEnd="@dimen/campo_radius"
-            app:boxCornerRadiusTopStart="@dimen/campo_radius"
-            app:boxStrokeColor="@color/campo_contorno"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rotulo_categoria">
-
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/campo_categoria"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/campo_altura"
-                android:gravity="center_vertical"
-                android:inputType="none"
-                android:maxLines="1"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:textColor="@color/md_theme_onBackground"
-                android:popupBackground="@color/md_theme_surface"
-                android:textSize="@dimen/text_size_15"
-                app:simpleItemSelectedColor="@color/selecao_item"
-                tools:text="Hortifruti" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
             android:id="@+id/rotulo_valor"
             style="@style/RotuloCampo"
             android:layout_marginTop="@dimen/spacing_m"
             android:text="@string/item_form_valor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/caixa_categoria" />
+            app:layout_constraintTop_toBottomOf="@id/caixa_unidade" />
 
         <EditText
             android:id="@+id/campo_valor"

@@ -1,7 +1,7 @@
 package com.example.ceris.model.dto
 
 data class ShoppingListItemResponse(
-    val id: String,
+    val id: String?,
     val name: String,
     val quantity: Double,
     val unitOfMeasure: String,

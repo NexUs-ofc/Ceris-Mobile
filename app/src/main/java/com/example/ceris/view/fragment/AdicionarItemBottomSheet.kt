@@ -8,7 +8,6 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import com.example.ceris.R
-import com.example.ceris.model.CategoriaItem
 import com.example.ceris.model.UnidadeMedida
 import com.example.ceris.util.Moeda
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -23,7 +22,6 @@ class AdicionarItemBottomSheet : BottomSheetDialogFragment() {
             nome: String,
             quantidade: Double,
             unidade: UnidadeMedida,
-            categoria: CategoriaItem,
             valor: Double
         )
     }
@@ -33,7 +31,6 @@ class AdicionarItemBottomSheet : BottomSheetDialogFragment() {
     private lateinit var campoNome: EditText
     private lateinit var campoQuantidade: EditText
     private lateinit var campoUnidade: MaterialAutoCompleteTextView
-    private lateinit var campoCategoria: MaterialAutoCompleteTextView
     private lateinit var campoValor: EditText
 
     override fun getTheme(): Int = R.style.TemaBottomSheet
@@ -50,14 +47,10 @@ class AdicionarItemBottomSheet : BottomSheetDialogFragment() {
         campoNome = view.findViewById(R.id.campo_nome)
         campoQuantidade = view.findViewById(R.id.campo_quantidade)
         campoUnidade = view.findViewById(R.id.campo_unidade)
-        campoCategoria = view.findViewById(R.id.campo_categoria)
         campoValor = view.findViewById(R.id.campo_valor)
 
         campoUnidade.setSimpleItems(UnidadeMedida.rotulos().toTypedArray())
         campoUnidade.setText(UnidadeMedida.UNIDADE.rotulo(), false)
-
-        campoCategoria.setSimpleItems(CategoriaItem.rotulos().toTypedArray())
-        campoCategoria.setText(CategoriaItem.PADRAO.rotulo, false)
 
         mostrarQuantidade()
 
@@ -82,7 +75,6 @@ class AdicionarItemBottomSheet : BottomSheetDialogFragment() {
             nome = campoNome.text.toString(),
             quantidade = lerQuantidade(),
             unidade = UnidadeMedida.porRotulo(campoUnidade.text.toString()),
-            categoria = CategoriaItem.porRotulo(campoCategoria.text.toString()),
             valor = Moeda.interpretar(campoValor.text.toString())
         )
 

@@ -14,3 +14,9 @@ local.properties
 .claude
 
 */libs.versions.toml
+
+# Contexto local e especificacoes de desenvolvimento
+AGENTS.md
+/specs/
+/.specify/
+/.sdd/
