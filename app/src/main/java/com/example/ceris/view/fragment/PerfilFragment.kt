@@ -17,28 +17,31 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.ceris.R
 import com.example.ceris.api.ApiBaseUrl
 import com.example.ceris.api.ProfileAPI
 import com.example.ceris.api.RetrofitClient
 import com.example.ceris.api.aoTerminar
 import com.example.ceris.api.bearer
-import com.example.ceris.local.FotoPerfilStore
 import com.example.ceris.local.ListaLocalStore
 import com.example.ceris.local.SessionManager
 import com.example.ceris.model.dto.ProfileResponse
 import com.example.ceris.notification.PushNotifications
+import com.example.ceris.util.FotoPerfilUpload
 import com.example.ceris.view.LoginActivity
 import com.example.ceris.view.MainActivity
+import com.example.ceris.view.utils.PopupCeris
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.button.MaterialButton
 import java.io.File
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 /**
  * Perfil (Figma > Protótipos > V1 > ProfileScreen).
  *
- * Nome e e-mail vêm da Core; a foto escolhida no aparelho tem prioridade sobre
- * a URL da Core. Personalização abre o popup de edição.
+ * Nome, e-mail e foto vêm da Core. Personalização abre o popup de edição.
  */
 class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Listener {
 
@@ -47,6 +50,8 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
     private var perfil: ProfileResponse? = null
     private var voltarCallback: OnBackPressedCallback? = null
     private var fotoPendente: Uri? = null
+    private var enviandoFoto = false
+    private var versaoFoto = 0
     private val escolherFoto = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) guardarFoto(uri)
     }
@@ -82,15 +87,15 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
 
         opcao(view, R.id.opcao_personalizacao, R.drawable.ic_menu_user, R.string.perfil_personalizacao) { editar() }
         opcao(view, R.id.opcao_privacidade, R.drawable.ic_menu_lock, R.string.perfil_privacidade) {
-            texto(R.string.perfil_privacidade, R.string.perfil_privacidade_texto)
+            texto(R.string.perfil_privacidade, R.string.perfil_privacidade_texto, R.drawable.ic_menu_lock)
         }
         opcao(view, R.id.opcao_termos, R.drawable.ic_menu_file_text, R.string.perfil_termos) {
-            texto(R.string.perfil_termos, R.string.perfil_termos_texto)
+            texto(R.string.perfil_termos, R.string.perfil_termos_texto, R.drawable.ic_menu_file_text)
         }
         opcao(view, R.id.opcao_sobre, R.drawable.ic_menu_info, R.string.perfil_sobre) {
-            texto(R.string.perfil_sobre, R.string.perfil_sobre_texto)
+            texto(R.string.perfil_sobre, R.string.perfil_sobre_texto, R.drawable.ic_menu_info)
         }
-        opcao(view, R.id.btn_sair, R.drawable.ic_menu_log_out, R.string.perfil_sair) { sair() }
+        opcao(view, R.id.btn_sair, R.drawable.ic_menu_log_out, R.string.perfil_sair) { confirmarSaida() }
 
         // Sair e vermelho e sem seta, como no Figma.
         view.findViewById<View>(R.id.btn_sair).apply {
@@ -116,10 +121,15 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
     }
 
     private fun carregar() {
-        val token = SessionManager(requireContext()).bearer() ?: return
+        val sessao = SessionManager(requireContext())
+        val atual = sessao.snapshot() ?: return
+        val token = sessao.bearer() ?: return
+        val versao = versaoFoto
         api.buscar(token).aoTerminar(
-            onSucesso = { recebido -> recebido?.let(::mostrar) },
-            onFalha = ::avisar
+            onSucesso = { recebido ->
+                if (sessao.isCurrent(atual) && versao == versaoFoto && !enviandoFoto) recebido?.let(::mostrar)
+            },
+            onFalha = { mensagem -> if (sessao.isCurrent(atual)) avisar(mensagem) }
         )
     }
 
@@ -135,38 +145,38 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
 
     private fun mostrarFoto() {
         val foto = view?.findViewById<ImageView>(R.id.img_perfil) ?: return
-        val local = FotoPerfilStore(requireContext()).buscar(
-            SessionManager(requireContext()).snapshot()?.profileId
-        )
         Glide.with(foto)
-            .load(local ?: perfil?.profileImageUrl?.takeIf { it.isNotBlank() })
+            .load(perfil?.profileImageUrl?.takeIf { it.isNotBlank() })
             .placeholder(R.drawable.ic_menu_user)
             .error(R.drawable.ic_menu_user)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
             .circleCrop()
             .into(foto)
     }
 
     private fun escolherOrigemFoto() {
+        if (enviandoFoto) return
         if (SessionManager(requireContext()).snapshot()?.profileId == null) {
             avisar(getString(R.string.perfil_carregando))
             return
         }
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.perfil_escolher_foto)
-            .setItems(arrayOf(getString(R.string.perfil_tirar_foto), getString(R.string.perfil_galeria))) { _, opcao ->
-                if (opcao == 0) {
-                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        abrirCamera()
-                    } else {
-                        pedirCamera.launch(Manifest.permission.CAMERA)
-                    }
-                } else {
-                    escolherFoto.launch("image/*")
-                }
+        val conteudo = layoutInflater.inflate(R.layout.dialogo_origem_foto, null)
+        val dialogo = MaterialAlertDialogBuilder(requireContext())
+            .setView(conteudo)
+            .create()
+        conteudo.findViewById<MaterialButton>(R.id.btn_foto_camera).setOnClickListener {
+            dialogo.dismiss()
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                abrirCamera()
+            } else {
+                pedirCamera.launch(Manifest.permission.CAMERA)
             }
-            .show()
+        }
+        conteudo.findViewById<MaterialButton>(R.id.btn_foto_galeria).setOnClickListener {
+            dialogo.dismiss()
+            escolherFoto.launch("image/*")
+        }
+        conteudo.findViewById<View>(R.id.btn_cancelar_foto).setOnClickListener { dialogo.dismiss() }
+        dialogo.show()
     }
 
     private fun abrirCamera() {
@@ -180,16 +190,36 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
 
     private fun guardarFoto(uri: Uri) {
         val contexto = context ?: return
-        val profileId = SessionManager(contexto).snapshot()?.profileId ?: return
+        val sessao = SessionManager(contexto)
+        val atual = sessao.snapshot() ?: return
+        val profileId = atual.profileId ?: return
+        if (enviandoFoto) return
+        enviandoFoto = true
+        versaoFoto++
         Thread {
-            val resultado = runCatching { FotoPerfilStore(contexto.applicationContext).salvar(profileId, uri) }
+            val resultado = runCatching {
+                val jpeg = FotoPerfilUpload.preparar(contexto.applicationContext, uri)
+                val corpo = RequestBody.create(MediaType.parse("image/jpeg"), jpeg)
+                val parte = MultipartBody.Part.createFormData("file", "perfil.jpg", corpo)
+                val resposta = api.enviarFoto("Bearer ${atual.accessToken}", parte).execute()
+                val imagem = resposta.body()
+                check(resposta.isSuccessful && imagem?.profileId == profileId && !imagem?.profileImageUrl.isNullOrBlank()) {
+                    "Falha no upload da foto"
+                }
+                imagem?.profileImageUrl ?: error("Foto sem URL")
+            }
             activity?.runOnUiThread {
                 if (!isAdded) return@runOnUiThread
-                if (SessionManager(requireContext()).snapshot()?.profileId != profileId) return@runOnUiThread
-                resultado.onSuccess {
+                enviandoFoto = false
+                if (!sessao.isCurrent(atual)) return@runOnUiThread
+                resultado.onSuccess { url ->
+                    perfil = (perfil ?: ProfileResponse(id = profileId)).copy(profileImageUrl = url)
                     mostrarFoto()
                     avisar(getString(R.string.perfil_foto_salva))
-                }.onFailure { avisar(getString(R.string.perfil_foto_falha)) }
+                }.onFailure {
+                    avisar(getString(R.string.perfil_foto_falha))
+                    carregar()
+                }
             }
         }.start()
     }
@@ -213,12 +243,27 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
         avisar(getString(R.string.perfil_salvo))
     }
 
-    private fun texto(@StringRes titulo: Int, @StringRes corpo: Int) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(titulo)
-            .setMessage(corpo)
-            .setPositiveButton(R.string.perfil_fechar, null)
-            .show()
+    private fun texto(@StringRes titulo: Int, @StringRes corpo: Int, @DrawableRes icone: Int) {
+        PopupCeris.mostrar(
+            contexto = requireContext(),
+            titulo = getString(titulo),
+            mensagem = getString(corpo),
+            icone = icone,
+            confirmar = getString(R.string.perfil_fechar)
+        )
+    }
+
+    private fun confirmarSaida() {
+        PopupCeris.mostrar(
+            contexto = requireContext(),
+            titulo = getString(R.string.perfil_sair_confirmar_titulo),
+            mensagem = getString(R.string.perfil_sair_confirmar_mensagem),
+            icone = R.drawable.ic_menu_log_out,
+            confirmar = getString(R.string.perfil_sair_confirmar_botao),
+            cancelar = getString(R.string.lista_nome_cancelar),
+            destrutivo = true,
+            aoConfirmar = ::sair
+        )
     }
 
     private fun avisar(mensagem: String) {

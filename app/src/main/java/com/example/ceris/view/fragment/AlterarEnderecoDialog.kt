@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -38,6 +39,7 @@ class AlterarEnderecoDialog : DialogFragment() {
             (parentFragment as? Listener)?.usarLocalizacaoAtual()
             dismiss()
         }
+        view.findViewById<View>(R.id.btn_cancelar_endereco).setOnClickListener { dismiss() }
         carregarEnderecoSalvo(view)
     }
 
@@ -45,7 +47,13 @@ class AlterarEnderecoDialog : DialogFragment() {
         super.onStart()
         dialog?.window?.apply {
             setBackgroundDrawableResource(android.R.color.transparent)
-            setLayout((resources.displayMetrics.widthPixels * 0.94f).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
+            setDimAmount(0.4f)
+            addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            setLayout(
+                (resources.displayMetrics.widthPixels * 0.9f).toInt()
+                    .coerceAtMost(resources.getDimensionPixelSize(R.dimen.content_max_width)),
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             setGravity(Gravity.CENTER)
         }
     }

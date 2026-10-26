@@ -145,6 +145,25 @@
         <item name="chipStrokeWidth">1dp</item>
     </style>
 
+    <!-- Opcoes disponiveis no seletor: a mesma pilula lilas do perfil, com area de toque maior. -->
+    <style name="ChipOpcaoRestricao" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipMinHeight">40dp</item>
+        <item name="chipCornerRadius">20dp</item>
+        <item name="chipStartPadding">12dp</item>
+        <item name="chipEndPadding">12dp</item>
+        <item name="android:textColor">@color/ceris_cinza</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="chipBackgroundColor">@color/stepper_fundo</item>
+        <item name="chipStrokeWidth">0dp</item>
+    </style>
+
+    <style name="ChipOpcaoRestricaoSelecionada" parent="ChipOpcaoRestricao">
+        <item name="android:textColor">@color/md_theme_primary</item>
+        <item name="chipBackgroundColor">@color/campo_perfil_borda</item>
+    </style>
+
     <!-- Rotulo miudo cinza em caixa alta: "ENDERECOS SALVOS". -->
     <style name="RotuloSecaoMiuda">
         <item name="android:layout_width">wrap_content</item>

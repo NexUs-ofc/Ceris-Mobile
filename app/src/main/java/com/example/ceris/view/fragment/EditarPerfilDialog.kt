@@ -2,15 +2,16 @@ package com.example.ceris.view.fragment
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.InputType
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.EditText
-import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.ceris.R
@@ -104,29 +105,89 @@ class EditarPerfilDialog : DialogFragment() {
     }
 
     private fun pedirRestricao(grupo: ChipGroup) {
-        val contexto = requireContext()
-        val campo = EditText(contexto).apply {
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-            hint = getString(R.string.perfil_restricao_hint)
-        }
-        val margem = resources.getDimensionPixelSize(R.dimen.dialogo_padding)
-        val caixa = FrameLayout(contexto).apply {
-            setPadding(margem, 0, margem, 0)
-            addView(campo)
+        val opcoes = resources.getStringArray(R.array.perfil_alergias)
+        val conteudo = layoutInflater.inflate(R.layout.dialogo_adicionar_restricoes, null)
+        val selecionadas = conteudo.findViewById<ChipGroup>(R.id.grupo_restricoes_selecionadas)
+        val disponiveis = conteudo.findViewById<ChipGroup>(R.id.grupo_restricoes_disponiveis)
+
+        fun atualizarOpcoes() {
+            selecionadas.removeAllViews()
+            disponiveis.removeAllViews()
+            val temSelecionadas = restricoes.isNotEmpty()
+            conteudo.findViewById<TextView>(R.id.rotulo_restricoes_selecionadas).visibility =
+                if (temSelecionadas) View.VISIBLE else View.GONE
+            selecionadas.visibility = if (temSelecionadas) View.VISIBLE else View.GONE
+
+            restricoes.forEach { texto ->
+                val chip = layoutInflater.inflate(
+                    R.layout.item_chip_opcao_restricao_selecionada, selecionadas, false
+                ) as Chip
+                chip.text = texto
+                chip.contentDescription = getString(R.string.perfil_remover_restricao, texto)
+                chip.setOnClickListener {
+                    restricoes.remove(texto)
+                    mostrarRestricoes(grupo)
+                    atualizarOpcoes()
+                }
+                selecionadas.addView(chip)
+            }
+
+            opcoes.dropLast(1).filterNot { opcao ->
+                restricoes.any { it.equals(opcao, ignoreCase = true) }
+            }.plus(opcoes.last()).forEach { texto ->
+                val chip = layoutInflater.inflate(R.layout.item_chip_opcao_restricao, disponiveis, false) as Chip
+                chip.text = texto
+                chip.setOnClickListener {
+                    if (texto == opcoes.last()) {
+                        pedirOutraRestricao(grupo) { atualizarOpcoes() }
+                    } else if (adicionarRestricao(texto, grupo)) {
+                        atualizarOpcoes()
+                    }
+                }
+                disponiveis.addView(chip)
+            }
         }
 
-        MaterialAlertDialogBuilder(contexto)
-            .setTitle(R.string.perfil_restricoes)
-            .setView(caixa)
-            .setPositiveButton(R.string.perfil_adicionar_confirmar) { _, _ ->
-                val texto = campo.text.toString().trim()
-                if (texto.isNotEmpty() && restricoes.none { it.equals(texto, ignoreCase = true) }) {
-                    restricoes.add(texto)
-                    mostrarRestricoes(grupo)
+        atualizarOpcoes()
+        val dialogo = MaterialAlertDialogBuilder(requireContext()).setView(conteudo).create()
+        conteudo.findViewById<MaterialButton>(R.id.btn_concluir_restricoes).setOnClickListener { dialogo.dismiss() }
+        dialogo.show()
+    }
+
+    private fun pedirOutraRestricao(grupo: ChipGroup, aoAdicionar: () -> Unit) {
+        val contexto = requireContext()
+        val conteudo = layoutInflater.inflate(R.layout.dialogo_outra_restricao, null)
+        val campo = conteudo.findViewById<EditText>(R.id.campo_outra_restricao)
+
+        val dialogo = MaterialAlertDialogBuilder(contexto)
+            .setTitle(R.string.perfil_outra_alergia)
+            .setView(conteudo)
+            .setPositiveButton(R.string.perfil_adicionar_confirmar, null)
+            .setNegativeButton(R.string.lista_nome_cancelar, null)
+            .create()
+        dialogo.setOnShowListener {
+            dialogo.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                if (campo.text.isBlank()) {
+                    campo.error = getString(R.string.perfil_restricao_vazia)
+                } else if (adicionarRestricao(campo.text.toString(), grupo)) {
+                    aoAdicionar()
+                    dialogo.dismiss()
                 }
             }
-            .setNegativeButton(R.string.lista_nome_cancelar, null)
-            .show()
+        }
+        dialogo.show()
+    }
+
+    private fun adicionarRestricao(valor: String, grupo: ChipGroup): Boolean {
+        val texto = valor.trim()
+        if (texto.isEmpty()) return false
+        if (restricoes.any { it.equals(texto, ignoreCase = true) }) {
+            avisar(getString(R.string.perfil_restricao_duplicada))
+            return false
+        }
+        restricoes.add(texto)
+        mostrarRestricoes(grupo)
+        return true
     }
 
     private fun salvar(nome: String, idade: String, botao: MaterialButton) {

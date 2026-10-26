@@ -10,6 +10,12 @@ data class ProfileResponse(
     val dietaryRestrictions: List<String>? = null
 )
 
+/** PUT /api/profile/image da Core. */
+data class ProfileImageResponse(
+    val profileId: Int,
+    val profileImageUrl: String?
+)
+
 /** Endereco como a Core devolve e recebe: CEP so com os 8 digitos, UF com 2 letras. */
 data class AddressDto(
     val street: String? = null,

@@ -166,6 +166,7 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         val inicial = Calendar.getInstance()
         DatePickerDialog(
             requireContext(),
+            R.style.TemaCalendarioCeris,
             { _, ano, mes, dia ->
                 val data = Calendar.getInstance().apply { set(ano, mes, dia) }.time
                 validade = ISO.format(data)

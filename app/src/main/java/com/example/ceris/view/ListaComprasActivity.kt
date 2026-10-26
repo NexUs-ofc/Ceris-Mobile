@@ -22,10 +22,10 @@ import com.example.ceris.util.Moeda
 import com.example.ceris.view.adapter.ItemListaAdapter
 import com.example.ceris.view.fragment.AdicionarItemBottomSheet
 import com.example.ceris.view.fragment.NomeListaBottomSheet
+import com.example.ceris.view.utils.PopupCeris
 import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.viewmodel.ListaComprasViewModel
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class ListaComprasActivity :
@@ -148,14 +148,15 @@ class ListaComprasActivity :
 
     // Toque longo remove: o design não tem botão de excluir na linha.
     private fun confirmarRemocaoDoItem(item: ItemLista) {
-        MaterialAlertDialogBuilder(this)
-            .setTitle(item.nome)
-            .setMessage(R.string.lista_item_remover_pergunta)
-            .setNegativeButton(R.string.lista_nome_cancelar, null)
-            .setPositiveButton(R.string.lista_excluir_confirmar) { _, _ ->
-                viewModel.removerItem(item.id)
-            }
-            .show()
+        PopupCeris.mostrar(
+            contexto = this,
+            titulo = item.nome,
+            mensagem = getString(R.string.lista_item_remover_pergunta),
+            icone = R.drawable.ic_menu_trash_2,
+            confirmar = getString(R.string.lista_excluir_confirmar),
+            cancelar = getString(R.string.lista_nome_cancelar),
+            destrutivo = true
+        ) { viewModel.removerItem(item.id) }
     }
 
     companion object {

@@ -189,6 +189,9 @@ Tente novamente ou volte ao início.</string>
     <!-- Chatbot -->
     <string name="chat_nome">Cerita</string>
     <string name="perfil_sair">Sair</string>
+    <string name="perfil_sair_confirmar_titulo">Sair da conta?</string>
+    <string name="perfil_sair_confirmar_mensagem">Você precisará entrar novamente para acessar seu perfil.</string>
+    <string name="perfil_sair_confirmar_botao">Sair da conta</string>
     <string name="perfil_foto">Foto do perfil</string>
     <string name="perfil_editar">Editar perfil</string>
     <string name="perfil_personalizacao">Personalização</string>
@@ -199,6 +202,7 @@ Tente novamente ou volte ao início.</string>
     <string name="perfil_carregando">Carregando o perfil, tente de novo em instantes.</string>
     <string name="perfil_salvo">Perfil atualizado.</string>
     <string name="perfil_escolher_foto">Alterar foto de perfil</string>
+    <string name="perfil_escolher_foto_instrucao">Escolha como quer atualizar sua foto.</string>
     <string name="perfil_tirar_foto">Tirar foto</string>
     <string name="perfil_galeria">Escolher da galeria</string>
     <string name="perfil_foto_salva">Foto de perfil atualizada.</string>
@@ -208,9 +212,29 @@ Tente novamente ou volte ao início.</string>
     <string name="perfil_nome_vazio">Informe o nome.</string>
     <string name="perfil_idade">Idade</string>
     <string name="perfil_restricoes">Restrições Alimentares</string>
+    <string name="perfil_restricoes_instrucao">Toque nas opções para adicionar ou remover.</string>
+    <string name="perfil_concluir">Concluir</string>
     <string name="perfil_adicionar">Adicionar +</string>
     <string name="perfil_adicionar_confirmar">Adicionar</string>
-    <string name="perfil_restricao_hint">Ex: Vegano</string>
+    <string name="perfil_restricoes_selecionadas">Selecionadas</string>
+    <string name="perfil_restricoes_disponiveis">Disponíveis</string>
+    <string name="perfil_remover_restricao">Remover %1$s</string>
+    <string name="perfil_outra_alergia">Outra alergia ou restrição</string>
+    <string name="perfil_restricao_hint">Digite a alergia ou restrição</string>
+    <string name="perfil_restricao_vazia">Informe uma alergia ou restrição.</string>
+    <string name="perfil_restricao_duplicada">Esta restrição já foi adicionada.</string>
+    <string-array name="perfil_alergias">
+        <item>Amendoim</item>
+        <item>Castanhas</item>
+        <item>Crustáceos</item>
+        <item>Gergelim</item>
+        <item>Leite</item>
+        <item>Ovos</item>
+        <item>Peixes</item>
+        <item>Soja</item>
+        <item>Trigo</item>
+        <item>Outros</item>
+    </string-array>
     <string name="perfil_salvar">Salvar Alterações</string>
     <string name="perfil_privacidade_texto">O Ceris guarda os dados da sua casa (estoque, listas, receitas e endereço) só para fazer o app funcionar. Fotos de notas fiscais são lidas e descartadas, e nada é vendido ou compartilhado com terceiros.</string>
     <string name="perfil_termos_texto">O Ceris é um projeto acadêmico do Instituto J&amp;F. As sugestões da Cerita, as validades estimadas e as tabelas nutricionais são aproximações: confira sempre a embalagem antes de consumir.</string>

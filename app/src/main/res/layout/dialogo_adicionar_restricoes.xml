@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/perfil_dialogo_padding"
+        android:paddingEnd="@dimen/perfil_dialogo_padding"
+        android:paddingBottom="@dimen/perfil_dialogo_padding">
+
+        <ImageView
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_popup_icone"
+            android:contentDescription="@null"
+            android:padding="14dp"
+            android:src="@drawable/ic_menu_chef_hat"
+            app:tint="@color/md_theme_primary" />
+
+        <TextView
+            style="@style/TituloSheet"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:text="@string/perfil_restricoes" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:text="@string/perfil_restricoes_instrucao"
+            android:textColor="@color/ceris_cinza"
+            android:textSize="@dimen/text_size_13" />
+
+        <TextView
+            android:id="@+id/rotulo_restricoes_selecionadas"
+            style="@style/RotuloPerfil"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:text="@string/perfil_restricoes_selecionadas" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/grupo_restricoes_selecionadas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s" />
+
+        <TextView
+            android:id="@+id/rotulo_restricoes_disponiveis"
+            style="@style/RotuloPerfil"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:text="@string/perfil_restricoes_disponiveis" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/grupo_restricoes_disponiveis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_concluir_restricoes"
+            style="@style/BotaoPrincipal"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:text="@string/perfil_concluir" />
+
+    </LinearLayout>
+</ScrollView>

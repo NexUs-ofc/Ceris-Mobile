@@ -4,8 +4,10 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -41,9 +43,18 @@ class QuantidadeDialog : DialogFragment() {
 
         return Dialog(requireContext()).apply {
             setContentView(conteudo)
-            // O cartao tem cantos proprios: a janela do dialogo fica transparente.
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            window?.setLayout(
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setGravity(Gravity.CENTER)
+            setDimAmount(0.4f)
+            addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            setLayout(
                 (resources.displayMetrics.widthPixels * FRACAO_LARGURA).toInt()
                     .coerceAtMost(resources.getDimensionPixelSize(R.dimen.content_max_width)),
                 ViewGroup.LayoutParams.WRAP_CONTENT

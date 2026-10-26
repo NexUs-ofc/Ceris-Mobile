@@ -192,8 +192,8 @@
     <dimen name="perfil_margem_topo">96dp</dimen>
     <dimen name="perfil_nome_texto">24sp</dimen>
     <dimen name="perfil_dialogo_padding">20dp</dimen>
-    <dimen name="perfil_campo_altura">42dp</dimen>
-    <dimen name="perfil_chip_altura">28dp</dimen>
+    <dimen name="perfil_campo_altura">48dp</dimen>
+    <dimen name="perfil_chip_altura">36dp</dimen>
     <dimen name="perfil_botao_altura">52dp</dimen>
     <dimen name="perfil_opcao_espaco">10dp</dimen>
     <dimen name="perfil_dialogo_deslocamento">64dp</dimen>

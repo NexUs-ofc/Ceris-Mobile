@@ -23,6 +23,7 @@
         <item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
         <item name="colorOutline">@color/md_theme_outline</item>
+        <item name="materialAlertDialogTheme">@style/TemaPopupCeris</item>
 
         <!-- Selecao e ripple de menus, popups e listas -->
         <item name="colorControlHighlight">@color/selecao_realce</item>
