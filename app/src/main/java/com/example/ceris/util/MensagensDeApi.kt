@@ -77,6 +77,8 @@ fun mensagemDeFalha(throwable: Throwable): String {
         throwable is com.example.ceris.repository.NotaFiscalRepository.LeituraCortada ->
             throwable.message.orEmpty()
 
+        throwable is ShoppingListRepository.ItemSemIdentificador -> throwable.message.orEmpty()
+
         throwable is ShoppingListRepository.SemSessao -> "Sessão expirada. Entre novamente."
 
         throwable is AcompanhamentoDeLeitura.LeituraDemorou -> throwable.message.orEmpty()

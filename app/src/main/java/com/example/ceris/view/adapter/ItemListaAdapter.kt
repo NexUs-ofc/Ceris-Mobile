@@ -78,14 +78,16 @@ class ItemListaAdapter(
             val contexto = itemView.context
 
             nome.text = item.nome
-            quantidade.text = item.descricao()
+            quantidade.text = if (item.editavel) item.descricao() else
+                contexto.getString(R.string.lista_item_somente_consulta, item.descricao())
             valor.text = Moeda.formatar(item.valor)
 
             // Sem listener durante a atribuição: numa View reciclada o setChecked
             // dispararia o callback e marcaria o item errado no servidor.
             caixa.setOnCheckedChangeListener(null)
             caixa.isChecked = item.marcado
-            caixa.setOnCheckedChangeListener { _, marcado -> aoMarcar(item, marcado) }
+            caixa.isEnabled = item.editavel
+            caixa.setOnCheckedChangeListener { _, marcado -> if (item.editavel) aoMarcar(item, marcado) }
             caixa.contentDescription = item.nome
 
             val cor = ContextCompat.getColor(
@@ -100,10 +102,10 @@ class ItemListaAdapter(
                 nome.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
 
-            itemView.setOnClickListener { caixa.isChecked = !caixa.isChecked }
+            itemView.setOnClickListener { if (item.editavel) caixa.isChecked = !caixa.isChecked }
             itemView.setOnLongClickListener {
-                aoSegurar(item)
-                true
+                if (item.editavel) aoSegurar(item)
+                item.editavel
             }
         }
     }
@@ -127,7 +129,8 @@ class ItemListaAdapter(
             anterior is Linha.Cabecalho && novo is Linha.Cabecalho ->
                 anterior.categoria == novo.categoria
             anterior is Linha.Produto && novo is Linha.Produto ->
-                anterior.item.id == novo.item.id
+                if (anterior.item.editavel && novo.item.editavel) anterior.item.id == novo.item.id
+                else anterior.item === novo.item
             else -> false
         }
 

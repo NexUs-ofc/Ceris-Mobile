@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ceris.R
 import com.example.ceris.local.ListaLocalStore
 import com.example.ceris.local.SessionManager
-import com.example.ceris.model.CategoriaItem
 import com.example.ceris.model.ItemLista
 import com.example.ceris.model.UnidadeMedida
 import com.example.ceris.repository.ShoppingListRepository
@@ -105,10 +104,9 @@ class ListaComprasActivity :
         nome: String,
         quantidade: Double,
         unidade: UnidadeMedida,
-        categoria: CategoriaItem,
         valor: Double
     ) {
-        viewModel.adicionarItem(nome, quantidade, unidade, categoria, valor)
+        viewModel.adicionarItem(nome, quantidade, unidade, valor)
     }
 
     override fun detalheCarregado(detalhe: ShoppingListRepository.Detalhe) {
