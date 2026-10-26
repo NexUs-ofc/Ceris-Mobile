@@ -158,6 +158,14 @@
     <dimen name="icone_google">48dp</dimen>
 
     <!-- Perfil -->
+    <dimen name="perfil_margem_topo">96dp</dimen>
+    <dimen name="perfil_nome_texto">24sp</dimen>
+    <dimen name="perfil_dialogo_padding">24dp</dimen>
+    <dimen name="perfil_campo_altura">50dp</dimen>
+    <dimen name="perfil_chip_altura">32dp</dimen>
+    <dimen name="perfil_botao_altura">56dp</dimen>
+    <dimen name="perfil_opcao_espaco">10dp</dimen>
+    <dimen name="perfil_dialogo_deslocamento">64dp</dimen>
     <dimen name="perfil_selo">34dp</dimen>
     <dimen name="perfil_opcao_altura">62dp</dimen>
     <dimen name="perfil_opcao_icone">24dp</dimen>

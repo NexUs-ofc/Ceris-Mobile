@@ -26,7 +26,7 @@ import com.example.ceris.viewmodel.LocaisStatus
 import com.example.ceris.viewmodel.LocaisViewModel
 import kotlinx.coroutines.launch
 
-class LocaisFragment : Fragment(R.layout.fragment_locais) {
+class LocaisFragment : Fragment(R.layout.fragment_locais), AlterarEnderecoDialog.Listener {
     private val viewModel: LocaisViewModel by viewModels()
     private var permissionRequested = false
     private val locationPermission =
@@ -63,7 +63,10 @@ class LocaisFragment : Fragment(R.layout.fragment_locais) {
             }
         }
         view.findViewById<View>(R.id.btn_alterar).setOnClickListener {
-            if (hasLocationPermission()) viewModel.refresh() else requestLocation()
+            if (childFragmentManager.findFragmentByTag(AlterarEnderecoDialog.TAG) == null) {
+                AlterarEnderecoDialog.novo(viewModel.state.value.usesProfileAddress)
+                    .show(childFragmentManager, AlterarEnderecoDialog.TAG)
+            }
         }
         parentFragmentManager.setFragmentResultListener(ADDRESS_SAVED, viewLifecycleOwner) { _, _ -> viewModel.refresh() }
         viewLifecycleOwner.lifecycleScope.launch {
@@ -110,6 +113,18 @@ class LocaisFragment : Fragment(R.layout.fragment_locais) {
             permissionRequested = true
             locationPermission.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
         }
+    }
+
+    override fun usarLocalizacaoAtual() {
+        if (hasLocationPermission()) viewModel.selectDeviceLocation() else {
+            viewModel.allowPermissionFallback(false)
+            requestLocation()
+            viewModel.selectDeviceLocation()
+        }
+    }
+
+    override fun usarEnderecoSalvo() {
+        viewModel.selectSavedAddress()
     }
 
     override fun onDestroyView() {

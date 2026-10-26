@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_alterar_endereco"
+    android:orientation="vertical"
+    android:padding="@dimen/sheet_padding">
+
+    <TextView
+        style="@style/TituloSheet"
+        android:text="@string/endereco_titulo" />
+
+    <TextView
+        android:id="@+id/btn_localizacao_atual"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/campo_altura"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:background="@drawable/bg_localizacao_atual"
+        android:clickable="true"
+        android:drawablePadding="@dimen/spacing_m"
+        android:focusable="true"
+        android:fontFamily="@font/montserrat_semibold"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/spacing_m"
+        android:paddingEnd="@dimen/spacing_m"
+        android:text="@string/endereco_localizacao"
+        android:textColor="@color/md_theme_primary"
+        android:textSize="@dimen/text_size_14"
+        app:drawableStartCompat="@drawable/ic_menu_map_pin"
+        app:drawableTint="@color/md_theme_primary" />
+
+    <TextView
+        android:id="@+id/rotulo_salvos"
+        style="@style/RotuloSecaoMiuda"
+        android:layout_marginTop="@dimen/spacing_m"
+        android:text="@string/endereco_salvos" />
+
+    <TextView
+        android:id="@+id/estado_endereco_salvo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_s"
+        android:text="@string/endereco_salvo_carregando"
+        android:textColor="@color/ceris_cinza"
+        android:textSize="@dimen/text_size_13" />
+
+    <LinearLayout
+        android:id="@+id/lista_enderecos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+</LinearLayout>

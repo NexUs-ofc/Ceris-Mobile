@@ -43,6 +43,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
  */
 class MainActivity : AppCompatActivity() {
     private var notificationLinkConsumed = false
+    private var perfilAberto = false
     private val notificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             PushNotifications.get(this).refresh()
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         hideNavigationBar()
         setContentView(R.layout.activity_main)
+        perfilAberto = supportFragmentManager.fragments.any { it.tag == PERFIL.toString() && it.isVisible }
 
         val areaNavegacao = findViewById<View>(R.id.navegacao)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -72,7 +74,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             // Teclado aberto: a barra some em vez de subir junto e esmagar a tela.
             areaNavegacao.visibility =
-                if (insets.isVisible(WindowInsetsCompat.Type.ime())) View.GONE else View.VISIBLE
+                if (perfilAberto || insets.isVisible(WindowInsetsCompat.Type.ime())) View.GONE else View.VISIBLE
             insets
         }
 
@@ -200,7 +202,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Abre o perfil, que exibe a barra sem ser um dos destinos dela.
+     * Abre o perfil em tela inteira, como no desenho.
      *
      * Fica aqui porque quem toca no ícone de perfil é um fragment, e ele não
      * deve conhecer o FragmentManager da Activity.
@@ -231,6 +233,9 @@ class MainActivity : AppCompatActivity() {
         val atual = gerenciador.fragments.firstOrNull { it.isVisible }
 
         if (atual?.tag == tag) return
+
+        perfilAberto = chave == PERFIL
+        findViewById<View>(R.id.navegacao).visibility = if (perfilAberto) View.GONE else View.VISIBLE
 
         gerenciador.beginTransaction().apply {
             setReorderingAllowed(true)

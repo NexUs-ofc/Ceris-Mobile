@@ -116,11 +116,14 @@
 
     <style name="CampoPerfil" parent="CampoFormulario">
         <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/perfil_campo_altura</item>
         <item name="android:background">@drawable/bg_campo_perfil</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
     </style>
 
     <!-- Restricao alimentar escolhida: pilula lilas com X para tirar. -->
     <style name="ChipRestricao" parent="Widget.MaterialComponents.Chip.Entry">
+        <item name="chipMinHeight">@dimen/perfil_chip_altura</item>
         <item name="android:checkable">false</item>
         <item name="android:textColor">@color/md_theme_primary</item>
         <item name="android:textSize">@dimen/text_size_13</item>
@@ -134,6 +137,7 @@
 
     <!-- "Adicionar +": pilula de contorno tracejado. O traco vem do drawable de fundo. -->
     <style name="ChipAdicionar" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipMinHeight">@dimen/perfil_chip_altura</item>
         <item name="android:textColor">@color/ceris_cinza</item>
         <item name="android:textSize">@dimen/text_size_13</item>
         <item name="chipBackgroundColor">@android:color/transparent</item>
