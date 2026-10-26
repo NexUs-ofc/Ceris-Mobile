@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.core.content.edit
 import com.example.ceris.model.CategoriaItem
 
-// Preco e categoria nao existem no contrato da Core, e a tela precisa dos dois.
-// Ficam aqui, por id do item, ate o servidor passar a guardá-los.
+// Preco fica local por item; categorias antigas sao lidas apenas para compatibilidade.
+// Novos itens nao recebem uma categoria manual no aparelho.
 class ListaLocalStore(context: Context) {
 
     private val preferences = context.applicationContext.getSharedPreferences(
@@ -13,18 +13,18 @@ class ListaLocalStore(context: Context) {
         Context.MODE_PRIVATE
     )
 
-    fun salvar(itemId: String, valor: Double, categoria: CategoriaItem) {
+    fun salvarValor(itemId: String, valor: Double) {
         preferences.edit {
             putFloat(chaveValor(itemId), valor.toFloat())
-            putString(chaveCategoria(itemId), categoria.name)
         }
     }
 
-    fun valorDe(itemId: String): Double =
-        preferences.getFloat(chaveValor(itemId), 0f).toDouble()
+    fun valorDe(itemId: String?): Double =
+        if (itemId.isNullOrBlank()) 0.0 else preferences.getFloat(chaveValor(itemId), 0f).toDouble()
 
-    fun categoriaDe(itemId: String): CategoriaItem =
-        CategoriaItem.porNome(preferences.getString(chaveCategoria(itemId), null))
+    fun categoriaDe(itemId: String?): CategoriaItem =
+        if (itemId.isNullOrBlank()) CategoriaItem.PADRAO
+        else CategoriaItem.porNome(preferences.getString(chaveCategoria(itemId), null))
 
     fun esquecer(itemId: String) {
         preferences.edit {

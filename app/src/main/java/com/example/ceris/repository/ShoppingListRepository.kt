@@ -5,7 +5,6 @@ import com.example.ceris.api.ShoppingListAPI
 import com.example.ceris.local.ListaLocalStore
 import com.example.ceris.local.SessionKeys
 import com.example.ceris.local.SessionManager
-import com.example.ceris.model.CategoriaItem
 import com.example.ceris.model.ItemLista
 import com.example.ceris.model.ListaCompra
 import com.example.ceris.model.UnidadeMedida
@@ -128,7 +127,6 @@ class ShoppingListRepository(
         nome: String,
         quantidade: Double,
         unidade: UnidadeMedida,
-        categoria: CategoriaItem,
         valor: Double,
         onSuccess: (Detalhe) -> Unit,
         onError: (statusCode: Int, errorBody: String?) -> Unit,
@@ -157,8 +155,9 @@ class ShoppingListRepository(
 
                     corpo.arrayList
                         .orEmpty()
-                        .firstOrNull { it.id !in idsAnteriores }
-                        ?.let { localStore.salvar(it.id, valor, categoria) }
+                        .mapNotNull { it.id?.takeIf(String::isNotBlank) }
+                        .firstOrNull { it !in idsAnteriores }
+                        ?.let { localStore.salvarValor(it, valor) }
 
                     onSuccess(paraDetalhe(corpo))
                 }
@@ -173,7 +172,7 @@ class ShoppingListRepository(
 
     fun atualizarItem(
         listaId: String,
-        itemId: String,
+        itemId: String?,
         quantidade: Double? = null,
         marcado: Boolean? = null,
         onSuccess: (Detalhe) -> Unit,
@@ -181,6 +180,8 @@ class ShoppingListRepository(
         onFailure: (Throwable) -> Unit
     ) {
         val autorizacao = autorizacao() ?: return onFailure(SemSessao())
+
+        if (itemId.isNullOrBlank()) return onFailure(ItemSemIdentificador())
 
         val req = ShoppingListItemUpdateRequest(quantity = quantidade, checked = marcado)
 
@@ -190,12 +191,14 @@ class ShoppingListRepository(
 
     fun removerItem(
         listaId: String,
-        itemId: String,
+        itemId: String?,
         onSuccess: (Detalhe) -> Unit,
         onError: (statusCode: Int, errorBody: String?) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
         val autorizacao = autorizacao() ?: return onFailure(SemSessao())
+
+        if (itemId.isNullOrBlank()) return onFailure(ItemSemIdentificador())
 
         api.removerItem(autorizacao, listaId, itemId).enqueue(
             object : Callback<ShoppingListResponse> {
@@ -236,6 +239,8 @@ class ShoppingListRepository(
 
         val valorTotal: Double get() = itens.sumOf { it.valor }
     }
+
+    class ItemSemIdentificador : IllegalStateException("Este item pode ser apenas consultado.")
 
     class SemSessao : IllegalStateException("Sessão expirada. Entre novamente.")
 

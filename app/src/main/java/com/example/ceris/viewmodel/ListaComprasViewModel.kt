@@ -6,7 +6,6 @@ import com.example.ceris.api.RetrofitClient
 import com.example.ceris.api.ShoppingListAPI
 import com.example.ceris.local.ListaLocalStore
 import com.example.ceris.local.SessionManager
-import com.example.ceris.model.CategoriaItem
 import com.example.ceris.model.UnidadeMedida
 import com.example.ceris.repository.ShoppingListRepository
 import com.example.ceris.util.mensagemDeErro
@@ -65,7 +64,6 @@ class ListaComprasViewModel : ViewModel() {
         nome: String?,
         quantidade: Double,
         unidade: UnidadeMedida,
-        categoria: CategoriaItem,
         valor: Double
     ) {
         val item = nome?.trim().orEmpty()
@@ -83,11 +81,10 @@ class ListaComprasViewModel : ViewModel() {
 
         repository.adicionarItem(
             listaId = listaId,
-            idsAnteriores = detalhe?.itens?.map { it.id }?.toSet().orEmpty(),
+            idsAnteriores = detalhe?.itens?.mapNotNull { it.id?.takeIf(String::isNotBlank) }?.toSet().orEmpty(),
             nome = item,
             quantidade = quantidade,
             unidade = unidade,
-            categoria = categoria,
             valor = valor,
             onSuccess = ::aoReceber,
             onError = ::aoErrar,
@@ -95,7 +92,7 @@ class ListaComprasViewModel : ViewModel() {
         )
     }
 
-    fun alternarMarcado(itemId: String, marcado: Boolean) {
+    fun alternarMarcado(itemId: String?, marcado: Boolean) {
         repository.atualizarItem(
             listaId = listaId,
             itemId = itemId,
@@ -106,7 +103,7 @@ class ListaComprasViewModel : ViewModel() {
         )
     }
 
-    fun alterarQuantidade(itemId: String, quantidade: Double) {
+    fun alterarQuantidade(itemId: String?, quantidade: Double) {
         if (quantidade <= 0.0) {
             removerItem(itemId)
             return
@@ -122,14 +119,14 @@ class ListaComprasViewModel : ViewModel() {
         )
     }
 
-    fun removerItem(itemId: String) {
+    fun removerItem(itemId: String?) {
         repository.removerItem(listaId, itemId, ::aoReceber, ::aoErrar, ::aoFalhar)
     }
 
     fun removerLista() {
         repository.remover(
             listaId = listaId,
-            itemIds = detalhe?.itens?.map { it.id }.orEmpty(),
+            itemIds = detalhe?.itens?.mapNotNull { it.id?.takeIf(String::isNotBlank) }.orEmpty(),
             onSuccess = { listener.listaRemovida() },
             onError = ::aoErrar,
             onFailure = ::aoFalhar
