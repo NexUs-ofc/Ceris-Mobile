@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Tablet. Vale a partir de 480dp de menor largura.
+    Tablet. Vale a partir de 600dp de menor largura, padrão recomendado pelo Android.
 
     O Galaxy Tab A7 Lite tem 1340x800 em 8.7 polegadas (~179 dpi). Conforme o
-    Android reporte 180 ou 240 dpi, a menor largura cai em 711dp ou 533dp - os
-    dois casos entram aqui. Celulares ficam de fora: os maiores param perto de
-    420dp de menor largura.
+    Android reporte sua densidade normal, a menor largura fica acima de 600dp.
+    Celulares e dobráveis estreitos permanecem com as medidas compactas.
 
     A regra nao e esticar: o conteudo cresce ate content_max_width e centraliza,
     e as grades passam a duas colunas.
@@ -27,6 +26,11 @@
     <dimen name="spacing_l">32dp</dimen>
     <dimen name="spacing_xl">44dp</dimen>
     <dimen name="spacing_xxl">72dp</dimen>
+
+    <!-- Scanner: controles continuam compactos e centralizados no tablet. -->
+    <dimen name="camera_modo_margin">48dp</dimen>
+    <dimen name="camera_modo_flash_gap">16dp</dimen>
+    <dimen name="camera_modo_max_width">360dp</dimen>
 
 
     <!--
@@ -156,6 +160,15 @@
 
     <dimen name="entrada_topo">96dp</dimen>
     <dimen name="icone_google">48dp</dimen>
+    <dimen name="address_top_margin">96dp</dimen>
+    <dimen name="address_section_gap">72dp</dimen>
+    <dimen name="address_button_gap">72dp</dimen>
+    <dimen name="loading_title_top">128dp</dimen>
+    <dimen name="loading_spinner_size">112dp</dimen>
+    <dimen name="loading_progress_size">132dp</dimen>
+    <dimen name="otp_content_max_width">480dp</dimen>
+    <dimen name="otp_digit_height">56dp</dimen>
+    <dimen name="otp_top_margin">160dp</dimen>
 
     <!-- Perfil -->
     <dimen name="perfil_margem_topo">96dp</dimen>

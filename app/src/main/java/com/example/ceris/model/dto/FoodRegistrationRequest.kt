@@ -20,3 +20,6 @@ data class FoodRegistrationRequest(
     /** yyyy-MM-dd, ou nulo para produto sem validade. */
     val expiryDate: String?
 )
+
+/** Lote atomico confirmado na revisao; limite do Core: 100 produtos. */
+data class FoodBatchRegistrationRequest(val products: List<FoodRegistrationRequest>)

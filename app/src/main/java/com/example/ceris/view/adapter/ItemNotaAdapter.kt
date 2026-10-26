@@ -70,6 +70,8 @@ class ItemNotaAdapter : RecyclerView.Adapter<ItemNotaAdapter.Card>() {
             // Filtrado, a posicao clicada nao e a do catalogo; por isso o produto
             // sai do rotulo clicado, nunca do indice.
             produto.setSimpleItems(rotulos)
+            // Candidato identificado pela OFF: não substituir por alimento não verificado do catálogo.
+            produto.isEnabled = item.produtoEncontrado == null
             val escolhidoAntes = porRotulo.values.firstOrNull { it.id == item.alimentoId }
             produto.setText(escolhidoAntes?.let(::rotulo) ?: item.alimentoNome.orEmpty(), false)
             produto.setOnItemClickListener { lista, _, posicao, _ ->

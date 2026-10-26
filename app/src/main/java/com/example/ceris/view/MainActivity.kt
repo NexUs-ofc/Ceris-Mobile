@@ -6,6 +6,11 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
+import android.content.pm.PackageManager
+import com.example.ceris.location.DeviceLocationSource
+import com.example.ceris.viewmodel.LocaisViewModel
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +47,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
  * recriaria a tela do zero.
  */
 class MainActivity : AppCompatActivity() {
+    private val locaisViewModel: LocaisViewModel by viewModels()
     private var notificationLinkConsumed = false
     private var perfilAberto = false
     private val notificationPermission =
@@ -78,6 +84,13 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        locaisViewModel.init(SessionManager(this), DeviceLocationSource(applicationContext))
+        if (listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION).any {
+                ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+            }) {
+            locaisViewModel.preload()
+        }
+
         barra = findViewById(R.id.nav_destinos)
 
         // A BottomNavigationView soma sozinha o recuo da barra do sistema ao
@@ -95,12 +108,14 @@ class MainActivity : AppCompatActivity() {
             if (nota != null && nota.isVisible) {
                 nota.capturar()
             } else {
+                limparSelecaoDaNavegacao()
                 mostrar(NOTA) { NotaFiscalFragment() }
             }
         }
 
         barra.setOnItemReselectedListener { }
         barra.setOnItemSelectedListener { item ->
+            if (item.itemId == R.id.nav_vao_scan) return@setOnItemSelectedListener true
             val destino = destinos[item.itemId] ?: return@setOnItemSelectedListener false
             mostrar(item.itemId, destino)
             true
@@ -114,6 +129,8 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             barra.selectedItemId = R.id.nav_estoque
             mostrar(R.id.nav_estoque) { EstoqueFragment() }
+        } else if (supportFragmentManager.fragments.any { it.tag == NOTA.toString() && it.isVisible }) {
+            limparSelecaoDaNavegacao()
         }
     }
 
@@ -160,6 +177,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         requestNotifications()
+    }
+
+    override fun onStop() {
+        locaisViewModel.onNotVisible()
+        super.onStop()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -251,6 +273,19 @@ class MainActivity : AppCompatActivity() {
 
             commit()
         }
+    }
+
+    /**
+     * Scan vive no botão central, fora do menu. Sem limpar o item marcado, tocar
+     * na aba anterior é tratado como reseleção e não navega de volta.
+     */
+    private fun limparSelecaoDaNavegacao() {
+        val vao = barra.menu.findItem(R.id.nav_vao_scan)
+        // O vão não desenha ícone nem rótulo. Selecioná-lo muda o ID interno
+        // da BottomNavigationView, para a aba anterior deixar de ser reseleção.
+        vao.isEnabled = true
+        barra.selectedItemId = R.id.nav_vao_scan
+        vao.isEnabled = false
     }
 
     private companion object {

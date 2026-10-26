@@ -47,24 +47,31 @@
         <!-- Os dois jeitos de ler: cada um com a sua moldura. -->
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/grupo_modo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/camera_modo_margin"
             android:layout_marginTop="@dimen/spacing_m"
-            app:checkedButton="@id/modo_nota"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/camera_modo_flash_gap"
+            app:checkedButton="@id/modo_codigo"
+            app:layout_constraintEnd_toStartOf="@id/btn_flash"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/preview"
+            app:layout_constraintWidth_max="@dimen/camera_modo_max_width"
             app:selectionRequired="true"
             app:singleSelection="true">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/modo_nota"
                 style="@style/BotaoModoCamera"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:text="@string/modo_nota" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/modo_codigo"
                 style="@style/BotaoModoCamera"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:text="@string/modo_codigo" />
 
         </com.google.android.material.button.MaterialButtonToggleGroup>

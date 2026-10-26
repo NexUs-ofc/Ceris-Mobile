@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telefones altos mantêm o respiro vertical do Figma. A base é compacta. -->
+<resources>
+    <dimen name="address_top_margin">64dp</dimen>
+    <dimen name="address_section_gap">50dp</dimen>
+    <dimen name="address_button_gap">50dp</dimen>
+    <dimen name="loading_title_top">112dp</dimen>
+    <dimen name="otp_top_margin">144dp</dimen>
+</resources>
