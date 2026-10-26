@@ -13,7 +13,7 @@
         android:contentDescription="@null"
         android:padding="15dp"
         android:src="@drawable/ic_menu_camera"
-        android:tint="@color/md_theme_primary" />
+        app:tint="@color/md_theme_primary" />
 
     <TextView
         style="@style/TituloSheet"
