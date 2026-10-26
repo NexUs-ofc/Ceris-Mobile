@@ -96,7 +96,6 @@
     <dimen name="divisor_altura">1dp</dimen>
 
     <!-- Receitas e listas -->
-    <dimen name="receita_imagem_size">62dp</dimen>
     <dimen name="botao_radius">32dp</dimen>
     <dimen name="progresso_altura">8dp</dimen>
 

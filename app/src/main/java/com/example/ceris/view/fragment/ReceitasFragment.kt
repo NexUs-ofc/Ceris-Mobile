@@ -1,63 +1,70 @@
 package com.example.ceris.view.fragment
 
+import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ceris.R
-import com.example.ceris.api.ApiBaseUrl
-import com.example.ceris.api.RecipeAPI
-import com.example.ceris.api.RetrofitClient
-import com.example.ceris.api.StockAPI
-import com.example.ceris.api.bearer
 import com.example.ceris.local.SessionManager
-import com.example.ceris.model.Receita
-import com.example.ceris.repository.ReceitasRepository
+import com.example.ceris.view.ChatbotActivity
 import com.example.ceris.view.DetalheReceitaActivity
 import com.example.ceris.view.adapter.ReceitaAdapter
+import com.example.ceris.viewmodel.ReceitasViewModel
 
-/**
- * Receitas salvas (Figma > Protótipos > V1 > Screen - Receitas). As que a
- * Cerita salvou na conversa aparecem aqui, vindas da Core.
- */
-class ReceitasFragment : Fragment(R.layout.fragment_receitas) {
+class ReceitasFragment : Fragment(R.layout.fragment_receitas), ReceitasViewModel.Listener {
+    private val viewModel: ReceitasViewModel by viewModels()
+    private val adapter =
+        ReceitaAdapter { receita ->
+            startActivity(DetalheReceitaActivity.intent(requireContext(), receita.id))
+        }
 
-    private val adapter = ReceitaAdapter { receita -> context?.let { DetalheReceitaActivity.abrir(it, receita) } }
-
-    private val repository by lazy {
-        ReceitasRepository(
-            RetrofitClient.getApiAutenticada(ApiBaseUrl.core, RecipeAPI::class.java),
-            RetrofitClient.getApiAutenticada(ApiBaseUrl.core, StockAPI::class.java)
-        )
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<RecyclerView>(R.id.lista_receitas).adapter = adapter
+        view.findViewById<TextView>(R.id.link_gerar_receita).apply {
+            paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            setOnClickListener { startActivity(Intent(requireContext(), ChatbotActivity::class.java)) }
+        }
+        view.findViewById<View>(R.id.btn_tentar_receitas).setOnClickListener { viewModel.carregar() }
+        viewModel.init(SessionManager(requireContext()))
+        viewModel.listener = this
     }
 
     override fun onResume() {
         super.onResume()
-        carregar()
+        if (!isHidden) viewModel.carregar()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if (!hidden) carregar()
+        if (!hidden && view != null && isResumed) viewModel.carregar()
     }
 
-    private fun carregar() {
-        val token = SessionManager(requireContext()).bearer() ?: return
-        repository.salvas(token, onSucesso = ::mostrar, onFalha = { mensagem ->
-            context?.let { Toast.makeText(it, mensagem, Toast.LENGTH_LONG).show() }
-        })
-    }
-
-    private fun mostrar(receitas: List<Receita>) {
+    override fun estadoAtualizado(estado: ReceitasViewModel.Estado) {
         val raiz = view ?: return
-        adapter.submitList(receitas)
-        raiz.findViewById<View>(R.id.estado_vazio_receitas).visibility =
-            if (receitas.isEmpty()) View.VISIBLE else View.GONE
+        val receitas = (estado as? ReceitasViewModel.Estado.Conteudo)?.receitas
+        raiz.findViewById<View>(R.id.progresso_receitas).isVisible = estado is ReceitasViewModel.Estado.Carregando
+        raiz.findViewById<View>(R.id.lista_receitas).isVisible = !receitas.isNullOrEmpty()
+        raiz.findViewById<View>(R.id.estado_receitas_vazio).isVisible = receitas?.isEmpty() == true
+        raiz.findViewById<View>(R.id.estado_receitas_erro).isVisible = estado is ReceitasViewModel.Estado.Erro
+        if (estado is ReceitasViewModel.Estado.Erro) {
+            raiz.findViewById<TextView>(R.id.txt_receitas_erro).text = estado.mensagem
+        }
+        adapter.submitList(receitas.orEmpty())
+    }
+
+    override fun onDestroyView() {
+        viewModel.listener = null
+        viewModel.cancelar()
+        view?.findViewById<RecyclerView>(R.id.lista_receitas)?.adapter = null
+        super.onDestroyView()
     }
 }

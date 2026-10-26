@@ -122,10 +122,8 @@
     <string name="mercado_sem_mapa">Nenhum app de mapas instalado.</string>
     <!-- Receitas -->
     <string name="receitas_titulo">Receitas salvas</string>
-    <string name="receita_imagem">Foto da receita</string>
     <string name="receita_tempo_icone">Tempo de preparo</string>
     <string name="receita_serve">Serve %1$d</string>
-    <string name="receita_ingredientes">Ingredientes</string>
     <string name="receita_modo_preparo">Modo de Preparo</string>
     <string name="receitas_vazio">Você ainda não salvou receitas. Peça uma para a Cerita!</string>
 
