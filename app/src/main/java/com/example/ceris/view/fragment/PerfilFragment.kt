@@ -17,28 +17,29 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.ceris.R
 import com.example.ceris.api.ApiBaseUrl
 import com.example.ceris.api.ProfileAPI
 import com.example.ceris.api.RetrofitClient
 import com.example.ceris.api.aoTerminar
 import com.example.ceris.api.bearer
-import com.example.ceris.local.FotoPerfilStore
 import com.example.ceris.local.ListaLocalStore
 import com.example.ceris.local.SessionManager
 import com.example.ceris.model.dto.ProfileResponse
 import com.example.ceris.notification.PushNotifications
+import com.example.ceris.util.FotoPerfilUpload
 import com.example.ceris.view.LoginActivity
 import com.example.ceris.view.MainActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 /**
  * Perfil (Figma > Protótipos > V1 > ProfileScreen).
  *
- * Nome e e-mail vêm da Core; a foto escolhida no aparelho tem prioridade sobre
- * a URL da Core. Personalização abre o popup de edição.
+ * Nome, e-mail e foto vêm da Core. Personalização abre o popup de edição.
  */
 class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Listener {
 
@@ -47,6 +48,8 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
     private var perfil: ProfileResponse? = null
     private var voltarCallback: OnBackPressedCallback? = null
     private var fotoPendente: Uri? = null
+    private var enviandoFoto = false
+    private var versaoFoto = 0
     private val escolherFoto = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) guardarFoto(uri)
     }
@@ -116,10 +119,15 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
     }
 
     private fun carregar() {
-        val token = SessionManager(requireContext()).bearer() ?: return
+        val sessao = SessionManager(requireContext())
+        val atual = sessao.snapshot() ?: return
+        val token = sessao.bearer() ?: return
+        val versao = versaoFoto
         api.buscar(token).aoTerminar(
-            onSucesso = { recebido -> recebido?.let(::mostrar) },
-            onFalha = ::avisar
+            onSucesso = { recebido ->
+                if (sessao.isCurrent(atual) && versao == versaoFoto && !enviandoFoto) recebido?.let(::mostrar)
+            },
+            onFalha = { mensagem -> if (sessao.isCurrent(atual)) avisar(mensagem) }
         )
     }
 
@@ -135,20 +143,16 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
 
     private fun mostrarFoto() {
         val foto = view?.findViewById<ImageView>(R.id.img_perfil) ?: return
-        val local = FotoPerfilStore(requireContext()).buscar(
-            SessionManager(requireContext()).snapshot()?.profileId
-        )
         Glide.with(foto)
-            .load(local ?: perfil?.profileImageUrl?.takeIf { it.isNotBlank() })
+            .load(perfil?.profileImageUrl?.takeIf { it.isNotBlank() })
             .placeholder(R.drawable.ic_menu_user)
             .error(R.drawable.ic_menu_user)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
             .circleCrop()
             .into(foto)
     }
 
     private fun escolherOrigemFoto() {
+        if (enviandoFoto) return
         if (SessionManager(requireContext()).snapshot()?.profileId == null) {
             avisar(getString(R.string.perfil_carregando))
             return
@@ -180,16 +184,36 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
 
     private fun guardarFoto(uri: Uri) {
         val contexto = context ?: return
-        val profileId = SessionManager(contexto).snapshot()?.profileId ?: return
+        val sessao = SessionManager(contexto)
+        val atual = sessao.snapshot() ?: return
+        val profileId = atual.profileId ?: return
+        if (enviandoFoto) return
+        enviandoFoto = true
+        versaoFoto++
         Thread {
-            val resultado = runCatching { FotoPerfilStore(contexto.applicationContext).salvar(profileId, uri) }
+            val resultado = runCatching {
+                val jpeg = FotoPerfilUpload.preparar(contexto.applicationContext, uri)
+                val corpo = RequestBody.create(MediaType.parse("image/jpeg"), jpeg)
+                val parte = MultipartBody.Part.createFormData("file", "perfil.jpg", corpo)
+                val resposta = api.enviarFoto("Bearer ${atual.accessToken}", parte).execute()
+                val imagem = resposta.body()
+                check(resposta.isSuccessful && imagem?.profileId == profileId && !imagem?.profileImageUrl.isNullOrBlank()) {
+                    "Falha no upload da foto"
+                }
+                imagem?.profileImageUrl ?: error("Foto sem URL")
+            }
             activity?.runOnUiThread {
                 if (!isAdded) return@runOnUiThread
-                if (SessionManager(requireContext()).snapshot()?.profileId != profileId) return@runOnUiThread
-                resultado.onSuccess {
+                enviandoFoto = false
+                if (!sessao.isCurrent(atual)) return@runOnUiThread
+                resultado.onSuccess { url ->
+                    perfil = (perfil ?: ProfileResponse(id = profileId)).copy(profileImageUrl = url)
                     mostrarFoto()
                     avisar(getString(R.string.perfil_foto_salva))
-                }.onFailure { avisar(getString(R.string.perfil_foto_falha)) }
+                }.onFailure {
+                    avisar(getString(R.string.perfil_foto_falha))
+                    carregar()
+                }
             }
         }.start()
     }
