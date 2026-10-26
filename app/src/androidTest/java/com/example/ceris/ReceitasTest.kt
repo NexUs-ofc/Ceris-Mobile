@@ -3,6 +3,7 @@ package com.example.ceris
 import android.app.Activity
 import android.graphics.Bitmap
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.ImageView
@@ -11,12 +12,15 @@ import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -32,6 +36,7 @@ import com.example.ceris.viewmodel.DetalheReceitaViewModel
 import com.example.ceris.viewmodel.ReceitasViewModel
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
+import org.hamcrest.Matcher
 import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -303,6 +308,10 @@ class ReceitasTest {
     ) {
         val card = activity.findViewById<LinearLayout>(R.id.passos_receita).getChildAt(indice) as MaterialCardView
         val cabecalho = card.findViewById<View>(R.id.cabecalho_passo)
+        val numero = card.findViewById<TextView>(R.id.numero_passo)
+        assertEquals((indice + 1).toString(), numero.text.toString())
+        assertEquals(activity.getColor(R.color.md_theme_primary), numero.currentTextColor)
+        assertTrue(card.findViewById<TextView>(R.id.titulo_passo).typeface.isBold)
         assertEquals(
             activity.getColor(if (expandido) R.color.md_theme_primary else R.color.ceris_white),
             card.cardBackgroundColor.defaultColor,
@@ -345,6 +354,23 @@ class ReceitasTest {
     }
 
     private fun screenshot(name: String) {
+        onView(isRoot()).perform(
+            object : ViewAction {
+                override fun getConstraints(): Matcher<View> = isRoot()
+
+                override fun getDescription() = "Aguardar o estado visual final dos cards"
+
+                override fun perform(
+                    uiController: UiController,
+                    view: View,
+                ) {
+                    uiController.loopMainThreadForAtLeast(ViewConfiguration.getPressedStateDuration().toLong())
+                    view.jumpDrawablesToCurrentState()
+                    val doisFrames = (2_000f / (view.display?.refreshRate ?: 60f)).toLong()
+                    uiController.loopMainThreadForAtLeast(doisFrames)
+                }
+            },
+        )
         instrumentation.waitForIdleSync()
         val directory = File(context.getExternalFilesDir(null), "receitas-tests").apply { mkdirs() }
         File(directory, "$name.png").outputStream().use {
