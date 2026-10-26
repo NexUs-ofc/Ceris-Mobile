@@ -187,4 +187,40 @@ class LocaisViewModelTest {
         callbacks[0](LocaisResult.Empty(""))
         assertEquals(LocaisUiState(LocaisStatus.EMPTY), model.state.value)
     }
+
+    @Test
+    fun alterarOrigemCancelaBuscaAnteriorEConsultaEnderecoSalvoSemGps() {
+        val device = mutableListOf<(LocaisResult) -> Unit>()
+        val saved = mutableListOf<(LocaisResult) -> Unit>()
+        var canceled = 0
+        val choosing = LocaisViewModel(
+            generation = { "current" },
+            load = { callback ->
+                val cancel = { canceled++; Unit }
+                device += callback
+                cancel
+            },
+            loadSavedAddress = { callback ->
+                val cancel = { canceled++; Unit }
+                saved += callback
+                cancel
+            },
+        )
+
+        choosing.onVisible()
+        choosing.selectSavedAddress()
+        assertEquals(1, canceled)
+        assertEquals(1, saved.size)
+        assertTrue(choosing.state.value.usesProfileAddress)
+        saved[0](LocaisResult.Loaded("Rua salva, 123", listOf(local)))
+        device[0](LocaisResult.Empty("resposta antiga"))
+        assertEquals("Rua salva, 123", choosing.state.value.address)
+
+        choosing.selectDeviceLocation()
+        assertEquals(2, device.size)
+        assertEquals(2, canceled)
+        assertTrue(!choosing.state.value.usesProfileAddress)
+        device[1](LocaisResult.Empty(""))
+        assertEquals(LocaisStatus.EMPTY, choosing.state.value.status)
+    }
 }

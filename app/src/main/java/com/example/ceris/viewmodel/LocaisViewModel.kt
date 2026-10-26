@@ -24,6 +24,8 @@ enum class LocaisStatus {
     LOCATION_UNAVAILABLE,
 }
 
+enum class LocaisSource { DEVICE, SAVED_ADDRESS }
+
 data class LocaisUiState(
     val status: LocaisStatus = LocaisStatus.IDLE,
     val address: String = "",
@@ -35,20 +37,24 @@ data class LocaisUiState(
 class LocaisViewModel() : ViewModel() {
     private var generation: () -> String? = { null }
     private var load: (((LocaisResult) -> Unit) -> (() -> Unit))? = null
+    private var loadSavedAddress: (((LocaisResult) -> Unit) -> (() -> Unit))? = null
     private var owner: String? = null
     private var sequence = 0L
     private var cancel: (() -> Unit)? = null
     private var visible = false
     private var permissionDenied = false
+    private var selectedSource = LocaisSource.DEVICE
     private val mutableState = MutableStateFlow(LocaisUiState())
     val state = mutableState.asStateFlow()
 
     internal constructor(
         generation: () -> String?,
+        loadSavedAddress: (((LocaisResult) -> Unit) -> (() -> Unit))? = null,
         load: ((LocaisResult) -> Unit) -> (() -> Unit),
     ) : this() {
         this.generation = generation
         this.load = load
+        this.loadSavedAddress = loadSavedAddress ?: load
     }
 
     fun init(
@@ -68,6 +74,7 @@ class LocaisViewModel() : ViewModel() {
                 repository.load(latitude = point.latitude, longitude = point.longitude, deliver = deliver)::cancel
             }
         load = loader::load
+        loadSavedAddress = { deliver -> repository.load(deliver = deliver)::cancel }
     }
 
     /** onResume e show/hide podem chamar juntos sem repetir a consulta. */
@@ -78,6 +85,7 @@ class LocaisViewModel() : ViewModel() {
         if (current != owner) {
             invalidate()
             owner = current
+            selectedSource = LocaisSource.DEVICE
             mutableState.value = LocaisUiState()
         }
         if (current == null) {
@@ -89,7 +97,7 @@ class LocaisViewModel() : ViewModel() {
 
     /** Retry ou resultado de um endereco efetivamente salvo. */
     fun refresh() {
-        val source = load ?: return
+        val source = (if (selectedSource == LocaisSource.SAVED_ADDRESS) loadSavedAddress else load) ?: return
         visible = true
         val current = generation()
         val previousAddress = state.value.address.takeIf { current == owner }.orEmpty()
@@ -99,7 +107,11 @@ class LocaisViewModel() : ViewModel() {
             mutableState.value = LocaisUiState(LocaisStatus.AUTH_REQUIRED)
             return
         }
-        mutableState.value = LocaisUiState(LocaisStatus.LOADING, previousAddress)
+        mutableState.value = LocaisUiState(
+            LocaisStatus.LOADING,
+            previousAddress,
+            usesProfileAddress = selectedSource == LocaisSource.SAVED_ADDRESS,
+        )
         val request = sequence
         val cancellation =
             source { result ->
@@ -164,9 +176,21 @@ class LocaisViewModel() : ViewModel() {
         permissionDenied = allowed
     }
 
+    fun selectSavedAddress() {
+        if (selectedSource != LocaisSource.SAVED_ADDRESS) mutableState.value = LocaisUiState()
+        selectedSource = LocaisSource.SAVED_ADDRESS
+        refresh()
+    }
+
+    fun selectDeviceLocation() {
+        if (selectedSource != LocaisSource.DEVICE) mutableState.value = LocaisUiState()
+        selectedSource = LocaisSource.DEVICE
+        refresh()
+    }
+
     fun onLocationPermissionResult(granted: Boolean) {
         permissionDenied = !granted
-        refresh()
+        if (selectedSource == LocaisSource.DEVICE) refresh()
     }
 
     override fun onCleared() {
