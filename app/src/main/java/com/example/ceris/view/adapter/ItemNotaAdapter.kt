@@ -110,6 +110,7 @@ class ItemNotaAdapter : RecyclerView.Adapter<ItemNotaAdapter.Card>() {
 
             DatePickerDialog(
                 itemView.context,
+                R.style.TemaCalendarioCeris,
                 { _, ano, mes, dia ->
                     val escolhida = Calendar.getInstance().apply { set(ano, mes, dia) }
                     item.validade = ISO.format(escolhida.time)

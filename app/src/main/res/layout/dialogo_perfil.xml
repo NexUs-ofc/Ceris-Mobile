@@ -15,6 +15,11 @@
         android:padding="@dimen/perfil_dialogo_padding">
 
         <TextView
+            style="@style/TituloSheet"
+            android:layout_marginBottom="@dimen/spacing_l"
+            android:text="@string/perfil_personalizacao" />
+
+        <TextView
             style="@style/RotuloPerfil"
             android:text="@string/perfil_nome" />
 

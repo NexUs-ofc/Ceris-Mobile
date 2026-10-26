@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dialogo_padding">
+
+    <ImageView
+        android:id="@+id/icone_popup"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/bg_popup_icone"
+        android:padding="15dp"
+        android:contentDescription="@null"
+        android:tint="@color/md_theme_primary" />
+
+    <TextView
+        android:id="@+id/titulo_popup"
+        style="@style/TituloSheet"
+        android:layout_marginTop="@dimen/spacing_l" />
+
+    <TextView
+        android:id="@+id/mensagem_popup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_s"
+        android:fontFamily="@font/montserrat"
+        android:lineSpacingExtra="4dp"
+        android:textColor="@color/ceris_cinza"
+        android:textSize="@dimen/text_size_14" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_confirmar_popup"
+        style="@style/BotaoPrincipal"
+        android:layout_marginTop="@dimen/spacing_l" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_cancelar_popup"
+        style="@style/BotaoContorno"
+        android:layout_marginTop="@dimen/spacing_s" />
+    </LinearLayout>
+</ScrollView>

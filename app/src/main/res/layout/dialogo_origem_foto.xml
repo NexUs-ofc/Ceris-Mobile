@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/dialogo_padding">
+
+    <ImageView
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/bg_popup_icone"
+        android:contentDescription="@null"
+        android:padding="15dp"
+        android:src="@drawable/ic_menu_camera"
+        android:tint="@color/md_theme_primary" />
+
+    <TextView
+        style="@style/TituloSheet"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:text="@string/perfil_escolher_foto" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xs"
+        android:text="@string/perfil_escolher_foto_instrucao"
+        android:textColor="@color/ceris_cinza"
+        android:textSize="@dimen/text_size_14" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_foto_camera"
+        style="@style/BotaoPrincipal"
+        android:layout_marginTop="@dimen/spacing_l"
+        android:text="@string/perfil_tirar_foto"
+        app:icon="@drawable/ic_menu_camera"
+        app:iconGravity="textStart"
+        app:iconTint="@color/md_theme_onPrimary" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_foto_galeria"
+        style="@style/BotaoContorno"
+        android:layout_marginTop="@dimen/spacing_s"
+        android:text="@string/perfil_galeria"
+        app:icon="@drawable/ic_menu_image"
+        app:iconGravity="textStart"
+        app:iconTint="@color/md_theme_primary" />
+
+    <TextView
+        android:id="@+id/btn_cancelar_foto"
+        style="@style/LinkCancelar"
+        android:layout_marginTop="@dimen/spacing_s" />
+</LinearLayout>

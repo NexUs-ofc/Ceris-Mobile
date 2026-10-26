@@ -30,7 +30,9 @@ import com.example.ceris.notification.PushNotifications
 import com.example.ceris.util.FotoPerfilUpload
 import com.example.ceris.view.LoginActivity
 import com.example.ceris.view.MainActivity
+import com.example.ceris.view.utils.PopupCeris
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.button.MaterialButton
 import java.io.File
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -85,15 +87,15 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
 
         opcao(view, R.id.opcao_personalizacao, R.drawable.ic_menu_user, R.string.perfil_personalizacao) { editar() }
         opcao(view, R.id.opcao_privacidade, R.drawable.ic_menu_lock, R.string.perfil_privacidade) {
-            texto(R.string.perfil_privacidade, R.string.perfil_privacidade_texto)
+            texto(R.string.perfil_privacidade, R.string.perfil_privacidade_texto, R.drawable.ic_menu_lock)
         }
         opcao(view, R.id.opcao_termos, R.drawable.ic_menu_file_text, R.string.perfil_termos) {
-            texto(R.string.perfil_termos, R.string.perfil_termos_texto)
+            texto(R.string.perfil_termos, R.string.perfil_termos_texto, R.drawable.ic_menu_file_text)
         }
         opcao(view, R.id.opcao_sobre, R.drawable.ic_menu_info, R.string.perfil_sobre) {
-            texto(R.string.perfil_sobre, R.string.perfil_sobre_texto)
+            texto(R.string.perfil_sobre, R.string.perfil_sobre_texto, R.drawable.ic_menu_info)
         }
-        opcao(view, R.id.btn_sair, R.drawable.ic_menu_log_out, R.string.perfil_sair) { sair() }
+        opcao(view, R.id.btn_sair, R.drawable.ic_menu_log_out, R.string.perfil_sair) { confirmarSaida() }
 
         // Sair e vermelho e sem seta, como no Figma.
         view.findViewById<View>(R.id.btn_sair).apply {
@@ -157,20 +159,24 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
             avisar(getString(R.string.perfil_carregando))
             return
         }
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.perfil_escolher_foto)
-            .setItems(arrayOf(getString(R.string.perfil_tirar_foto), getString(R.string.perfil_galeria))) { _, opcao ->
-                if (opcao == 0) {
-                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        abrirCamera()
-                    } else {
-                        pedirCamera.launch(Manifest.permission.CAMERA)
-                    }
-                } else {
-                    escolherFoto.launch("image/*")
-                }
+        val conteudo = layoutInflater.inflate(R.layout.dialogo_origem_foto, null)
+        val dialogo = MaterialAlertDialogBuilder(requireContext())
+            .setView(conteudo)
+            .create()
+        conteudo.findViewById<MaterialButton>(R.id.btn_foto_camera).setOnClickListener {
+            dialogo.dismiss()
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                abrirCamera()
+            } else {
+                pedirCamera.launch(Manifest.permission.CAMERA)
             }
-            .show()
+        }
+        conteudo.findViewById<MaterialButton>(R.id.btn_foto_galeria).setOnClickListener {
+            dialogo.dismiss()
+            escolherFoto.launch("image/*")
+        }
+        conteudo.findViewById<View>(R.id.btn_cancelar_foto).setOnClickListener { dialogo.dismiss() }
+        dialogo.show()
     }
 
     private fun abrirCamera() {
@@ -237,12 +243,27 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil), EditarPerfilDialog.Li
         avisar(getString(R.string.perfil_salvo))
     }
 
-    private fun texto(@StringRes titulo: Int, @StringRes corpo: Int) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(titulo)
-            .setMessage(corpo)
-            .setPositiveButton(R.string.perfil_fechar, null)
-            .show()
+    private fun texto(@StringRes titulo: Int, @StringRes corpo: Int, @DrawableRes icone: Int) {
+        PopupCeris.mostrar(
+            contexto = requireContext(),
+            titulo = getString(titulo),
+            mensagem = getString(corpo),
+            icone = icone,
+            confirmar = getString(R.string.perfil_fechar)
+        )
+    }
+
+    private fun confirmarSaida() {
+        PopupCeris.mostrar(
+            contexto = requireContext(),
+            titulo = getString(R.string.perfil_sair_confirmar_titulo),
+            mensagem = getString(R.string.perfil_sair_confirmar_mensagem),
+            icone = R.drawable.ic_menu_log_out,
+            confirmar = getString(R.string.perfil_sair_confirmar_botao),
+            cancelar = getString(R.string.lista_nome_cancelar),
+            destrutivo = true,
+            aoConfirmar = ::sair
+        )
     }
 
     private fun avisar(mensagem: String) {

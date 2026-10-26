@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/perfil_dialogo_padding"
+    android:paddingEnd="@dimen/perfil_dialogo_padding"
+    android:paddingBottom="@dimen/spacing_s">
+
+    <EditText
+        android:id="@+id/campo_outra_restricao"
+        style="@style/CampoPerfil"
+        android:hint="@string/perfil_restricao_hint"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences" />
+</LinearLayout>
