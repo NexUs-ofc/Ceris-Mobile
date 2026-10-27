@@ -10,7 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -27,7 +27,7 @@ import com.example.ceris.viewmodel.LocaisViewModel
 import kotlinx.coroutines.launch
 
 class LocaisFragment : Fragment(R.layout.fragment_locais), AlterarEnderecoDialog.Listener {
-    private val viewModel: LocaisViewModel by viewModels()
+    private val viewModel: LocaisViewModel by activityViewModels()
     private var permissionRequested = false
     private val locationPermission =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {

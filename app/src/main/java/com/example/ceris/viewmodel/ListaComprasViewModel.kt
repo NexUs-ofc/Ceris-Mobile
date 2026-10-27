@@ -25,6 +25,7 @@ class ListaComprasViewModel : ViewModel() {
     // Guardado para os extras locais: adicionarItem precisa saber quais ids ja
     // existiam, e remover a lista precisa dos ids antes do DELETE.
     private var detalhe: ShoppingListRepository.Detalhe? = null
+    private var removendoLista = false
 
     interface Listener {
         fun makeText(message: String)
@@ -124,12 +125,20 @@ class ListaComprasViewModel : ViewModel() {
     }
 
     fun removerLista() {
+        if (removendoLista || detalhe == null) return
+        removendoLista = true
         repository.remover(
             listaId = listaId,
             itemIds = detalhe?.itens?.mapNotNull { it.id?.takeIf(String::isNotBlank) }.orEmpty(),
             onSuccess = { listener.listaRemovida() },
-            onError = ::aoErrar,
-            onFailure = ::aoFalhar
+            onError = { code, body ->
+                removendoLista = false
+                aoErrar(code, body)
+            },
+            onFailure = { error ->
+                removendoLista = false
+                aoFalhar(error)
+            }
         )
     }
 

@@ -47,6 +47,7 @@
     <string name="nota_produto">Produto</string>
     <string name="nota_definir_validade">Definir validade</string>
     <string name="nota_validade">Vence em %1$s</string>
+    <string name="lista_calendario">Calendário da lista</string>
     <string name="codigo_subtitulo">A IA detectou estes dados. Toque em qualquer campo para corrigir se necessário.</string>
     <string name="codigo_titulo">Confirmar dados do produto</string>
     <string name="codigo_nome">Nome do item</string>
@@ -304,4 +305,23 @@ Tente novamente ou volte ao início.</string>
     <string name="redefinir_nova">Nova senha</string>
     <string name="redefinir_confirmar">Confirme a nova senha</string>
     <string name="lista_item_somente_consulta">%1$s · Somente consulta</string>
+    <string name="lista_excluir_titulo">Excluir lista?</string>
+    <string name="lista_excluir_aviso">A lista e todos os seus itens serão excluídos. Essa ação não pode ser desfeita.</string>
+    <string name="lista_item_excluir_titulo">Excluir item?</string>
+    <string name="lista_item_excluir_aviso">%1$s\n\nO item será removido desta lista. Essa ação não pode ser desfeita.</string>
+    <plurals name="nota_produtos_ignorados">
+        <item quantity="one">Não consegui identificar %d produto com segurança. Ele não foi listado; cadastre manualmente ou escaneie o código de barras.</item>
+        <item quantity="other">Não consegui identificar %d produtos com segurança. Eles não foram listados; cadastre manualmente ou escaneie os códigos de barras.</item>
+    </plurals>
+    <string name="nota_busca_parcial">Parte da busca está temporariamente indisponível.</string>
+    <string name="nota_busca_indisponivel">A busca de produtos está indisponível. Tente novamente ou cadastre manualmente pelo código de barras. Nenhum item foi adicionado.</string>
+    <string name="cadastro_endereco_titulo">Seu endereço</string>
+    <string name="endereco_subtitulo">Vamos encontrar mercados perto de você</string>
+    <string name="endereco_cep">CEP</string>
+    <string name="endereco_rua">Rua</string>
+    <string name="cadastro_endereco_numero">Número</string>
+    <string name="endereco_bairro">Bairro</string>
+    <string name="endereco_cidade">Cidade</string>
+    <string name="endereco_estado">Estado</string>
+    <string name="endereco_registrar">Registrar</string>
 </resources>

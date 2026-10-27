@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Medidas do celular padrao.
-    O tablet sobrescreve estes valores em values-sw480dp/dimens.xml.
+    O tablet sobrescreve estes valores em values-sw600dp/dimens.xml.
     Nenhum layout deve voltar a fixar dp direto: sempre referenciar daqui.
 -->
 <resources>
@@ -176,17 +176,30 @@
     <dimen name="camera_botao">56dp</dimen>
     <dimen name="camera_botao_icone">26dp</dimen>
     <dimen name="camera_flash">40dp</dimen>
+    <dimen name="camera_modo_margin">16dp</dimen>
+    <dimen name="camera_modo_flash_gap">8dp</dimen>
+    <dimen name="camera_modo_max_width">320dp</dimen>
 
     <!-- Card da nota -->
     <dimen name="nota_card_radius">14dp</dimen>
     <dimen name="pilula_altura">50dp</dimen>
     <dimen name="pilula_raio">25dp</dimen>
-    <dimen name="moldura_espaco_topo">72dp</dimen>
+    <dimen name="moldura_espaco_topo">120dp</dimen>
     <dimen name="moldura_espaco_dica">96dp</dimen>
 
     <!-- Telas de entrada (login, cadastro, senha): distancia do titulo ao topo -->
     <dimen name="entrada_topo">56dp</dimen>
     <dimen name="icone_google">40dp</dimen>
+    <!-- Base compacta: telefones baixos e paisagem não podem cortar ações. -->
+    <dimen name="address_top_margin">32dp</dimen>
+    <dimen name="address_section_gap">24dp</dimen>
+    <dimen name="address_button_gap">24dp</dimen>
+    <dimen name="loading_title_top">72dp</dimen>
+    <dimen name="loading_spinner_size">96dp</dimen>
+    <dimen name="loading_progress_size">115dp</dimen>
+    <dimen name="otp_content_max_width">392dp</dimen>
+    <dimen name="otp_digit_height">48dp</dimen>
+    <dimen name="otp_top_margin">72dp</dimen>
 
     <!-- Perfil -->
     <dimen name="perfil_margem_topo">96dp</dimen>

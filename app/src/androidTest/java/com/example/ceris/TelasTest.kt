@@ -89,11 +89,11 @@ class TelasTest {
     fun camera_com_os_dois_modos_e_cadastro_por_codigo() {
         tela(TelaDeTesteActivity.TELA_NOTA).use { cena ->
             Thread.sleep(3_000)
-            print("2_camera_modo_nota")
+            print("2_camera_modo_codigo_inicial")
 
-            cena.onActivity { it.findViewById<android.view.View>(R.id.modo_codigo).performClick() }
+            cena.onActivity { it.findViewById<android.view.View>(R.id.modo_nota).performClick() }
             Thread.sleep(1_500)
-            print("3_camera_modo_codigo")
+            print("3_camera_modo_nota")
 
             // Mesmo caminho do leitor: um GTIN valido abre o cadastro.
             // Mesmo caminho do leitor: aberto pela tela da camera, que volta a

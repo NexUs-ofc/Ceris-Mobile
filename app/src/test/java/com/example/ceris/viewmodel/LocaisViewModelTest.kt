@@ -66,7 +66,7 @@ class LocaisViewModelTest {
         assertEquals(1, callbacks.size)
         model.refresh()
         assertEquals("Rua A", model.state.value.address)
-        assertTrue(model.state.value.locais.isEmpty())
+        assertEquals(listOf(local), model.state.value.locais)
         callbacks[1](LocaisResult.Loaded("Endereco salvo", listOf(local.copy(id = "99"))))
         assertEquals("Endereco salvo", model.state.value.address)
         assertEquals("99", model.state.value.locais.single().id)
@@ -222,5 +222,47 @@ class LocaisViewModelTest {
         assertTrue(!choosing.state.value.usesProfileAddress)
         device[1](LocaisResult.Empty(""))
         assertEquals(LocaisStatus.EMPTY, choosing.state.value.status)
+    }
+
+    @Test
+    fun preloadConcluidoApareceSemNovaConsultaAoAbrirAba() {
+        model.preload()
+        callbacks.single()(content)
+        model.onVisible()
+        assertEquals(1, callbacks.size)
+        assertEquals(listOf(local), model.state.value.locais)
+    }
+
+    @Test
+    fun abrirDurantePreloadNaoCancelaNemDuplicaConsulta() {
+        model.preload()
+        model.onVisible()
+        assertEquals(1, callbacks.size)
+        assertEquals(0, cancelled)
+        callbacks.single()(content)
+        assertEquals(LocaisStatus.CONTENT, model.state.value.status)
+    }
+
+    @Test
+    fun voltarParaAbaPreservaCardsDuranteAtualizacaoDaMesmaOrigem() {
+        model.onVisible()
+        callbacks.single()(content)
+        model.onNotVisible()
+        model.onVisible()
+        assertEquals(2, callbacks.size)
+        assertEquals(listOf(local), model.state.value.locais)
+        callbacks.last()(LocaisResult.QueryStarted(false))
+        assertEquals(listOf(local), model.state.value.locais)
+    }
+
+    @Test
+    fun preloadNuncaReaproveitaDadosDeOutraSessao() {
+        model.preload()
+        callbacks.single()(content)
+        generation = "another"
+        model.onVisible()
+        assertTrue(model.state.value.locais.isEmpty())
+        assertEquals(LocaisStatus.LOADING, model.state.value.status)
+
     }
 }

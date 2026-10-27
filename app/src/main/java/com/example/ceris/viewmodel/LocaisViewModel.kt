@@ -90,8 +90,16 @@ class LocaisViewModel() : ViewModel() {
         }
         if (current == null) {
             mutableState.value = LocaisUiState(LocaisStatus.AUTH_REQUIRED)
-        } else if (returning || state.value.status == LocaisStatus.IDLE) {
+        } else if ((returning && cancel == null) || state.value.status == LocaisStatus.IDLE) {
             refresh()
+        }
+    }
+
+    /** Aquece o cache sem pedir permissao nem depender da abertura da aba. */
+    fun preload() {
+        if (state.value.status == LocaisStatus.IDLE && cancel == null) {
+            refresh()
+            visible = false
         }
     }
 
@@ -100,14 +108,18 @@ class LocaisViewModel() : ViewModel() {
         val source = (if (selectedSource == LocaisSource.SAVED_ADDRESS) loadSavedAddress else load) ?: return
         visible = true
         val current = generation()
-        val previousAddress = state.value.address.takeIf { current == owner }.orEmpty()
+        val previous = state.value.takeIf { current == owner }
+        val previousAddress = previous?.address.orEmpty()
         invalidate()
         owner = current
         if (current == null) {
             mutableState.value = LocaisUiState(LocaisStatus.AUTH_REQUIRED)
             return
         }
-        mutableState.value = LocaisUiState(
+        mutableState.value = previous?.takeIf {
+            it.status in setOf(LocaisStatus.CONTENT, LocaisStatus.EMPTY) &&
+                it.usesProfileAddress == (selectedSource == LocaisSource.SAVED_ADDRESS)
+        } ?: LocaisUiState(
             LocaisStatus.LOADING,
             previousAddress,
             usesProfileAddress = selectedSource == LocaisSource.SAVED_ADDRESS,

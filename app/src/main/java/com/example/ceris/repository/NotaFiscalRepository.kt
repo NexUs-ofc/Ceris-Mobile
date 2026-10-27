@@ -11,7 +11,6 @@ import com.example.ceris.local.SessionManager
 import com.example.ceris.model.ItemNota
 import com.example.ceris.model.dto.FoodResponse
 import com.example.ceris.model.dto.ReceiptScanResponse
-import com.example.ceris.model.dto.StockItemRequest
 import com.example.ceris.model.dto.StockItemResponse
 import com.google.gson.JsonParseException
 import com.google.gson.stream.MalformedJsonException
@@ -74,7 +73,10 @@ class NotaFiscalRepository(
     }
 
     /** A tela saiu: para de perguntar pela leitura em andamento. */
-    fun cancelarLeitura() = acompanhamento.cancelar()
+    fun cancelarLeitura() {
+        acompanhamento.cancelar()
+        busca.cancelar()
+    }
 
     fun catalogo(onSuccess: (List<FoodResponse>) -> Unit, onFailure: (Throwable) -> Unit) {
         val autorizacao = autorizacao() ?: return onFailure(ShoppingListRepository.SemSessao())
@@ -101,44 +103,60 @@ class NotaFiscalRepository(
         )
     }
 
-    /**
-     * Grava um por um, em sequencia. A Core nao tem inclusao em lote, e
-     * disparar tudo junto faria a contagem de falhas depender da ordem em que
-     * as respostas voltam.
-     */
+    private val busca = ProdutosNotaRepository(com.example.ceris.api.openfoodfacts.OpenFoodFactsClient.api)
+
+    fun buscarProdutos(
+        nomes: List<String>,
+        sucesso: (com.example.ceris.model.dto.FoodLookupResponse) -> Unit,
+        falha: (Throwable) -> Unit,
+    ) {
+        val sessao = sessionManager.snapshot() ?: return falha(ShoppingListRepository.SemSessao())
+        busca.buscar(nomes) { resposta ->
+            if (sessionManager.isCurrent(sessao)) sucesso(resposta)
+            else falha(ShoppingListRepository.SemSessao())
+        }
+    }
+
+    /** Salva somente a selecao confirmada, em lotes de ate 100 produtos. Sem retry de escrita. */
     fun salvar(itens: List<ItemNota>, aoTerminar: (salvos: Int, falhas: Int) -> Unit) {
-        val autorizacao = autorizacao() ?: return aoTerminar(0, itens.size)
-
+        val sessao = sessionManager.snapshot() ?: return aoTerminar(0, itens.size)
+        val lotes = itens.chunked(100)
         fun proximo(indice: Int, salvos: Int, falhas: Int) {
-            if (indice == itens.size) {
-                return aoTerminar(salvos, falhas)
+            if (indice >= lotes.size) return aoTerminar(salvos, falhas)
+            if (!sessionManager.isCurrent(sessao)) {
+                return aoTerminar(salvos, falhas + lotes.drop(indice).sumOf { it.size })
             }
-
-            val item = itens[indice]
-            val alimento = item.alimentoId ?: return proximo(indice + 1, salvos, falhas + 1)
-
-            estoqueApi.adicionar(
-                autorizacao,
-                StockItemRequest(foodId = alimento, quantity = item.quantidade, expiryDate = item.validade)
-            ).enqueue(
-                object : Callback<StockItemResponse> {
-                    override fun onResponse(call: Call<StockItemResponse>, response: Response<StockItemResponse>) {
-                        if (response.isSuccessful) {
-                            proximo(indice + 1, salvos + 1, falhas)
-                        } else {
-                            Log.e(TAG, "salvar ${item.nomeNaNota}: HTTP ${response.code()}")
-                            proximo(indice + 1, salvos, falhas + 1)
-                        }
+            val lote = lotes[indice]
+            val cadastros = lote.mapNotNull { item ->
+                item.produtoEncontrado?.takeIf { it.valido() }?.cadastro(item.quantidade, item.validade)
+            }
+            if (cadastros.size != lote.size) {
+                proximo(indice + 1, salvos, falhas + lote.size)
+                return
+            }
+            estoqueApi.registrarLote(
+                "Bearer ${sessao.accessToken}",
+                com.example.ceris.model.dto.FoodBatchRegistrationRequest(cadastros),
+                sessao,
+            ).enqueue(object : Callback<List<StockItemResponse>> {
+                override fun onResponse(call: Call<List<StockItemResponse>>, response: Response<List<StockItemResponse>>) {
+                    if (!sessionManager.isCurrent(sessao)) {
+                        aoTerminar(salvos, falhas + lotes.drop(indice).sumOf { it.size })
+                        return
                     }
-
-                    override fun onFailure(call: Call<StockItemResponse>, t: Throwable) {
-                        Log.e(TAG, "salvar ${item.nomeNaNota} falhou", t)
-                        proximo(indice + 1, salvos, falhas + 1)
+                    if (response.isSuccessful && response.body()?.size == lote.size) {
+                        proximo(indice + 1, salvos + lote.size, falhas)
+                    } else {
+                        Log.e(TAG, "salvar lote: HTTP ${response.code()}")
+                        aoTerminar(salvos, falhas + lotes.drop(indice).sumOf { it.size })
                     }
                 }
-            )
+                override fun onFailure(call: Call<List<StockItemResponse>>, t: Throwable) {
+                    Log.e(TAG, "salvar lote falhou", t)
+                    aoTerminar(salvos, falhas + lotes.drop(indice).sumOf { it.size })
+                }
+            })
         }
-
         proximo(0, 0, 0)
     }
 
