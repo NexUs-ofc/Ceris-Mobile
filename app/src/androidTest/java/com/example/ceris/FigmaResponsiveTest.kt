@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.view.View
+import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -66,9 +67,43 @@ class FigmaResponsiveTest {
                         assertTrue("$name: view $id ultrapassa o topo", rect.top >= window.top)
                         assertTrue("$name: view $id ultrapassa a base", rect.bottom <= window.bottom)
                     }
+                    if (activity.resources.configuration.smallestScreenWidthDp >= 600) {
+                        validarEscalaTablet(name, layout, activity, root)
+                    }
                 }
                 screenshot("figma-$name")
             }
+        }
+    }
+
+    private fun validarEscalaTablet(
+        name: String,
+        layout: Int,
+        activity: FigmaPreviewActivity,
+        root: View,
+    ) {
+        val referencia = when (layout) {
+            R.layout.fragment_estoque -> activity.findViewById<View>(R.id.campo_busca)
+            R.layout.fragment_listas -> activity.findViewById<View>(R.id.btn_criar_lista)
+            R.layout.activity_lista_compras -> activity.findViewById<View>(R.id.btn_adicionar_item)
+            R.layout.fragment_nota_fiscal -> activity.findViewById<View>(R.id.grupo_modo)
+            else -> null
+        }
+        referencia?.let {
+            assertTrue("$name: conteúdo continua estreito no tablet", it.width >= root.width * 0.6f)
+        }
+
+        val titulo = when (layout) {
+            R.layout.fragment_estoque -> activity.findViewById<TextView>(R.id.titulo)
+            R.layout.fragment_listas -> activity.findViewById<TextView>(R.id.titulo_listas)
+            R.layout.activity_lista_compras -> activity.findViewById<TextView>(R.id.txt_titulo)
+            else -> null
+        }
+        titulo?.let {
+            val metricas = activity.resources.displayMetrics
+            val tamanhoSp = it.textSize /
+                (metricas.density * activity.resources.configuration.fontScale)
+            assertTrue("$name: título continua pequeno no tablet", tamanhoSp >= 28f)
         }
     }
 
@@ -98,7 +133,7 @@ class FigmaResponsiveTest {
         R.layout.activity_chatbot -> intArrayOf(R.id.cabecalho, R.id.lista_mensagens, R.id.barra_envio)
         R.layout.activity_lista_compras -> intArrayOf(
             R.id.txt_titulo, R.id.painel_progresso, R.id.lista_itens,
-            R.id.btn_adicionar_item, R.id.btn_excluir_lista,
+            R.id.icone_calendario_lista, R.id.btn_adicionar_item,
         )
         R.layout.activity_detalhe_receita -> intArrayOf(
             R.id.cabecalho_receita, R.id.conteudo_receita,

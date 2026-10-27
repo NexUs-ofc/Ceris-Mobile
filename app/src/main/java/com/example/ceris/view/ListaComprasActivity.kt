@@ -77,9 +77,6 @@ class ListaComprasActivity :
 
         viewModel.listener = this
         viewModel.init(listaId, SessionManager(this), ListaLocalStore(this))
-        supportFragmentManager.setFragmentResultListener(EXCLUIR_LISTA, this) { _, _ ->
-            viewModel.removerLista()
-        }
         supportFragmentManager.setFragmentResultListener(EXCLUIR_ITEM, this) { _, result ->
             result.getString(ConfirmarExclusaoDialog.ID)?.let { viewModel.removerItem(it) }
         }
@@ -101,14 +98,6 @@ class ListaComprasActivity :
 
         findViewById<ImageButton>(R.id.btn_voltar).setOnClickListener { finish() }
         findViewById<ImageButton>(R.id.btn_renomear).setOnClickListener { pedirNovoNome() }
-        findViewById<MaterialButton>(R.id.btn_excluir_lista).setOnClickListener {
-            mostrarConfirmacao(
-                ConfirmarExclusaoDialog.novo(
-                    getString(R.string.lista_excluir_titulo), titulo.text.toString(),
-                    getString(R.string.lista_excluir_aviso), EXCLUIR_LISTA,
-                ),
-            )
-        }
         findViewById<MaterialButton>(R.id.btn_adicionar_item).setOnClickListener {
             AdicionarItemBottomSheet().show(supportFragmentManager, AdicionarItemBottomSheet.TAG)
         }
@@ -124,7 +113,6 @@ class ListaComprasActivity :
     }
 
     override fun detalheCarregado(detalhe: ShoppingListRepository.Detalhe) {
-        findViewById<View>(R.id.btn_excluir_lista).isEnabled = true
         titulo.text = detalhe.nome
 
         concluidos.text = getString(R.string.lista_concluidos, detalhe.concluidos, detalhe.total)
@@ -178,7 +166,6 @@ class ListaComprasActivity :
     }
 
     companion object {
-        private const val EXCLUIR_LISTA = "excluir_lista"
         private const val EXCLUIR_ITEM = "excluir_item"
         const val EXTRA_LISTA_ID = "lista_id"
         const val EXTRA_LISTA_NOME = "lista_nome"

@@ -1,6 +1,5 @@
 package com.example.ceris.view.fragment
 
-import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,13 +23,11 @@ import com.example.ceris.repository.CodigoBarrasRepository
 import com.example.ceris.util.mensagemDeErro
 import com.example.ceris.util.mensagemDeFalha
 import com.example.ceris.view.utils.Seletor
+import com.example.ceris.view.utils.CalendarioValidade
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 /**
  * Confirmar dados do produto, aberto quando a camera le um codigo de barras.
@@ -163,19 +160,10 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun escolherValidade() {
-        val inicial = Calendar.getInstance()
-        DatePickerDialog(
-            requireContext(),
-            R.style.TemaCalendarioCeris,
-            { _, ano, mes, dia ->
-                val data = Calendar.getInstance().apply { set(ano, mes, dia) }.time
-                validade = ISO.format(data)
-                campoValidade.text = CURTA.format(data)
-            },
-            inicial.get(Calendar.YEAR),
-            inicial.get(Calendar.MONTH),
-            inicial.get(Calendar.DAY_OF_MONTH)
-        ).show()
+        CalendarioValidade.mostrar(requireContext(), validade) { escolhida ->
+            validade = escolhida
+            campoValidade.text = CalendarioValidade.formatar(escolhida, "dd/MM/yyyy")
+        }
     }
 
     private fun avisar(mensagem: String) {
@@ -190,9 +178,6 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
     companion object {
         const val TAG = "CodigoBarrasBottomSheet"
         private const val ARG_GTIN = "gtin"
-
-        private val ISO = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-        private val CURTA = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
 
         private fun formatar(valor: Double): String =
             if (valor % 1.0 == 0.0) valor.toLong().toString() else valor.toString().replace('.', ',')

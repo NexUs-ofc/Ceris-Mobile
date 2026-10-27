@@ -184,7 +184,7 @@
     <dimen name="nota_card_radius">14dp</dimen>
     <dimen name="pilula_altura">50dp</dimen>
     <dimen name="pilula_raio">25dp</dimen>
-    <dimen name="moldura_espaco_topo">72dp</dimen>
+    <dimen name="moldura_espaco_topo">120dp</dimen>
     <dimen name="moldura_espaco_dica">96dp</dimen>
 
     <!-- Telas de entrada (login, cadastro, senha): distancia do titulo ao topo -->

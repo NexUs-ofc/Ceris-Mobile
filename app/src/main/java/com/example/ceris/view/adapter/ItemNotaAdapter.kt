@@ -1,6 +1,5 @@
 package com.example.ceris.view.adapter
 
-import android.app.DatePickerDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +10,9 @@ import com.example.ceris.model.ItemNota
 import com.example.ceris.model.dto.FoodResponse
 import com.example.ceris.util.unidadeNaTela
 import com.example.ceris.view.utils.Seletor
+import com.example.ceris.view.utils.CalendarioValidade
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 /**
  * Itens lidos da nota, na revisao. A lista e editada no lugar: o que a pessoa
@@ -98,38 +95,20 @@ class ItemNotaAdapter : RecyclerView.Adapter<ItemNotaAdapter.Card>() {
 
         private fun mostrarValidade(item: ItemNota) {
             val contexto = itemView.context
-            val data = item.validade?.let { runCatching { ISO.parse(it) }.getOrNull() }
-
-            validade.text = data
-                ?.let { contexto.getString(R.string.nota_validade, CURTA.format(it)) }
+            validade.text = CalendarioValidade.formatar(item.validade, "dd/MM")
+                ?.let { contexto.getString(R.string.nota_validade, it) }
                 ?: contexto.getString(R.string.nota_definir_validade)
         }
 
         private fun escolherValidade(item: ItemNota) {
-            val inicial = Calendar.getInstance().apply {
-                item.validade?.let { runCatching { ISO.parse(it) }.getOrNull() }?.let { time = it }
+            CalendarioValidade.mostrar(itemView.context, item.validade) { escolhida ->
+                item.validade = escolhida
+                mostrarValidade(item)
             }
-
-            DatePickerDialog(
-                itemView.context,
-                R.style.TemaCalendarioCeris,
-                { _, ano, mes, dia ->
-                    val escolhida = Calendar.getInstance().apply { set(ano, mes, dia) }
-                    item.validade = ISO.format(escolhida.time)
-                    mostrarValidade(item)
-                },
-                inicial.get(Calendar.YEAR),
-                inicial.get(Calendar.MONTH),
-                inicial.get(Calendar.DAY_OF_MONTH)
-            ).show()
         }
     }
 
     private fun rotulo(food: FoodResponse): String =
         listOfNotNull(food.name, food.productBrand?.takeIf { it.isNotBlank() }).joinToString(" · ")
 
-    private companion object {
-        val ISO = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-        val CURTA = SimpleDateFormat("dd/MM", Locale("pt", "BR"))
-    }
 }
