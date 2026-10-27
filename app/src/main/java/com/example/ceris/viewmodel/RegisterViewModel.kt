@@ -138,7 +138,6 @@ class RegisterViewModel: ViewModel() {
             request = req,
             onSuccess = { response: PasswordRegisterResponse ->
                 this.authRepository.saveRegistrationId(response.registrationId)
-                listener.makeText("Cadastro concluído com sucesso: ${response.registrationId}")
                 listener.operationCompleted()
             },
             onError = { statusCode, errorBody ->

@@ -30,6 +30,7 @@ class RenovadorDeSessao(
     private val sessionManager: SessionManager,
     private val api: AuthAPI,
     private val avisar: (String) -> Unit = { Log.w(TAG, it) },
+    private val aoExpirar: () -> Unit = {},
 ) : Authenticator {
     companion object {
         private const val TAG = "RenovadorDeSessao"
@@ -43,10 +44,6 @@ class RenovadorDeSessao(
         route: Route?,
         response: Response,
     ): Request? {
-        if (tentativasJaFeitas(response) >= LIMITE_DE_TENTATIVAS) {
-            return null
-        }
-
         // 401 nem sempre fala do token. O ms-ia recusa a X-API-Key com 401 e
         // `WWW-Authenticate: ApiKey`; renovar ali gasta o refresh, troca os
         // dois tokens por novos e toma 401 de novo pelo mesmo motivo. Só o
@@ -56,6 +53,15 @@ class RenovadorDeSessao(
         }
 
         val origem = response.request().tag(SessionSnapshot::class.java) ?: return null
+
+        // O refresh ja aconteceu e ate o token novo foi recusado. Manter essa
+        // sessao faria cada chamada seguinte repetir o ciclo e cada tela
+        // exibiria seu proprio erro. Esse e o ponto sem recuperacao: encerra
+        // uma vez e entrega a navegacao ao app.
+        if (tentativasJaFeitas(response) >= LIMITE_DE_TENTATIVAS) {
+            expirar(origem)
+            return null
+        }
 
         // O lock da renovacao nao bloqueia o logout. O compare-and-set do
         // SessionManager descarta uma resposta que chegue depois dele.
@@ -102,7 +108,7 @@ class RenovadorDeSessao(
                 resposta.errorBody()?.close()
                 avisar("Renovacao recusada com HTTP ${resposta.code()}")
                 // 429, 5xx e erros de configuracao nao comprovam token revogado.
-                if (resposta.code() == 401) sessionManager.discard(sessao)
+                if (resposta.code() == 401) expirar(sessao)
                 null
             }
         } catch (e: IOException) {
@@ -114,6 +120,13 @@ class RenovadorDeSessao(
             avisar("Resposta de renovacao invalida")
             null
         }
+
+    private fun expirar(sessao: SessionSnapshot) {
+        if (!sessionManager.discard(sessao)) return
+
+        runCatching(aoExpirar)
+            .onFailure { avisar("Sessao encerrada, mas nao foi possivel abrir o login") }
+    }
 
     private fun tentativasJaFeitas(response: Response): Int {
         var feitas = 0

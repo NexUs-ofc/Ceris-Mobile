@@ -48,10 +48,14 @@ object RetrofitClient {
      * renovar a renovação, em círculo.
      */
     @Synchronized
-    fun configurarRenovacao(sessionManager: SessionManager) {
+    fun configurarRenovacao(
+        sessionManager: SessionManager,
+        aoExpirar: () -> Unit = {},
+    ) {
         renovador = RenovadorDeSessao(
             sessionManager = sessionManager,
-            api = getApi(ApiBaseUrl.auth, AuthAPI::class.java)
+            api = getApi(ApiBaseUrl.auth, AuthAPI::class.java),
+            aoExpirar = aoExpirar,
         )
         sessaoInterceptor = SessionRequestInterceptor(sessionManager)
 
