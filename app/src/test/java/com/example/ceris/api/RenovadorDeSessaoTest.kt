@@ -36,8 +36,16 @@ class RenovadorDeSessaoTest {
             .protocol(Protocol.HTTP_1_1).code(401).message("Unauthorized")
             .header("WWW-Authenticate", challenge).build()
 
-    private fun authenticator(respond: () -> Response<RefreshSessionResponse>): RenovadorDeSessao =
-        RenovadorDeSessao(manager, testApi<AuthAPI> { TestCall(respond) }, {})
+    private fun authenticator(
+        aoExpirar: () -> Unit = {},
+        respond: () -> Response<RefreshSessionResponse>,
+    ): RenovadorDeSessao =
+        RenovadorDeSessao(
+            sessionManager = manager,
+            api = testApi<AuthAPI> { TestCall(respond) },
+            avisar = {},
+            aoExpirar = aoExpirar,
+        )
 
     @Test
     fun dois401UsamUmaSoRenovacao() {
@@ -79,9 +87,40 @@ class RenovadorDeSessaoTest {
 
     @Test
     fun refresh401DescartaSomenteASessaoAtual() {
-        val auth = authenticator { Response.error(401, ResponseBody.create(MediaType.parse("application/json"), "{}")) }
+        val expiracoes = AtomicInteger()
+        val auth =
+            authenticator(aoExpirar = { expiracoes.incrementAndGet() }) {
+                Response.error(401, ResponseBody.create(MediaType.parse("application/json"), "{}"))
+            }
         assertNull(auth.authenticate(null, unauthorized()))
         assertNull(manager.snapshot())
+        assertEquals(1, expiracoes.get())
+    }
+
+    @Test
+    fun tokenRenovadoTambemRecusadoEncerraSessao() {
+        val expiracoes = AtomicInteger()
+        val auth =
+            authenticator(aoExpirar = { expiracoes.incrementAndGet() }) {
+                Response.success(refreshed)
+            }
+        val primeiraResposta = unauthorized()
+        val repetida = auth.authenticate(null, primeiraResposta)
+        assertNotNull(repetida)
+
+        val segundaResposta =
+            okhttp3.Response.Builder()
+                .request(repetida!!)
+                .protocol(Protocol.HTTP_1_1)
+                .code(401)
+                .message("Unauthorized")
+                .header("WWW-Authenticate", "Bearer")
+                .priorResponse(primeiraResposta)
+                .build()
+
+        assertNull(auth.authenticate(null, segundaResposta))
+        assertNull(manager.snapshot())
+        assertEquals(1, expiracoes.get())
     }
 
     @Test

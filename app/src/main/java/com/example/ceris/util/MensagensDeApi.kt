@@ -1,6 +1,5 @@
 package com.example.ceris.util
 
-import com.example.ceris.BuildConfig
 import com.example.ceris.model.dto.ApiError
 import com.example.ceris.repository.AcompanhamentoDeLeitura
 import com.example.ceris.repository.ShoppingListRepository
@@ -119,11 +118,8 @@ fun mensagemDeFalha(throwable: Throwable): String {
         else -> "Um erro inesperado aconteceu: ${throwable.message}"
     }
 
-    // Em debug a frase carrega o tipo da exceção: sem isso, descobrir qual das
-    // falhas de rede aconteceu exige plugar o Logcat e repetir o caso.
-    return if (BuildConfig.DEBUG) {
-        "$frase\n[${throwable.javaClass.simpleName}]"
-    } else {
-        frase
-    }
+    // Detalhes tecnicos pertencem ao Logcat. Colocar o nome da excecao no
+    // Toast fazia builds de teste exibirem mensagens como [IOException] em
+    // todas as telas e quebrava a identidade visual.
+    return frase
 }
