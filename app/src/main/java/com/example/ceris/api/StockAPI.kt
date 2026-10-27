@@ -18,6 +18,13 @@ import retrofit2.http.Query
 // Bearer, como as listas: a Core tira a casa dona do estoque do subject do JWT.
 interface StockAPI {
 
+    @POST("/api/foods/batch")
+    fun registrarLote(
+        @Header("Authorization") autorizacao: String,
+        @Body cadastro: com.example.ceris.model.dto.FoodBatchRegistrationRequest,
+        @retrofit2.http.Tag sessao: com.example.ceris.local.SessionSnapshot,
+    ): Call<List<StockItemResponse>>
+
     @GET("/api/stock")
     fun listar(
         @Header("Authorization") autorizacao: String

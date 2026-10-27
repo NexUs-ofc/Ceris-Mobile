@@ -21,8 +21,8 @@ import com.example.ceris.repository.ShoppingListRepository
 import com.example.ceris.util.Moeda
 import com.example.ceris.view.adapter.ItemListaAdapter
 import com.example.ceris.view.fragment.AdicionarItemBottomSheet
+import com.example.ceris.view.fragment.ConfirmarExclusaoDialog
 import com.example.ceris.view.fragment.NomeListaBottomSheet
-import com.example.ceris.view.utils.PopupCeris
 import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.viewmodel.ListaComprasViewModel
 import com.google.android.material.button.MaterialButton
@@ -77,6 +77,12 @@ class ListaComprasActivity :
 
         viewModel.listener = this
         viewModel.init(listaId, SessionManager(this), ListaLocalStore(this))
+        supportFragmentManager.setFragmentResultListener(EXCLUIR_LISTA, this) { _, _ ->
+            viewModel.removerLista()
+        }
+        supportFragmentManager.setFragmentResultListener(EXCLUIR_ITEM, this) { _, result ->
+            result.getString(ConfirmarExclusaoDialog.ID)?.let { viewModel.removerItem(it) }
+        }
         viewModel.carregar()
     }
 
@@ -95,6 +101,14 @@ class ListaComprasActivity :
 
         findViewById<ImageButton>(R.id.btn_voltar).setOnClickListener { finish() }
         findViewById<ImageButton>(R.id.btn_renomear).setOnClickListener { pedirNovoNome() }
+        findViewById<MaterialButton>(R.id.btn_excluir_lista).setOnClickListener {
+            mostrarConfirmacao(
+                ConfirmarExclusaoDialog.novo(
+                    getString(R.string.lista_excluir_titulo), titulo.text.toString(),
+                    getString(R.string.lista_excluir_aviso), EXCLUIR_LISTA,
+                ),
+            )
+        }
         findViewById<MaterialButton>(R.id.btn_adicionar_item).setOnClickListener {
             AdicionarItemBottomSheet().show(supportFragmentManager, AdicionarItemBottomSheet.TAG)
         }
@@ -110,6 +124,7 @@ class ListaComprasActivity :
     }
 
     override fun detalheCarregado(detalhe: ShoppingListRepository.Detalhe) {
+        findViewById<View>(R.id.btn_excluir_lista).isEnabled = true
         titulo.text = detalhe.nome
 
         concluidos.text = getString(R.string.lista_concluidos, detalhe.concluidos, detalhe.total)
@@ -146,20 +161,25 @@ class ListaComprasActivity :
         viewModel.renomear(nome)
     }
 
-    // Toque longo remove: o design não tem botão de excluir na linha.
     private fun confirmarRemocaoDoItem(item: ItemLista) {
-        PopupCeris.mostrar(
-            contexto = this,
-            titulo = item.nome,
-            mensagem = getString(R.string.lista_item_remover_pergunta),
-            icone = R.drawable.ic_menu_trash_2,
-            confirmar = getString(R.string.lista_excluir_confirmar),
-            cancelar = getString(R.string.lista_nome_cancelar),
-            destrutivo = true
-        ) { viewModel.removerItem(item.id) }
+        if (!item.editavel) return
+        mostrarConfirmacao(
+            ConfirmarExclusaoDialog.novo(
+                getString(R.string.lista_item_excluir_titulo), item.nome,
+                getString(R.string.lista_item_excluir_aviso, item.descricao()), EXCLUIR_ITEM, item.id,
+            ),
+        )
+    }
+
+    private fun mostrarConfirmacao(dialogo: ConfirmarExclusaoDialog) {
+        if (supportFragmentManager.findFragmentByTag(ConfirmarExclusaoDialog.TAG) == null) {
+            dialogo.showNow(supportFragmentManager, ConfirmarExclusaoDialog.TAG)
+        }
     }
 
     companion object {
+        private const val EXCLUIR_LISTA = "excluir_lista"
+        private const val EXCLUIR_ITEM = "excluir_item"
         const val EXTRA_LISTA_ID = "lista_id"
         const val EXTRA_LISTA_NOME = "lista_nome"
     }

@@ -59,6 +59,9 @@ class MascaraLeituraView @JvmOverloads constructor(
 
     private var animacao: ValueAnimator? = null
 
+    /** Limite medido pelo layout, logo abaixo do seletor de tipo de leitura. */
+    private var limiteSuperior = espacoTopo
+
     var modoNota: Boolean = true
         private set
 
@@ -93,18 +96,36 @@ class MascaraLeituraView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Impede que a area vazada seja desenhada por tras do seletor. O valor
+     * vem da posicao real dele, portanto continua correto com fontes maiores,
+     * celulares baixos e tablets.
+     */
+    fun definirLimiteSuperior(limite: Float) {
+        val novoLimite = limite.coerceAtLeast(espacoTopo)
+        if (limiteSuperior == novoLimite) return
+        limiteSuperior = novoLimite
+        recalcularMolduras(width, height)
+    }
+
     override fun onSizeChanged(largura: Int, altura: Int, antesL: Int, antesA: Int) {
         super.onSizeChanged(largura, altura, antesL, antesA)
+
+        recalcularMolduras(largura, altura)
+    }
+
+    private fun recalcularMolduras(largura: Int, altura: Int) {
+        if (largura <= 0 || altura <= 0) return
 
         // Codigo de barras: 293 x 180 de 440 no Figma, um pouco acima do meio.
         val wCodigo = (largura * FRACAO_CODIGO).coerceAtMost(larguraMaxima)
         val hCodigo = (wCodigo * PROPORCAO_CODIGO).coerceAtMost(altura * 0.5f)
         val xCodigo = (largura - wCodigo) / 2f
-        val yCodigo = (altura - hCodigo) * POSICAO_CODIGO
+        val yCodigo = maxOf((altura - hCodigo) * POSICAO_CODIGO, limiteSuperior)
         molduraCodigo.set(xCodigo, yCodigo, xCodigo + wCodigo, yCodigo + hCodigo)
 
         // Nota: alta, no formato de um cupom, entre o seletor de modo e a dica.
-        val alturaUtil = (altura - espacoTopo - espacoDica).coerceAtLeast(altura * 0.4f)
+        val alturaUtil = (altura - limiteSuperior - espacoDica).coerceAtLeast(altura * 0.25f)
         var wNota = (largura * FRACAO_NOTA).coerceAtMost(larguraMaxima)
         var hNota = wNota * PROPORCAO_NOTA
         if (hNota > alturaUtil) {
@@ -112,7 +133,7 @@ class MascaraLeituraView @JvmOverloads constructor(
             wNota = hNota / PROPORCAO_NOTA
         }
         val xNota = (largura - wNota) / 2f
-        val yNota = espacoTopo + (alturaUtil - hNota) / 2f
+        val yNota = limiteSuperior + (alturaUtil - hNota) / 2f
         molduraNota.set(xNota, yNota, xNota + wNota, yNota + hNota)
 
         animacao?.cancel()

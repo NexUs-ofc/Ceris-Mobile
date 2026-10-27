@@ -5,6 +5,7 @@
     <color name="receita_passo_texto_secundario">#8E859F</color>
     <color name="receita_passo_texto_secundario_expandido">#B3FFFFFF</color>
     <dimen name="receita_content_max_width">440dp</dimen>
+    <dimen name="receita_detalhe_content_max_width">440dp</dimen>
     <dimen name="receita_topo">64dp</dimen>
     <dimen name="receita_lista_espaco_titulo">36dp</dimen>
     <dimen name="receita_card_altura">88dp</dimen>

@@ -29,6 +29,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -86,12 +87,13 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     private var flashLigado = false
 
     /** Modo da camera: nota fiscal (foto e leitura no ms-ia) ou codigo de barras. */
-    @Volatile private var modoCodigo = false
+    @Volatile private var modoCodigo = true
 
     private lateinit var mascara: MascaraLeituraView
     private lateinit var dica: TextView
+    private lateinit var grupoModo: MaterialButtonToggleGroup
 
-    private val reconhecedor = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+    private lateinit var reconhecedor: com.google.mlkit.vision.text.TextRecognizer
 
     /** Um quadro por vez: o analisador descarta os que chegam enquanto o anterior roda. */
     @Volatile private var analisando = false
@@ -103,13 +105,7 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     private var disparoAutomatico = false
 
     /** So os formatos de produto de mercado: QR e outros nao sao GTIN. */
-    private val leitorCodigo = BarcodeScanning.getClient(
-        BarcodeScannerOptions.Builder()
-            .setBarcodeFormats(
-                Barcode.FORMAT_EAN_13, Barcode.FORMAT_EAN_8, Barcode.FORMAT_UPC_A, Barcode.FORMAT_UPC_E
-            )
-            .build()
-    )
+    private lateinit var leitorCodigo: com.google.mlkit.vision.barcode.BarcodeScanner
 
     /** Cadastro aberto: a camera para de ler para nao abrir outro por cima. */
     @Volatile private var cadastroAberto = false
@@ -129,6 +125,14 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Estes clientes pertencem ao ciclo da View. O Fragment e reutilizado
+        // depois de rotação/recriação; manter instâncias fechadas aqui fazia
+        // código de barras e OCR pararem definitivamente nessa situação.
+        reconhecedor = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+        leitorCodigo = novoLeitorCodigo()
+        analisando = false
+        cadastroAberto = false
 
         camadaCamera = view.findViewById(R.id.camada_camera)
         camadaLendo = view.findViewById(R.id.camada_lendo)
@@ -152,10 +156,18 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
 
         mascara = view.findViewById(R.id.mascara)
         dica = view.findViewById(R.id.dica)
-        view.findViewById<MaterialButtonToggleGroup>(R.id.grupo_modo)
-            .addOnButtonCheckedListener { _, id, marcado ->
+        grupoModo = view.findViewById(R.id.grupo_modo)
+        grupoModo.doOnLayout { seletor ->
+            val folga = resources.getDimension(R.dimen.spacing_m)
+            mascara.definirLimiteSuperior(seletor.bottom - mascara.top + folga)
+        }
+        grupoModo.addOnButtonCheckedListener { _, id, marcado ->
                 if (marcado) aplicarModo(id == R.id.modo_codigo)
             }
+        // O Scan sempre abre pronto para o fluxo mais comum. Aplicar aqui
+        // também sincroniza máscara e dica após recriação da View.
+        grupoModo.check(R.id.modo_codigo)
+        aplicarModo(codigo = true)
 
         flash.setOnClickListener { alternarFlash() }
         view.findViewById<View>(R.id.btn_trocar_camera).setOnClickListener {
@@ -173,11 +185,15 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         cameraProvider?.unbindAll()
+        cameraProvider = null
+        captura = null
+        camera = null
+        analisando = false
         trabalho.shutdown()
         reconhecedor.close()
         leitorCodigo.close()
+        super.onDestroyView()
     }
 
     /**
@@ -190,8 +206,15 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
         if (hidden) {
             desligarCamera()
         } else if (viewModel.estado == Estado.CAMERA) {
+            selecionarCodigoDeBarras()
             prepararCamera()
         }
+    }
+
+    private fun selecionarCodigoDeBarras() {
+        if (!this::grupoModo.isInitialized) return
+        grupoModo.check(R.id.modo_codigo)
+        aplicarModo(codigo = true)
     }
 
     /** Chamado pelo botao central da barra quando esta tela ja esta aberta. */
@@ -515,9 +538,29 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
         context?.let { Toast.makeText(it, message, Toast.LENGTH_LONG).show() }
     }
 
+    override fun produtosNaoEncontrados(quantidade: Int, indisponiveis: Int) {
+        val mensagem = resources.getQuantityString(R.plurals.nota_produtos_ignorados, quantidade, quantidade)
+        makeText(if (indisponiveis > 0) "$mensagem ${getString(R.string.nota_busca_parcial)}" else mensagem)
+    }
+
+    override fun buscaIndisponivel() {
+        makeText(getString(R.string.nota_busca_indisponivel))
+    }
+
     private companion object {
         const val TAG = "NotaFiscalFragment"
         const val LADO_MAXIMO = 2000
+
+        fun novoLeitorCodigo() = BarcodeScanning.getClient(
+            BarcodeScannerOptions.Builder()
+                .setBarcodeFormats(
+                    Barcode.FORMAT_EAN_13,
+                    Barcode.FORMAT_EAN_8,
+                    Barcode.FORMAT_UPC_A,
+                    Barcode.FORMAT_UPC_E,
+                )
+                .build()
+        )
         const val QUALIDADE_JPEG = 90
 
         /** Abaixo disso nao e nota: um cartaz ou um rotulo tem poucas linhas. */

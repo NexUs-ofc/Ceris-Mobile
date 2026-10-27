@@ -1,32 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Tablet. Vale a partir de 480dp de menor largura.
+    Tablet. Vale a partir de 600dp de menor largura, padrão recomendado pelo Android.
 
     O Galaxy Tab A7 Lite tem 1340x800 em 8.7 polegadas (~179 dpi). Conforme o
-    Android reporte 180 ou 240 dpi, a menor largura cai em 711dp ou 533dp - os
-    dois casos entram aqui. Celulares ficam de fora: os maiores param perto de
-    420dp de menor largura.
+    Android reporte sua densidade normal, a menor largura fica acima de 600dp.
+    Celulares e dobráveis estreitos permanecem com as medidas compactas.
 
     A regra nao e esticar: o conteudo cresce ate content_max_width e centraliza,
     e as grades passam a duas colunas.
 -->
 <resources>
 
-    <dimen name="content_max_width">600dp</dimen>
+    <dimen name="content_max_width">680dp</dimen>
 
-    <dimen name="field_width">480dp</dimen>
-    <dimen name="field_height">68dp</dimen>
-    <dimen name="field_corner_radius">34dp</dimen>
+    <dimen name="field_width">560dp</dimen>
+    <dimen name="field_height">76dp</dimen>
+    <dimen name="field_corner_radius">38dp</dimen>
 
-    <dimen name="button_height">64dp</dimen>
+    <dimen name="button_height">72dp</dimen>
 
-    <dimen name="screen_margin_horizontal">48dp</dimen>
-    <dimen name="spacing_xs">6dp</dimen>
-    <dimen name="spacing_s">12dp</dimen>
-    <dimen name="spacing_m">20dp</dimen>
-    <dimen name="spacing_l">32dp</dimen>
-    <dimen name="spacing_xl">44dp</dimen>
-    <dimen name="spacing_xxl">72dp</dimen>
+    <dimen name="screen_margin_horizontal">60dp</dimen>
+    <dimen name="spacing_xs">8dp</dimen>
+    <dimen name="spacing_s">14dp</dimen>
+    <dimen name="spacing_m">24dp</dimen>
+    <dimen name="spacing_l">38dp</dimen>
+    <dimen name="spacing_xl">52dp</dimen>
+    <dimen name="spacing_xxl">80dp</dimen>
+
+    <!-- Em tela grande, texto de celular fica visualmente pequeno mesmo em sp. -->
+    <dimen name="text_size_10">13sp</dimen>
+    <dimen name="text_size_12">15sp</dimen>
+    <dimen name="text_size_13">16sp</dimen>
+    <dimen name="text_size_14">17sp</dimen>
+    <dimen name="text_size_15">18sp</dimen>
+    <dimen name="text_size_16">20sp</dimen>
+    <dimen name="text_size_18">22sp</dimen>
+    <dimen name="text_size_20">28sp</dimen>
+    <dimen name="text_size_28">36sp</dimen>
+    <dimen name="text_size_32">40sp</dimen>
+    <dimen name="text_size_36">46sp</dimen>
+    <dimen name="text_size_64">80sp</dimen>
+
+    <!-- Scanner: controles continuam compactos e centralizados no tablet. -->
+    <dimen name="camera_modo_margin">60dp</dimen>
+    <dimen name="camera_modo_flash_gap">16dp</dimen>
+    <dimen name="camera_modo_max_width">520dp</dimen>
 
 
     <!--
@@ -40,31 +58,31 @@
         nav_bar_height e a faixa dos destinos; nav_area_height e ela mais o
         espaco que a saliencia ocupa acima.
     -->
-    <dimen name="nav_bar_height">120dp</dimen>
-    <dimen name="nav_icon_size">26dp</dimen>
-    <dimen name="nav_label_text">13sp</dimen>
-    <dimen name="nav_scan_size">84dp</dimen>
-    <dimen name="nav_scan_icon_size">26dp</dimen>
+    <dimen name="nav_bar_height">132dp</dimen>
+    <dimen name="nav_icon_size">32dp</dimen>
+    <dimen name="nav_label_text">15sp</dimen>
+    <dimen name="nav_scan_size">96dp</dimen>
+    <dimen name="nav_scan_icon_size">32dp</dimen>
 
     <dimen name="card_corner_radius">20dp</dimen>
     <dimen name="card_elevation">3dp</dimen>
-    <dimen name="card_image_height">180dp</dimen>
-    <dimen name="hero_image_height">420dp</dimen>
-    <dimen name="list_item_height">88dp</dimen>
-    <dimen name="avatar_size">128dp</dimen>
+    <dimen name="card_image_height">220dp</dimen>
+    <dimen name="hero_image_height">480dp</dimen>
+    <dimen name="list_item_height">104dp</dimen>
+    <dimen name="avatar_size">144dp</dimen>
 
     <integer name="grid_columns">2</integer>
 
     <!-- Ilustracoes de estado vazio e botao flutuante secundario -->
-    <dimen name="ilustracao_size">160dp</dimen>
-    <dimen name="fab_secundario_size">58dp</dimen>
+    <dimen name="ilustracao_size">210dp</dimen>
+    <dimen name="fab_secundario_size">68dp</dimen>
 
-    <dimen name="chip_height">46dp</dimen>
-    <dimen name="chip_padding_h">14dp</dimen>
+    <dimen name="chip_height">54dp</dimen>
+    <dimen name="chip_padding_h">18dp</dimen>
     <dimen name="chip_espaco">16dp</dimen>
 
     <dimen name="busca_radius">16dp</dimen>
-    <dimen name="nav_indicador_size">48dp</dimen>
+    <dimen name="nav_indicador_size">56dp</dimen>
     <dimen name="alterar_radius">10dp</dimen>
 
     <dimen name="nav_bar_corner_radius">28dp</dimen>
@@ -77,20 +95,20 @@
 
 
     <!-- Barra mais a parte do botao de scan que sobe: o conteudo para aqui -->
-    <dimen name="nav_area_height">169dp</dimen>
+    <dimen name="nav_area_height">187dp</dimen>
 
     <!-- Card de produto -->
-    <dimen name="card_produto_imagem">72dp</dimen>
-    <dimen name="card_produto_padding">16dp</dimen>
+    <dimen name="card_produto_imagem">88dp</dimen>
+    <dimen name="card_produto_padding">20dp</dimen>
     <dimen name="card_produto_imagem_radius">14dp</dimen>
     <dimen name="selo_padding_h">12dp</dimen>
     <dimen name="selo_padding_v">6dp</dimen>
     <dimen name="card_stroke_width">1dp</dimen>
 
-    <dimen name="nav_saliencia_raio">49dp</dimen>
+    <dimen name="nav_saliencia_raio">55dp</dimen>
 
     <!-- Tela de Locais -->
-    <dimen name="local_imagem_size">72dp</dimen>
+    <dimen name="local_imagem_size">88dp</dimen>
     <dimen name="local_imagem_radius">12dp</dimen>
     <dimen name="header_padding_v">16dp</dimen>
     <dimen name="divisor_altura">1dp</dimen>
@@ -100,12 +118,12 @@
     <dimen name="progresso_altura">8dp</dimen>
 
     <!-- Lista de compras -->
-    <dimen name="lista_painel_padding">18dp</dimen>
+    <dimen name="lista_painel_padding">22dp</dimen>
     <dimen name="lista_painel_radius">14dp</dimen>
     <dimen name="lista_cabecalho_text">12sp</dimen>
-    <dimen name="lista_ilustracao_size">180dp</dimen>
-    <dimen name="item_check_size">26dp</dimen>
-    <dimen name="item_lista_padding">16dp</dimen>
+    <dimen name="lista_ilustracao_size">230dp</dimen>
+    <dimen name="item_check_size">30dp</dimen>
+    <dimen name="item_lista_padding">20dp</dimen>
 
     <!-- Formulário de item -->
     <dimen name="sheet_corner_radius">28dp</dimen>
@@ -115,13 +133,13 @@
     <dimen name="sheet_alca_largura">48dp</dimen>
     <dimen name="sheet_alca_altura">5dp</dimen>
     <dimen name="campo_rotulo_text">12sp</dimen>
-    <dimen name="campo_altura">60dp</dimen>
+    <dimen name="campo_altura">68dp</dimen>
     <dimen name="campo_radius">14dp</dimen>
     <dimen name="campo_padding_h">18dp</dimen>
     <dimen name="stepper_botao_size">40dp</dimen>
     <dimen name="stepper_icone_size">18dp</dimen>
-    <dimen name="icone_acao_size">28dp</dimen>
-    <dimen name="icone_voltar_size">48dp</dimen>
+    <dimen name="icone_acao_size">32dp</dimen>
+    <dimen name="icone_voltar_size">56dp</dimen>
 
     <!-- Chatbot -->
     <dimen name="chat_header_altura">84dp</dimen>
@@ -132,7 +150,7 @@
     <dimen name="chat_sugestao_altura">44dp</dimen>
 
     <!-- Popups do Figma -->
-    <dimen name="text_size_22">26sp</dimen>
+    <dimen name="text_size_22">28sp</dimen>
     <dimen name="campo_confirmacao_radius">18dp</dimen>
     <dimen name="stepper_tecla">34dp</dimen>
     <dimen name="dialogo_radius">28dp</dimen>
@@ -141,21 +159,30 @@
     <!-- Camera do scanner -->
     <dimen name="moldura_traco">6dp</dimen>
     <dimen name="moldura_canto">48dp</dimen>
-    <dimen name="moldura_largura_max">520dp</dimen>
-    <dimen name="camera_controles_altura">150dp</dimen>
-    <dimen name="camera_botao">68dp</dimen>
-    <dimen name="camera_botao_icone">30dp</dimen>
-    <dimen name="camera_flash">48dp</dimen>
+    <dimen name="moldura_largura_max">620dp</dimen>
+    <dimen name="camera_controles_altura">170dp</dimen>
+    <dimen name="camera_botao">80dp</dimen>
+    <dimen name="camera_botao_icone">36dp</dimen>
+    <dimen name="camera_flash">56dp</dimen>
 
     <!-- Card da nota -->
     <dimen name="nota_card_radius">16dp</dimen>
     <dimen name="pilula_altura">58dp</dimen>
     <dimen name="pilula_raio">29dp</dimen>
-    <dimen name="moldura_espaco_topo">88dp</dimen>
+    <dimen name="moldura_espaco_topo">160dp</dimen>
     <dimen name="moldura_espaco_dica">110dp</dimen>
 
     <dimen name="entrada_topo">96dp</dimen>
     <dimen name="icone_google">48dp</dimen>
+    <dimen name="address_top_margin">96dp</dimen>
+    <dimen name="address_section_gap">72dp</dimen>
+    <dimen name="address_button_gap">72dp</dimen>
+    <dimen name="loading_title_top">128dp</dimen>
+    <dimen name="loading_spinner_size">112dp</dimen>
+    <dimen name="loading_progress_size">132dp</dimen>
+    <dimen name="otp_content_max_width">480dp</dimen>
+    <dimen name="otp_digit_height">56dp</dimen>
+    <dimen name="otp_top_margin">160dp</dimen>
 
     <!-- Perfil -->
     <dimen name="perfil_margem_topo">96dp</dimen>
