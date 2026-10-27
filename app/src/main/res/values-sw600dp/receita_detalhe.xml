@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Medidas exclusivas do detalhe da receita em tablet. -->
+<resources>
+    <dimen name="receita_detalhe_content_max_width">680dp</dimen>
+    <dimen name="receita_resumo_altura">84dp</dimen>
+    <dimen name="receita_painel_raio">26dp</dimen>
+    <dimen name="receita_passo_numero_size">44dp</dimen>
+    <dimen name="receita_passo_card_altura">116dp</dimen>
+    <dimen name="receita_passo_cabecalho_altura">68dp</dimen>
+    <dimen name="receita_passo_linha_espaco">4dp</dimen>
+    <dimen name="receita_passo_dica_tamanho">15sp</dimen>
+    <dimen name="receita_ingrediente_espaco">16dp</dimen>
+</resources>

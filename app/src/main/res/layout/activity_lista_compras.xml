@@ -239,6 +239,7 @@
         android:layout_marginStart="@dimen/screen_margin_horizontal"
         android:layout_marginTop="@dimen/spacing_l"
         android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:layout_marginBottom="@dimen/spacing_s"
         android:fontFamily="@font/montserrat_semibold"
         app:fontFamily="@font/montserrat_semibold"
         android:insetTop="0dp"
@@ -247,11 +248,37 @@
         android:textSize="@dimen/text_size_15"
         app:backgroundTint="@color/md_theme_primary"
         app:cornerRadius="@dimen/botao_radius"
-        android:layout_marginBottom="@dimen/spacing_l"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_excluir_lista"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_excluir_lista"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:layout_marginBottom="@dimen/spacing_l"
+        android:enabled="false"
+        android:fontFamily="@font/montserrat_semibold"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/lista_excluir"
+        android:textAllCaps="false"
+        android:textColor="@color/md_theme_error"
+        android:textSize="@dimen/text_size_15"
+        app:cornerRadius="@dimen/botao_radius"
+        app:icon="@drawable/ic_menu_trash_2"
+        app:iconGravity="textStart"
+        app:iconTint="@color/md_theme_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="@dimen/content_max_width"
+        app:strokeColor="@color/md_theme_error"
+        app:strokeWidth="@dimen/botao_contorno" />
 
     <!-- Some junto com o total quando a lista está vazia. -->
     <androidx.constraintlayout.widget.Group

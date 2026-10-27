@@ -87,6 +87,7 @@ class FigmaResponsiveTest {
             R.layout.fragment_listas -> activity.findViewById<View>(R.id.btn_criar_lista)
             R.layout.activity_lista_compras -> activity.findViewById<View>(R.id.btn_adicionar_item)
             R.layout.fragment_nota_fiscal -> activity.findViewById<View>(R.id.grupo_modo)
+            R.layout.activity_detalhe_receita -> activity.findViewById<View>(R.id.cabecalho_receita)
             else -> null
         }
         referencia?.let {
@@ -133,7 +134,7 @@ class FigmaResponsiveTest {
         R.layout.activity_chatbot -> intArrayOf(R.id.cabecalho, R.id.lista_mensagens, R.id.barra_envio)
         R.layout.activity_lista_compras -> intArrayOf(
             R.id.txt_titulo, R.id.painel_progresso, R.id.lista_itens,
-            R.id.icone_calendario_lista, R.id.btn_adicionar_item,
+            R.id.icone_calendario_lista, R.id.btn_adicionar_item, R.id.btn_excluir_lista,
         )
         R.layout.activity_detalhe_receita -> intArrayOf(
             R.id.cabecalho_receita, R.id.conteudo_receita,
