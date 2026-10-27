@@ -9,6 +9,7 @@ import com.example.ceris.api.RetrofitClient
 import com.example.ceris.local.SessionManager
 import com.example.ceris.model.dto.ChatRequest
 import com.example.ceris.repository.ChatRepository
+import com.example.ceris.model.dto.SectionFeedbackRequest
 import com.example.ceris.util.mensagemDeErro
 import com.example.ceris.util.mensagemDeFalha
 
@@ -43,8 +44,12 @@ class ChatViewModel : ViewModel() {
     val temSessao: Boolean
         get() = sessionId != null
 
+    val estaAguardando: Boolean
+        get() = aguardando
+
     /** Barra envio em cima de envio: a conversa tem de manter a ordem. */
     private var aguardando = false
+    private var encerrando = false
 
     private val relogio = Handler(Looper.getMainLooper())
 
@@ -67,16 +72,31 @@ class ChatViewModel : ViewModel() {
      * Encerra a conversa no servidor e esquece o fio aqui, para a proxima
      * mensagem comecar do zero.
      */
-    fun encerrarSessao(aoTerminar: () -> Unit) {
+    fun encerrarSessao(aoTerminar: (String?, Boolean) -> Unit) {
+        if (encerrando) return
         val id = sessionId
 
-        sessionId = null
-
         if (id == null) {
-            return aoTerminar()
+            return aoTerminar(null, true)
         }
 
-        repository.encerrar(id, aoTerminar)
+        encerrando = true
+        repository.encerrar(id) { sucesso ->
+            encerrando = false
+            aoTerminar(id, sucesso)
+        }
+    }
+
+    /** Sends the optional score after the server has already closed the section. */
+    fun avaliarSessao(id: String, nota: Int, feedback: String?, aoTerminar: () -> Unit) {
+        repository.encerrar(
+            sessionId = id,
+            avaliacao = SectionFeedbackRequest(
+                nota,
+                feedback?.trim()?.takeIf(String::isNotEmpty)
+            ),
+            aoTerminar = { _ -> aoTerminar() }
+        )
     }
 
     fun init(sessionManager: SessionManager) {
@@ -177,7 +197,7 @@ class ChatViewModel : ViewModel() {
         relogio.removeCallbacksAndMessages(null)
 
         if (this::repository.isInitialized) {
-            encerrarSessao {}
+            encerrarSessao { _, _ -> }
         }
     }
 

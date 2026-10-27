@@ -71,4 +71,15 @@
         <item name="android:textSize">@dimen/text_size_12</item>
     </style>
 
+    <style name="AvaliacaoEstrela">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">58dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:textSize">44sp</item>
+        <item name="android:textColor">@color/ceris_cinza_claro</item>
+    </style>
+
 </resources>

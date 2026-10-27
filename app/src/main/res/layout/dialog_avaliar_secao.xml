@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/avaliacao_titulo"
+        android:textColor="@color/md_theme_onSurface"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView android:id="@+id/estrela_1" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_muito_ruim" android:text="☆" />
+        <TextView android:id="@+id/estrela_2" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_ruim" android:text="☆" />
+        <TextView android:id="@+id/estrela_3" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_regular" android:text="☆" />
+        <TextView android:id="@+id/estrela_4" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_bom" android:text="☆" />
+        <TextView android:id="@+id/estrela_5" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_excelente" android:text="☆" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/avaliacao_muito_ruim"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/avaliacao_excelente"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/avaliacao_ajude"
+        android:textColor="@color/md_theme_onSurface"
+        android:textSize="20sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/campo_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:gravity="top|start"
+            android:hint="@string/avaliacao_comentarios"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="2000"
+            android:padding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_salvar_avaliacao"
+        style="@style/BotaoPrincipal"
+        android:layout_marginTop="16dp"
+        android:text="@string/avaliacao_salvar" />
+
+    <TextView
+        android:id="@+id/btn_cancelar_avaliacao"
+        style="@style/LinkCancelar"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/avaliacao_cancelar" />
+</LinearLayout>
