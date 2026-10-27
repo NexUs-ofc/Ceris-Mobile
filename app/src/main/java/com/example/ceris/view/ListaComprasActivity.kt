@@ -101,7 +101,7 @@ class ListaComprasActivity :
 
         findViewById<ImageButton>(R.id.btn_voltar).setOnClickListener { finish() }
         findViewById<ImageButton>(R.id.btn_renomear).setOnClickListener { pedirNovoNome() }
-        findViewById<ImageButton>(R.id.btn_excluir_lista).setOnClickListener {
+        findViewById<MaterialButton>(R.id.btn_excluir_lista).setOnClickListener {
             mostrarConfirmacao(
                 ConfirmarExclusaoDialog.novo(
                     getString(R.string.lista_excluir_titulo), titulo.text.toString(),

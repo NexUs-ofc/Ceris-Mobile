@@ -97,7 +97,8 @@ class FigmaResponsiveTest {
         R.layout.fragment_perfil -> intArrayOf(R.id.img_perfil, R.id.txt_nome_perfil, R.id.opcoes_perfil)
         R.layout.activity_chatbot -> intArrayOf(R.id.cabecalho, R.id.lista_mensagens, R.id.barra_envio)
         R.layout.activity_lista_compras -> intArrayOf(
-            R.id.txt_titulo, R.id.painel_progresso, R.id.lista_itens, R.id.btn_adicionar_item,
+            R.id.txt_titulo, R.id.painel_progresso, R.id.lista_itens,
+            R.id.btn_adicionar_item, R.id.btn_excluir_lista,
         )
         R.layout.activity_detalhe_receita -> intArrayOf(
             R.id.cabecalho_receita, R.id.conteudo_receita,

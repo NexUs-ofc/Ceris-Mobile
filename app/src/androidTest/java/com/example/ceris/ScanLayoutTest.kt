@@ -39,7 +39,9 @@ class ScanLayoutTest {
                 val flash = activity.findViewById<android.view.View>(R.id.btn_flash)
                 assertEquals(R.id.modo_codigo, group.checkedButtonId)
                 assertTrue(group.width > 0)
-                assertTrue("selector overlaps flash", group.right <= flash.left)
+                assertTrue("selector must stay below flash", group.top >= flash.bottom)
+                assertTrue("selector overflows left", group.left >= 0)
+                assertTrue("selector overflows right", group.right <= activity.findViewById<android.view.View>(android.R.id.content).width)
                 assertTrue(group.width <= activity.resources.getDimensionPixelSize(R.dimen.camera_modo_max_width))
             }
         }
