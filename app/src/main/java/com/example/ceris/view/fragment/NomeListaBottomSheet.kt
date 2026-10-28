@@ -1,15 +1,19 @@
 package com.example.ceris.view.fragment
 
+import android.content.DialogInterface
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.content.Context
 import android.widget.EditText
 import android.widget.TextView
-import com.example.ceris.view.utils.CalendarioValidade
 import com.example.ceris.R
+import com.example.ceris.view.utils.CalendarioValidade
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 
@@ -40,9 +44,14 @@ class NomeListaBottomSheet : BottomSheetDialogFragment() {
         campo.setText(argumentos.getString(ARG_NOME).orEmpty())
         campo.setSelection(campo.text.length)
         dataSelecionada = argumentos.getString(ARG_DATA)
+        if (savedInstanceState != null) {
+            dataSelecionada = savedInstanceState.getString(ESTADO_DATA, dataSelecionada)
+        }
         campoData = view.findViewById(R.id.campo_data_lista)
         atualizarCampoData()
         campoData?.setOnClickListener {
+            esconderTeclado()
+            campo.clearFocus()
             CalendarioValidade.mostrar(requireContext(), dataSelecionada) { escolhida ->
                 dataSelecionada = escolhida
                 atualizarCampoData()
@@ -67,9 +76,25 @@ class NomeListaBottomSheet : BottomSheetDialogFragment() {
             }
         }
 
-        // O sheet abre só para digitar um nome: o teclado vem junto.
-        campo.requestFocus()
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        // Mantém o teclado fora do sheet por padrão; tocar no campo de nome abre-o.
+        campo.showSoftInputOnFocus = true
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        view.post { dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE) }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(ESTADO_DATA, dataSelecionada)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        esconderTeclado()
+        super.onDismiss(dialog)
+    }
+
+    private fun esconderTeclado() {
+        val im = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        im?.hideSoftInputFromWindow(campo.windowToken, 0)
     }
 
     private fun confirmar() {
@@ -91,6 +116,7 @@ class NomeListaBottomSheet : BottomSheetDialogFragment() {
         private const val ARG_CONFIRMAR = "confirmar"
         private const val ARG_NOME = "nome"
         private const val ARG_DATA = "data"
+        private const val ESTADO_DATA = "estado_data"
 
         fun criar(): NomeListaBottomSheet = montar(
             titulo = R.string.lista_nome_criar_titulo,
