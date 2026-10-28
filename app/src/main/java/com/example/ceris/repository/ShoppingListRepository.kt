@@ -93,6 +93,20 @@ class ShoppingListRepository(
             .enqueue(respostaDetalhe("renomear", onSuccess, onError, onFailure))
     }
 
+    fun atualizarData(
+        listaId: String,
+        titulo: String,
+        data: String?,
+        onSuccess: (Detalhe) -> Unit,
+        onError: (statusCode: Int, errorBody: String?) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        val autorizacao = autorizacao() ?: return onFailure(SemSessao())
+
+        api.renomear(autorizacao, listaId, ShoppingListRequest(title = titulo, date = data))
+            .enqueue(respostaDetalhe("atualizarData", onSuccess, onError, onFailure))
+    }
+
     // Os ids vao por parametro porque depois do DELETE nao ha de onde tira-los.
     fun remover(
         listaId: String,

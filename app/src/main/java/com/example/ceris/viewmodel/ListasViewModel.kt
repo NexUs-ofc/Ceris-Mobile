@@ -25,7 +25,7 @@ class ListasViewModel : ViewModel() {
 
         fun listasCarregadas(listas: List<ListaCompra>)
 
-        fun listaCriada(id: String, nome: String)
+        fun listaCriada(id: String, nome: String, data: String?)
     }
 
     lateinit var listener: Listener
@@ -59,7 +59,7 @@ class ListasViewModel : ViewModel() {
         repository.criar(
             titulo = titulo,
             data = data,
-            onSuccess = { resposta -> listener.listaCriada(resposta.id, resposta.title) },
+            onSuccess = { resposta -> listener.listaCriada(resposta.id, resposta.title, resposta.date) },
             onError = { statusCode, errorBody ->
                 listener.makeText(mensagemDeErro(statusCode, errorBody))
             },

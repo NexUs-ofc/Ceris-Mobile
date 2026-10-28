@@ -61,6 +61,11 @@ class ListaComprasViewModel : ViewModel() {
         repository.renomear(listaId, titulo, data, ::aoReceber, ::aoErrar, ::aoFalhar)
     }
 
+    fun atualizarData(data: String?) {
+        val atual = detalhe ?: return
+        repository.atualizarData(listaId, atual.nome, data, ::aoReceber, ::aoErrar, ::aoFalhar)
+    }
+
     fun adicionarItem(
         nome: String?,
         quantidade: Double,

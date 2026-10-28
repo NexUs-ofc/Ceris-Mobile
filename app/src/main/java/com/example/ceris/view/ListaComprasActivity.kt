@@ -23,6 +23,7 @@ import com.example.ceris.view.adapter.ItemListaAdapter
 import com.example.ceris.view.fragment.AdicionarItemBottomSheet
 import com.example.ceris.view.fragment.ConfirmarExclusaoDialog
 import com.example.ceris.view.fragment.NomeListaBottomSheet
+import com.example.ceris.view.utils.CalendarioValidade
 import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.viewmodel.ListaComprasViewModel
 import com.google.android.material.button.MaterialButton
@@ -46,6 +47,7 @@ class ListaComprasActivity :
     private lateinit var txtVazio: View
     private lateinit var grupoTotal: Group
     private lateinit var txtTotal: TextView
+    private var aguardandoDataInicial = false
 
     private val adapter = ItemListaAdapter(
         aoMarcar = { item, marcado -> viewModel.alternarMarcado(item.id, marcado) },
@@ -75,6 +77,8 @@ class ListaComprasActivity :
         ligarViews()
 
         titulo.text = intent.getStringExtra(EXTRA_LISTA_NOME).orEmpty()
+        dataLista = intent.getStringExtra(EXTRA_LISTA_DATA)
+        aguardandoDataInicial = intent.getBooleanExtra(EXTRA_PEDIR_DATA, false)
 
         viewModel.listener = this
         viewModel.init(listaId, SessionManager(this), ListaLocalStore(this))
@@ -102,6 +106,7 @@ class ListaComprasActivity :
 
         findViewById<ImageButton>(R.id.btn_voltar).setOnClickListener { finish() }
         findViewById<ImageButton>(R.id.btn_renomear).setOnClickListener { pedirNovoNome() }
+        findViewById<View>(R.id.icone_calendario_lista).setOnClickListener { escolherData() }
         findViewById<MaterialButton>(R.id.btn_excluir_lista).setOnClickListener {
             mostrarConfirmacao(
                 ConfirmarExclusaoDialog.novo(
@@ -128,6 +133,14 @@ class ListaComprasActivity :
         findViewById<View>(R.id.btn_excluir_lista).isEnabled = true
         titulo.text = detalhe.nome
         dataLista = detalhe.data
+        findViewById<View>(R.id.icone_calendario_lista).contentDescription =
+            CalendarioValidade.formatar(dataLista, "dd/MM/yyyy")?.let {
+                getString(R.string.lista_calendario_data, it)
+            } ?: getString(R.string.lista_calendario)
+        if (aguardandoDataInicial) {
+            aguardandoDataInicial = false
+            findViewById<View>(R.id.icone_calendario_lista).post { escolherData() }
+        }
 
         concluidos.text = getString(R.string.lista_concluidos, detalhe.concluidos, detalhe.total)
         percentual.text = getString(R.string.lista_percentual, detalhe.progresso)
@@ -155,12 +168,22 @@ class ListaComprasActivity :
     }
 
     private fun pedirNovoNome() {
-        NomeListaBottomSheet.renomear(titulo.text.toString(), dataLista)
+        NomeListaBottomSheet.renomear(titulo.text.toString())
             .show(supportFragmentManager, NomeListaBottomSheet.TAG)
     }
 
-    override fun aoConfirmarNomeDaLista(nome: String, data: String?) {
-        viewModel.renomear(nome, data)
+    private fun escolherData() {
+        CalendarioValidade.mostrar(this, dataLista) { escolhida ->
+            dataLista = escolhida
+            val dataFormatada = CalendarioValidade.formatar(escolhida, "dd/MM/yyyy").orEmpty()
+            findViewById<View>(R.id.icone_calendario_lista).contentDescription =
+                getString(R.string.lista_calendario_data, dataFormatada)
+            viewModel.atualizarData(escolhida)
+        }
+    }
+
+    override fun aoConfirmarNomeDaLista(nome: String) {
+        viewModel.renomear(nome, dataLista)
     }
 
     private fun confirmarRemocaoDoItem(item: ItemLista) {
@@ -184,5 +207,7 @@ class ListaComprasActivity :
         private const val EXCLUIR_ITEM = "excluir_item"
         const val EXTRA_LISTA_ID = "lista_id"
         const val EXTRA_LISTA_NOME = "lista_nome"
+        const val EXTRA_LISTA_DATA = "lista_data"
+        const val EXTRA_PEDIR_DATA = "pedir_data"
     }
 }
