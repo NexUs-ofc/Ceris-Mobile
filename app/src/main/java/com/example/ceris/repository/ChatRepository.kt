@@ -8,6 +8,7 @@ import com.example.ceris.local.SessionManager
 import com.example.ceris.model.dto.ChatRequest
 import com.example.ceris.model.SessionAttribute
 import com.example.ceris.model.dto.ChatResponse
+import com.example.ceris.model.dto.SectionFeedbackRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -82,24 +83,38 @@ class ChatRepository(
     fun encerrarPendente() {
         val pendente = sessionId ?: return
 
-        sessionId = null
         encerrar(pendente) {}
     }
 
     /** Melhor esforco: se o encerramento falhar, a tela segue em frente. */
-    fun encerrar(sessionId: String, aoTerminar: () -> Unit) {
-        val autorizacao = autorizacao() ?: return aoTerminar()
+    fun encerrar(
+        sessionId: String,
+        avaliacao: SectionFeedbackRequest? = null,
+        aoTerminar: (Boolean) -> Unit
+    ) {
+        val autorizacao = autorizacao() ?: return aoTerminar(false)
 
-        api.encerrar(autorizacao, BuildConfig.CERISIA_API_KEY, sessionId).enqueue(
+        val chamada = if (avaliacao == null) {
+            api.encerrar(autorizacao, BuildConfig.CERISIA_API_KEY, sessionId)
+        } else {
+            api.encerrarComAvaliacao(autorizacao, BuildConfig.CERISIA_API_KEY, sessionId, avaliacao)
+        }
+        chamada.enqueue(
             object : Callback<Map<String, Object>> {
                 override fun onResponse(
                     call: Call<Map<String, Object>>,
                     response: Response<Map<String, Object>>
-                ) = aoTerminar()
+                ) {
+                    val fechada = response.isSuccessful
+                    if (fechada && this@ChatRepository.sessionId == sessionId) {
+                        this@ChatRepository.sessionId = null
+                    }
+                    aoTerminar(fechada)
+                }
 
                 override fun onFailure(call: Call<Map<String, Object>>, t: Throwable) {
                     Log.e(TAG, "encerrar falhou", t)
-                    aoTerminar()
+                    aoTerminar(false)
                 }
             }
         )

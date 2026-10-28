@@ -2,12 +2,14 @@ package com.example.ceris.api
 
 import com.example.ceris.model.dto.ChatRequest
 import com.example.ceris.model.dto.ChatResponse
+import com.example.ceris.model.dto.SectionFeedbackRequest
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.DELETE
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.HTTP
 
 /**
  * Conversa com a Cerita, no ms-ia.
@@ -40,5 +42,13 @@ interface ChatAPI {
         @Header("Authorization") autorizacao: String,
         @Header("X-API-Key") apiKey: String,
         @Path("session_id") sessionId: String
+    ): Call<Map<String, Object>>
+
+    @HTTP(method = "DELETE", path = "chat/{session_id}", hasBody = true)
+    fun encerrarComAvaliacao(
+        @Header("Authorization") autorizacao: String,
+        @Header("X-API-Key") apiKey: String,
+        @Path("session_id") sessionId: String,
+        @Body avaliacao: SectionFeedbackRequest
     ): Call<Map<String, Object>>
 }
