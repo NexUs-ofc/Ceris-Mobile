@@ -37,6 +37,7 @@ class ListaComprasActivity :
     private val viewModel: ListaComprasViewModel by viewModels()
 
     private lateinit var titulo: TextView
+    private var dataLista: String? = null
     private lateinit var concluidos: TextView
     private lateinit var percentual: TextView
     private lateinit var barra: LinearProgressIndicator
@@ -126,6 +127,7 @@ class ListaComprasActivity :
     override fun detalheCarregado(detalhe: ShoppingListRepository.Detalhe) {
         findViewById<View>(R.id.btn_excluir_lista).isEnabled = true
         titulo.text = detalhe.nome
+        dataLista = detalhe.data
 
         concluidos.text = getString(R.string.lista_concluidos, detalhe.concluidos, detalhe.total)
         percentual.text = getString(R.string.lista_percentual, detalhe.progresso)
@@ -153,12 +155,12 @@ class ListaComprasActivity :
     }
 
     private fun pedirNovoNome() {
-        NomeListaBottomSheet.renomear(titulo.text.toString())
+        NomeListaBottomSheet.renomear(titulo.text.toString(), dataLista)
             .show(supportFragmentManager, NomeListaBottomSheet.TAG)
     }
 
-    override fun aoConfirmarNomeDaLista(nome: String) {
-        viewModel.renomear(nome)
+    override fun aoConfirmarNomeDaLista(nome: String, data: String?) {
+        viewModel.renomear(nome, data)
     }
 
     private fun confirmarRemocaoDoItem(item: ItemLista) {

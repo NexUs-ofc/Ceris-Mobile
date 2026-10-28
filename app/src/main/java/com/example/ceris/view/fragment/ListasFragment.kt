@@ -103,8 +103,8 @@ class ListasFragment :
             .show(childFragmentManager, NomeListaBottomSheet.TAG)
     }
 
-    override fun aoConfirmarNomeDaLista(nome: String) {
-        viewModel.criarLista(nome)
+    override fun aoConfirmarNomeDaLista(nome: String, data: String?) {
+        viewModel.criarLista(nome, data)
     }
 
     private fun abrirDetalhe(id: String, nome: String) {

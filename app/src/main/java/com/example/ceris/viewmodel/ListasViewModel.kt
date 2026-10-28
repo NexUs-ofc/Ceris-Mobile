@@ -48,7 +48,7 @@ class ListasViewModel : ViewModel() {
         )
     }
 
-    fun criarLista(nome: String?) {
+    fun criarLista(nome: String?, data: String?) {
         val titulo = nome?.trim().orEmpty()
 
         if (titulo.isEmpty()) {
@@ -58,6 +58,7 @@ class ListasViewModel : ViewModel() {
 
         repository.criar(
             titulo = titulo,
+            data = data,
             onSuccess = { resposta -> listener.listaCriada(resposta.id, resposta.title) },
             onError = { statusCode, errorBody ->
                 listener.makeText(mensagemDeErro(statusCode, errorBody))

@@ -50,7 +50,7 @@ class ListaComprasViewModel : ViewModel() {
         repository.buscar(listaId, ::aoReceber, ::aoErrar, ::aoFalhar)
     }
 
-    fun renomear(nome: String?) {
+    fun renomear(nome: String?, data: String?) {
         val titulo = nome?.trim().orEmpty()
 
         if (titulo.isEmpty()) {
@@ -58,7 +58,7 @@ class ListaComprasViewModel : ViewModel() {
             return
         }
 
-        repository.renomear(listaId, titulo, ::aoReceber, ::aoErrar, ::aoFalhar)
+        repository.renomear(listaId, titulo, data, ::aoReceber, ::aoErrar, ::aoFalhar)
     }
 
     fun adicionarItem(
