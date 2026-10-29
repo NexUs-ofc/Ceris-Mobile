@@ -63,8 +63,8 @@ class ListasFragment :
         mostrarAviso(!temListas)
     }
 
-    override fun listaCriada(id: String, nome: String) {
-        abrirDetalhe(id, nome)
+    override fun listaCriada(id: String, nome: String, data: String?) {
+        abrirDetalhe(id, nome, data, pedirData = data.isNullOrBlank())
     }
 
     /**
@@ -104,14 +104,21 @@ class ListasFragment :
     }
 
     override fun aoConfirmarNomeDaLista(nome: String) {
-        viewModel.criarLista(nome)
+        viewModel.criarLista(nome, null)
     }
 
-    private fun abrirDetalhe(id: String, nome: String) {
+    private fun abrirDetalhe(
+        id: String,
+        nome: String,
+        data: String? = null,
+        pedirData: Boolean = false
+    ) {
         startActivity(
             Intent(requireContext(), ListaComprasActivity::class.java)
                 .putExtra(ListaComprasActivity.EXTRA_LISTA_ID, id)
                 .putExtra(ListaComprasActivity.EXTRA_LISTA_NOME, nome)
+                .putExtra(ListaComprasActivity.EXTRA_LISTA_DATA, data)
+                .putExtra(ListaComprasActivity.EXTRA_PEDIR_DATA, pedirData)
         )
     }
 }

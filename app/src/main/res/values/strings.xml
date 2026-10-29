@@ -48,6 +48,7 @@
     <string name="nota_definir_validade">Definir validade</string>
     <string name="nota_validade">Vence em %1$s</string>
     <string name="lista_calendario">Calendário da lista</string>
+    <string name="lista_calendario_data">Data da lista: %1$s</string>
     <string name="codigo_subtitulo">A IA detectou estes dados. Toque em qualquer campo para corrigir se necessário.</string>
     <string name="codigo_titulo">Confirmar dados do produto</string>
     <string name="codigo_nome">Nome do item</string>
@@ -174,6 +175,9 @@
     <string name="lista_nome_criar_confirmar">Criar lista</string>
     <string name="lista_nome_renomear_titulo">Renomear lista</string>
     <string name="lista_nome_renomear_confirmar">Salvar</string>
+    <string name="lista_data_rotulo">DATA DA COMPRA (OPCIONAL)</string>
+    <string name="lista_data_sem_data">Escolher data</string>
+    <string name="lista_data_card">Data: %1$s</string>
     <string name="lista_nome_cancelar">Cancelar</string>
     <string name="lista_excluir">Excluir lista</string>
     <string name="lista_excluir_pergunta">Excluir \"%1$s\"? Os itens dela serão perdidos.</string>

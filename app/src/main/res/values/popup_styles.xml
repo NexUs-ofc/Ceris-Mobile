@@ -41,5 +41,7 @@
         <item name="colorAccent">@color/md_theme_primary</item>
         <item name="android:colorAccent">@color/md_theme_primary</item>
         <item name="android:windowBackground">@drawable/bg_dialogo</item>
+        <item name="android:windowMinWidthMajor">87%</item>
+        <item name="android:windowMinWidthMinor">87%</item>
     </style>
 </resources>

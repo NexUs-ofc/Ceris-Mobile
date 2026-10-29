@@ -56,13 +56,14 @@ class ShoppingListRepository(
 
     fun criar(
         titulo: String,
+        data: String?,
         onSuccess: (ShoppingListResponse) -> Unit,
         onError: (statusCode: Int, errorBody: String?) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
         val autorizacao = autorizacao() ?: return onFailure(SemSessao())
 
-        api.criar(autorizacao, ShoppingListRequest(title = titulo))
+        api.criar(autorizacao, ShoppingListRequest(title = titulo, date = data))
             .enqueue(respostaCrua("criar", onSuccess, onError, onFailure))
     }
 
@@ -81,14 +82,29 @@ class ShoppingListRepository(
     fun renomear(
         listaId: String,
         titulo: String,
+        data: String?,
         onSuccess: (Detalhe) -> Unit,
         onError: (statusCode: Int, errorBody: String?) -> Unit,
         onFailure: (Throwable) -> Unit
     ) {
         val autorizacao = autorizacao() ?: return onFailure(SemSessao())
 
-        api.renomear(autorizacao, listaId, ShoppingListRequest(title = titulo))
+        api.renomear(autorizacao, listaId, ShoppingListRequest(title = titulo, date = data))
             .enqueue(respostaDetalhe("renomear", onSuccess, onError, onFailure))
+    }
+
+    fun atualizarData(
+        listaId: String,
+        titulo: String,
+        data: String?,
+        onSuccess: (Detalhe) -> Unit,
+        onError: (statusCode: Int, errorBody: String?) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        val autorizacao = autorizacao() ?: return onFailure(SemSessao())
+
+        api.renomear(autorizacao, listaId, ShoppingListRequest(title = titulo, date = data))
+            .enqueue(respostaDetalhe("atualizarData", onSuccess, onError, onFailure))
     }
 
     // Os ids vao por parametro porque depois do DELETE nao ha de onde tira-los.
@@ -228,7 +244,8 @@ class ShoppingListRepository(
     data class Detalhe(
         val id: String,
         val nome: String,
-        val itens: List<ItemLista>
+        val itens: List<ItemLista>,
+        val data: String? = null
     ) {
         val concluidos: Int get() = itens.count { it.marcado }
 
@@ -249,7 +266,7 @@ class ShoppingListRepository(
             .takeIf { it.isNotBlank() }
             ?.let { "Bearer $it" }
 
-    // Categoria sai do eventId: o contrato nao tem campo de categoria.
+    // Data e título vêm do Core; preço continua sendo um extra local.
     private fun paraCard(resposta: ShoppingListResponse): ListaCompra {
         val itens = resposta.arrayList.orEmpty()
         val concluidos = itens.count { it.checked }
@@ -259,15 +276,17 @@ class ShoppingListRepository(
             id = resposta.id,
             nome = resposta.title,
             quantidadeItens = itens.size,
-            categoria = if (resposta.eventId.isNullOrBlank()) "Compras" else "Eventos",
+            categoria = "Compras",
             progresso = if (itens.isEmpty()) 0 else (concluidos * 100.0 / itens.size).roundToInt(),
-            valorTotal = Moeda.formatar(valor)
+            valorTotal = Moeda.formatar(valor),
+            data = resposta.date
         )
     }
 
     private fun paraDetalhe(resposta: ShoppingListResponse): Detalhe = Detalhe(
         id = resposta.id,
         nome = resposta.title,
+        data = resposta.date,
         itens = resposta.arrayList.orEmpty().map { item ->
             ItemLista(
                 id = item.id,

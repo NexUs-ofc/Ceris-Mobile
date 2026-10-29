@@ -79,7 +79,18 @@
             android:textColor="@color/md_secundary_text"
             android:textSize="@dimen/text_size_13"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_nome_lista" />
+            app:layout_constraintTop_toBottomOf="@id/txt_data_lista" />
+
+        <TextView
+            android:id="@+id/txt_data_lista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:textColor="@color/md_secundary_text"
+            android:textSize="@dimen/text_size_12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_nome_lista"
+            tools:text="Data: 28/10/2026" />
 
         <TextView
             android:id="@+id/txt_percentual"

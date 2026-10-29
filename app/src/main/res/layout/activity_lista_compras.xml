@@ -63,18 +63,22 @@
         android:src="@drawable/ic_menu_pencil"
         app:layout_constraintBottom_toBottomOf="@id/txt_titulo"
         app:layout_constraintEnd_toStartOf="@id/icone_calendario_lista"
+        android:layout_marginEnd="@dimen/spacing_xs"
         app:layout_constraintTop_toTopOf="@id/txt_titulo"
         app:tint="@color/md_theme_primary" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/icone_calendario_lista"
         android:layout_width="@dimen/icone_voltar_size"
         android:layout_height="@dimen/icone_voltar_size"
-        android:layout_marginEnd="@dimen/screen_margin_horizontal"
         android:contentDescription="@string/lista_calendario"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="12dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="@id/txt_titulo"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
         app:layout_constraintTop_toTopOf="@id/txt_titulo"
         app:srcCompat="@drawable/ic_menu_calendar"
         app:tint="@color/md_theme_primary" />

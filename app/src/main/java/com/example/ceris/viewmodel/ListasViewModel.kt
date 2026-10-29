@@ -25,7 +25,7 @@ class ListasViewModel : ViewModel() {
 
         fun listasCarregadas(listas: List<ListaCompra>)
 
-        fun listaCriada(id: String, nome: String)
+        fun listaCriada(id: String, nome: String, data: String?)
     }
 
     lateinit var listener: Listener
@@ -48,7 +48,7 @@ class ListasViewModel : ViewModel() {
         )
     }
 
-    fun criarLista(nome: String?) {
+    fun criarLista(nome: String?, data: String?) {
         val titulo = nome?.trim().orEmpty()
 
         if (titulo.isEmpty()) {
@@ -58,7 +58,8 @@ class ListasViewModel : ViewModel() {
 
         repository.criar(
             titulo = titulo,
-            onSuccess = { resposta -> listener.listaCriada(resposta.id, resposta.title) },
+            data = data,
+            onSuccess = { resposta -> listener.listaCriada(resposta.id, resposta.title, resposta.date) },
             onError = { statusCode, errorBody ->
                 listener.makeText(mensagemDeErro(statusCode, errorBody))
             },

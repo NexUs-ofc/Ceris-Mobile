@@ -4,8 +4,9 @@ data class ListaCompra(
     val id: String,
     val nome: String,
     val quantidadeItens: Int,
-    // "Compras" ou "Eventos", derivado do eventId.
+    // Mantido como rótulo de apresentação das listas atuais.
     val categoria: String,
     val progresso: Int,
-    val valorTotal: String
+    val valorTotal: String,
+    val data: String? = null
 )

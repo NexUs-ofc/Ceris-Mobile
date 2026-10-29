@@ -1,11 +1,14 @@
 package com.example.ceris.view.fragment
 
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import com.example.ceris.R
@@ -36,7 +39,6 @@ class NomeListaBottomSheet : BottomSheetDialogFragment() {
         campo = view.findViewById(R.id.campo_nome_lista)
         campo.setText(argumentos.getString(ARG_NOME).orEmpty())
         campo.setSelection(campo.text.length)
-
         view.findViewById<TextView>(R.id.titulo_sheet)
             .setText(argumentos.getInt(ARG_TITULO))
 
@@ -55,9 +57,20 @@ class NomeListaBottomSheet : BottomSheetDialogFragment() {
             }
         }
 
-        // O sheet abre só para digitar um nome: o teclado vem junto.
-        campo.requestFocus()
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        // Mantém o teclado fora do sheet por padrão; tocar no campo de nome abre-o.
+        campo.showSoftInputOnFocus = true
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        view.post { dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE) }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        esconderTeclado()
+        super.onDismiss(dialog)
+    }
+
+    private fun esconderTeclado() {
+        val im = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        im?.hideSoftInputFromWindow(campo.windowToken, 0)
     }
 
     private fun confirmar() {
