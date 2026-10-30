@@ -40,7 +40,11 @@
     <TextView
         android:id="@+id/txt_titulo"
         style="@style/TituloTela"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
+        app:layout_constraintWidth_default="wrap"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_xs"
         android:layout_marginTop="@dimen/spacing_xl"
@@ -54,14 +58,16 @@
 
     <ImageButton
         android:id="@+id/btn_renomear"
-        android:layout_width="@dimen/icone_voltar_size"
-        android:layout_height="@dimen/icone_voltar_size"
+        android:layout_width="@dimen/icone_acao_alvo"
+        android:layout_height="@dimen/icone_acao_alvo"
         android:layout_marginStart="@dimen/spacing_s"
         android:padding="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/lista_renomear"
         android:src="@drawable/ic_menu_pencil"
         app:layout_constraintBottom_toBottomOf="@id/txt_titulo"
+        app:layout_constraintStart_toEndOf="@id/txt_titulo"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintEnd_toStartOf="@id/icone_calendario_lista"
         android:layout_marginEnd="@dimen/spacing_xs"
         app:layout_constraintTop_toTopOf="@id/txt_titulo"
@@ -69,8 +75,8 @@
 
     <ImageButton
         android:id="@+id/icone_calendario_lista"
-        android:layout_width="@dimen/icone_voltar_size"
-        android:layout_height="@dimen/icone_voltar_size"
+        android:layout_width="@dimen/icone_acao_alvo"
+        android:layout_height="@dimen/icone_acao_alvo"
         android:contentDescription="@string/lista_calendario"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="12dp"
