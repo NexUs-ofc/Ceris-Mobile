@@ -41,6 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_xs"
             android:layout_weight="1"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textColor="@color/card_titulo"
             android:textSize="@dimen/text_size_28"
             tools:text="Frango ao molho" />

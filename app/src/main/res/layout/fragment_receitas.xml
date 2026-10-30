@@ -14,7 +14,7 @@
         style="@style/TituloTela"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/receita_topo"
+        android:layout_marginTop="@dimen/spacing_l"
         android:paddingStart="@dimen/screen_margin_horizontal"
         android:paddingEnd="@dimen/screen_margin_horizontal"
         android:text="@string/receitas_titulo"
@@ -29,7 +29,7 @@
         android:id="@+id/lista_receitas"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/receita_lista_espaco_titulo"
+        android:layout_marginTop="@dimen/spacing_m"
         android:clipToPadding="false"
         android:paddingStart="@dimen/screen_margin_horizontal"
         android:paddingEnd="@dimen/screen_margin_horizontal"
@@ -53,19 +53,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titulo_receitas" />
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/estado_receitas_vazio"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/screen_margin_horizontal"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titulo_receitas"
         app:layout_constraintWidth_max="@dimen/receita_content_max_width">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/screen_margin_horizontal">
 
         <ImageView
             android:id="@+id/img_receitas_vazia"
@@ -101,7 +106,8 @@
             android:textColor="@color/md_theme_primary"
             android:textSize="@dimen/text_size_14" />
 
-    </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/estado_receitas_erro"

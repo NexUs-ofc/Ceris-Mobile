@@ -30,6 +30,8 @@ class ListasFragment :
     private lateinit var imgVazia: ImageView
 
     private var temListas = false
+    private var listasAtuais: List<ListaCompra>? = null
+    private var criando = false
 
     private val adapter = ListaAdapter { escolhida -> abrirDetalhe(escolhida.id, escolhida.nome) }
 
@@ -42,7 +44,13 @@ class ListasFragment :
         lista.adapter = adapter
 
         view.findViewById<MaterialButton>(R.id.btn_criar_lista).setOnClickListener {
-            pedirNome()
+            val listas = listasAtuais ?: return@setOnClickListener
+            if (criando) return@setOnClickListener
+            val nomes = listas.map { it.nome.trim().lowercase() }.toSet()
+            var numero = 1
+            while ("${getString(R.string.lista_nova_nome)} $numero".lowercase() in nomes) numero++
+            criando = true
+            viewModel.criarLista("${getString(R.string.lista_nova_nome)} $numero", null)
         }
 
         viewModel.listener = this
@@ -56,6 +64,7 @@ class ListasFragment :
     }
 
     override fun listasCarregadas(listas: List<ListaCompra>) {
+        listasAtuais = listas
         adapter.submitList(listas)
         temListas = listas.isNotEmpty()
 
@@ -64,6 +73,8 @@ class ListasFragment :
     }
 
     override fun listaCriada(id: String, nome: String, data: String?) {
+        criando = false
+        listasAtuais = null
         abrirDetalhe(id, nome, data, pedirData = data.isNullOrBlank())
     }
 
@@ -80,6 +91,7 @@ class ListasFragment :
      */
     override fun makeText(message: String) {
         // O fragment pode já ter saído de cena enquanto a chamada estava no ar.
+        criando = false
         val contexto = context ?: return
 
         if (temListas) {
