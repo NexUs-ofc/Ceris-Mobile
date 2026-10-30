@@ -40,6 +40,10 @@
         <item name="fontFamily">@font/montserrat</item>
         <item name="android:fontFamily">@font/montserrat</item>
 
+        <!-- A identidade do Ceris usa superfícies claras. Impede que o Force Dark
+             do Android escureça fundos explícitos sem adaptar as cores do texto. -->
+        <item name="android:forceDarkAllowed">false</item>
+
         <item name="android:statusBarColor">@color/design_default_color_primary</item>
     </style>
 </resources>

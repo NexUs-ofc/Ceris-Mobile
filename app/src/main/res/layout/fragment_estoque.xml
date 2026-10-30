@@ -43,10 +43,11 @@
 
         <ImageButton
             android:id="@+id/btn_perfil"
-            android:layout_width="@dimen/nav_icon_size"
-            android:layout_height="@dimen/nav_icon_size"
+            android:layout_width="@dimen/icone_acao_alvo"
+            android:layout_height="@dimen/icone_acao_alvo"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/estoque_perfil"
+            android:padding="12dp"
             android:src="@drawable/ic_menu_user"
             app:layout_constraintBottom_toBottomOf="@id/titulo"
             app:layout_constraintEnd_toEndOf="parent"

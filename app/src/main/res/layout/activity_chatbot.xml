@@ -150,8 +150,8 @@
 
         <ImageButton
             android:id="@+id/btn_voltar"
-            android:layout_width="@dimen/icone_voltar_size"
-            android:layout_height="@dimen/icone_voltar_size"
+            android:layout_width="@dimen/icone_acao_alvo"
+            android:layout_height="@dimen/icone_acao_alvo"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/chat_voltar"
             android:padding="@dimen/spacing_s"
@@ -177,8 +177,8 @@
 
         <ImageButton
             android:id="@+id/btn_encerrar"
-            android:layout_width="@dimen/icone_voltar_size"
-            android:layout_height="@dimen/icone_voltar_size"
+            android:layout_width="@dimen/icone_acao_alvo"
+            android:layout_height="@dimen/icone_acao_alvo"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/chat_encerrar"
             android:padding="@dimen/spacing_s"

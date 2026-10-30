@@ -142,6 +142,8 @@
     <dimen name="stepper_icone_size">16dp</dimen>
     <dimen name="icone_acao_size">24dp</dimen>
     <dimen name="icone_voltar_size">42dp</dimen>
+    <!-- Alvo de toque para acoes no cabecalho; o desenho interno continua 24dp. -->
+    <dimen name="icone_acao_alvo">48dp</dimen>
 
     <!-- Chatbot -->
     <dimen name="chat_header_altura">72dp</dimen>
@@ -153,7 +155,7 @@
     <dimen name="chat_balao_max_width">280dp</dimen>
     <dimen name="chat_campo_radius">28dp</dimen>
     <dimen name="chat_campo_altura">56dp</dimen>
-    <dimen name="chat_enviar_size">44dp</dimen>
+    <dimen name="chat_enviar_size">48dp</dimen>
     <dimen name="chat_sugestao_radius">20dp</dimen>
     <dimen name="chat_sugestao_padding_h">14dp</dimen>
     <dimen name="chat_sugestao_altura">38dp</dimen>

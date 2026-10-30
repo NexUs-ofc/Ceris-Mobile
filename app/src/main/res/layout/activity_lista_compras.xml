@@ -54,8 +54,8 @@
 
     <ImageButton
         android:id="@+id/btn_renomear"
-        android:layout_width="@dimen/icone_voltar_size"
-        android:layout_height="@dimen/icone_voltar_size"
+        android:layout_width="@dimen/icone_acao_alvo"
+        android:layout_height="@dimen/icone_acao_alvo"
         android:layout_marginStart="@dimen/spacing_s"
         android:padding="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -69,8 +69,8 @@
 
     <ImageButton
         android:id="@+id/icone_calendario_lista"
-        android:layout_width="@dimen/icone_voltar_size"
-        android:layout_height="@dimen/icone_voltar_size"
+        android:layout_width="@dimen/icone_acao_alvo"
+        android:layout_height="@dimen/icone_acao_alvo"
         android:contentDescription="@string/lista_calendario"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="12dp"

@@ -140,6 +140,7 @@
     <dimen name="stepper_icone_size">18dp</dimen>
     <dimen name="icone_acao_size">32dp</dimen>
     <dimen name="icone_voltar_size">56dp</dimen>
+    <dimen name="icone_acao_alvo">56dp</dimen>
 
     <!-- Chatbot -->
     <dimen name="chat_header_altura">84dp</dimen>
