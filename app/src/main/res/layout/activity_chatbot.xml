@@ -192,6 +192,7 @@
         <TextView
             android:id="@+id/nome_bot"
             style="@style/TituloTela"
+            android:textColor="@color/texto_titulo_prototipo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_m"

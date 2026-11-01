@@ -19,7 +19,7 @@
         android:paddingTop="@dimen/chat_balao_padding_v"
         android:paddingEnd="@dimen/chat_balao_padding_h"
         android:paddingBottom="@dimen/chat_balao_padding_v"
-        android:textColor="@color/md_theme_onBackground"
+        android:textColor="@color/card_titulo"
         android:textSize="@dimen/text_size_14"
         tools:text="Oi! Posso ajudar a planejar compras, sugerir receitas ou conferir o que falta no estoque." />
 

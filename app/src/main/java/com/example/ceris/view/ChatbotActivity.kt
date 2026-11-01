@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -189,8 +190,25 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
         return true
     }
 
-    override fun respostaRecebida(texto: String) {
+    override fun respostaRecebida(texto: String, respostasRecomendadas: List<String>?) {
         lista.scrollToPosition(adapter.acrescentar(MensagemChat.DaCerita(texto)))
+        mostrarSugestoes(respostasRecomendadas.orEmpty())
+    }
+
+    private fun mostrarSugestoes(respostas: List<String>) {
+        val container = sugestoes as? ViewGroup ?: return
+        container.removeAllViews()
+        respostas.asSequence().map(String::trim).filter(String::isNotEmpty).take(3).forEach { resposta ->
+            val chip = layoutInflater.inflate(R.layout.item_chat_sugestao, container, false) as TextView
+            chip.apply {
+                text = resposta
+                setOnClickListener {
+                    enviar(resposta)
+                }
+            }
+            container.addView(chip)
+        }
+        sugestoes.visibility = if (container.childCount > 0) View.VISIBLE else View.GONE
     }
 
     override fun progressoDaEspera(texto: String) {
