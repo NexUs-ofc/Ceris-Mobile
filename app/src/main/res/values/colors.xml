@@ -8,6 +8,10 @@
     <color name="ceris_deep_300">#4F2078</color>
     <color name="ceris_deep_400">#322340</color>
     <color name="ceris_white">#FFFFFF</color>
+    <color name="fundo_prototipo">#FAFAFA</color>
+    <color name="texto_titulo_prototipo">#3B3B3B</color>
+    <color name="borda_input_cinza">#B3B3B3</color>
+    <color name="avaliacao_contorno">#D8D0DF</color>
     <color name="ceris_black">#000000</color>
     <!-- Card de produto: destaque de quantidade e validade, e titulo em negrito. -->
     <color name="card_destaque">#6D28D9</color>
@@ -79,6 +83,7 @@
     <color name="md_theme_onErrorContainer">#73342D</color>
     <!-- Card de produto -->
     <color name="card_contorno">#EDEDF2</color>
+    <color name="borda_card_prototipo">#DEDEE5</color>
 
     <!-- Selos de situacao do produto -->
     <color name="selo_fresco_fundo">#D6F5E3</color>
@@ -110,6 +115,8 @@
     <!-- Chatbot (Figma > Protótipos > V1 > Chatbot) -->
     <color name="chat_fundo">#FAF8F0</color>
     <color name="chat_balao_bot">#E8DCFA</color>
+    <color name="chat_balao_contorno">#D5C5E7</color>
+    <color name="chat_campo_contorno">@color/borda_input_cinza</color>
     <!-- Creme do fundo com alfa: o padrão continua aparecendo sob o cabeçalho -->
     <color name="chat_header_fundo">#E6FAF8F0</color>
     <color name="chat_header_traco">#1A4F2078</color>

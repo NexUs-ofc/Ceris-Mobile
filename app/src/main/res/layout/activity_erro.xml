@@ -15,7 +15,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/fundo_prototipo"
     tools:context=".view.ErroActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,6 +45,7 @@
         <TextView
             android:id="@+id/txt_erro_titulo"
             style="@style/TituloTela"
+            android:textColor="@color/texto_titulo_prototipo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_l"

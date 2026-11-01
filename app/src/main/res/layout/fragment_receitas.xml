@@ -6,7 +6,7 @@
     android:id="@+id/raiz_receitas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/fundo_prototipo"
     tools:context=".view.fragment.ReceitasFragment">
 
     <TextView

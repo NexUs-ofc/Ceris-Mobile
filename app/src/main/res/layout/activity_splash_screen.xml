@@ -9,9 +9,9 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="120dp"
+        android:layout_width="@dimen/splash_logo_size"
+        android:layout_height="@dimen/splash_logo_size"
+        android:layout_marginTop="@dimen/splash_logo_top"
         android:alpha="0"
         android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
         android:alpha="0"
         android:text="Ceris"
         android:textColor="@color/md_theme_primary"
-        android:textSize="@dimen/text_size_64"
+        android:textSize="@dimen/splash_title_size"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -37,10 +37,10 @@
 
     <TextView
         android:id="@+id/legends"
-        android:layout_width="303dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/screen_margin_horizontal"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="@dimen/splash_tagline_top"
         android:layout_marginEnd="@dimen/screen_margin_horizontal"
         android:fontFamily="@font/huninn"
         app:fontFamily="@font/huninn"
@@ -48,11 +48,12 @@
         android:text="Monitorar seu estoque nunca ficou tão fácil"
         android:textAlignment="center"
         android:textColor="@color/ceris_cinza"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_size_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintWidth_max="@dimen/splash_tagline_max_width" />
 
 
     <ImageView

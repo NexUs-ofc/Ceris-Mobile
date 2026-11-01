@@ -16,7 +16,7 @@
     android:id="@+id/raiz_estoque"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/fundo_prototipo"
     tools:context=".view.fragment.EstoqueFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,6 +33,7 @@
         <TextView
             android:id="@+id/titulo"
             style="@style/TituloTela"
+            android:textColor="@color/texto_titulo_prototipo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_xl"
@@ -56,6 +57,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/campo_busca"
+            app:boxStrokeColor="@color/borda_input_cinza"
             style="@style/BuscaInputStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/field_height"

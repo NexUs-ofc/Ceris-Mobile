@@ -22,13 +22,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <EditText
         android:id="@+id/txt_valor"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@null"
         android:fontFamily="@font/montserrat_medium"
         android:gravity="center"
+        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
         android:maxLines="1"
+        android:padding="0dp"
+        android:selectAllOnFocus="true"
         android:textColor="@color/card_titulo"
         android:textSize="@dimen/text_size_13"
         app:fontFamily="@font/montserrat_medium"

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajustes para telas baixas em paisagem; o conteúdo continua rolável. -->
+<resources>
+    <dimen name="screen_margin_horizontal">16dp</dimen>
+    <dimen name="spacing_m">12dp</dimen>
+    <dimen name="spacing_l">16dp</dimen>
+    <dimen name="spacing_xl">20dp</dimen>
+    <dimen name="spacing_xxl">24dp</dimen>
+
+    <!-- A barra inferior deixa mais altura para o conteúdo em paisagem. -->
+    <dimen name="nav_bar_height">68dp</dimen>
+    <dimen name="nav_icon_size">20dp</dimen>
+    <dimen name="nav_label_text">10sp</dimen>
+    <dimen name="nav_scan_size">48dp</dimen>
+    <dimen name="nav_scan_icon_size">20dp</dimen>
+    <dimen name="nav_cradle_margin">4dp</dimen>
+    <dimen name="nav_saliencia_raio">28dp</dimen>
+    <dimen name="nav_area_height">96dp</dimen>
+    <dimen name="nav_indicador_size">34dp</dimen>
+
+    <!-- Telas de entrada e estados de carregamento. -->
+    <dimen name="entrada_topo">20dp</dimen>
+    <dimen name="address_top_margin">16dp</dimen>
+    <dimen name="address_section_gap">12dp</dimen>
+    <dimen name="address_button_gap">12dp</dimen>
+    <dimen name="loading_title_top">24dp</dimen>
+    <dimen name="loading_spinner_size">72dp</dimen>
+    <dimen name="loading_progress_size">88dp</dimen>
+    <dimen name="otp_top_margin">24dp</dimen>
+    <dimen name="perfil_margem_topo">24dp</dimen>
+
+    <!-- A imagem decorativa não deve disputar espaço com formulários curtos. -->
+    <dimen name="hero_image_height">180dp</dimen>
+    <dimen name="splash_logo_size">88dp</dimen>
+    <dimen name="splash_logo_top">12dp</dimen>
+    <dimen name="splash_tagline_top">10dp</dimen>
+    <dimen name="splash_tagline_max_width">420dp</dimen>
+    <dimen name="splash_title_size">48sp</dimen>
+
+    <!-- Controles e moldura da câmera cabem em alturas de paisagem. -->
+    <dimen name="camera_controles_altura">64dp</dimen>
+    <dimen name="moldura_espaco_topo">48dp</dimen>
+    <dimen name="moldura_espaco_dica">32dp</dimen>
+    <dimen name="camera_modo_margin">12dp</dimen>
+    <dimen name="camera_modo_max_width">320dp</dimen>
+</resources>
