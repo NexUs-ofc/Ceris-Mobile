@@ -10,7 +10,6 @@ import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
 import com.example.ceris.BuildConfig
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 
@@ -25,10 +24,7 @@ object GoogleSignInHelper {
     private const val TAG = "GoogleSignInHelper"
     private const val CLIENT_ID_NAO_CONFIGURADO = "PREENCHER"
 
-    suspend fun obterIdToken(
-        context: Context,
-        filtrarPorContasAutorizadas: Boolean = false
-    ): Resultado {
+    suspend fun obterIdToken(context: Context): Resultado {
         if (BuildConfig.GOOGLE_WEB_CLIENT_ID.startsWith(CLIENT_ID_NAO_CONFIGURADO)) {
             Log.e(TAG, "GOOGLE_WEB_CLIENT_ID não configurado no local.properties")
             return Resultado.Erro(
@@ -36,34 +32,21 @@ object GoogleSignInHelper {
             )
         }
 
-        val porGoogleId = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(filtrarPorContasAutorizadas)
-            .setServerClientId(BuildConfig.GOOGLE_WEB_CLIENT_ID)
-            .setAutoSelectEnabled(false)
-            .build()
-
-        solicitar(context, porGoogleId)?.let { return it }
-
-        val porBotaoGoogle = GetSignInWithGoogleOption
+        // Este app iniciou a ação por um botão explícito "Google". Usar a
+        // opção própria desse botão evita a primeira consulta GetGoogleIdOption,
+        // que falha em alguns aparelhos Android 14 (inclusive Xiaomi/MIUI) e
+        // deixa uma segunda solicitação ambígua no Credential Manager.
+        val opcao = GetSignInWithGoogleOption
             .Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
             .build()
 
-        solicitar(context, porBotaoGoogle)?.let { return it }
-
-        return Resultado.Erro(
-            "Nenhuma conta Google disponível para este app. " +
-                "Verifique se a assinatura do app está registrada no Google Cloud."
-        )
+        return solicitar(context, opcao)
     }
 
-    /**
-     * Devolve null quando o Credential Manager não oferece nenhuma conta para
-     * esta opção, sinalizando ao chamador que vale tentar a próxima estratégia.
-     */
     private suspend fun solicitar(
         context: Context,
         opcao: CredentialOption
-    ): Resultado? {
+    ): Resultado {
         val requisicao = GetCredentialRequest.Builder()
             .addCredentialOption(opcao)
             .build()
@@ -86,13 +69,24 @@ object GoogleSignInHelper {
                 Resultado.Erro("Não foi possível ler a credencial do Google.")
             }
         } catch (e: GetCredentialCancellationException) {
+            Log.i(TAG, "Seleção de conta Google cancelada pelo usuário")
             Resultado.Cancelado
         } catch (e: NoCredentialException) {
-            Log.w(TAG, "Nenhuma credencial oferecida para esta opção", e)
-            null
+            Log.e(TAG, "O Credential Manager não ofereceu uma conta Google", e)
+            Resultado.Erro(
+                "O Android não conseguiu disponibilizar uma conta Google. " +
+                    "Confira as contas do aparelho e tente novamente."
+            )
         } catch (e: GetCredentialException) {
             Log.e(TAG, "Falha ao obter credencial do Google: ${e.type}", e)
             Resultado.Erro("Não foi possível entrar com o Google: ${e.type}")
+        } catch (e: Exception) {
+            // A credencial pode ter sido escolhida com sucesso e ainda assim
+            // falhar ao ser convertida (por exemplo, token/claims inesperados).
+            // Sem este catch a coroutine morria antes de avisar a tela ou abrir
+            // o carregamento, deixando o botão aparentemente travado.
+            Log.e(TAG, "Falha ao interpretar a credencial escolhida do Google", e)
+            Resultado.Erro("Não foi possível concluir o login com Google. Tente novamente.")
         }
     }
 
