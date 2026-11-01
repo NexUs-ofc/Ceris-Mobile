@@ -2,13 +2,14 @@ package com.example.ceris.view.fragment
 
 import android.app.Dialog
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
+import android.widget.FrameLayout
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.example.ceris.R
@@ -23,16 +24,27 @@ class QuantidadeDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val argumentos = requireArguments()
-        val conteudo = layoutInflater.inflate(R.layout.dialogo_quantidade, null)
+        val conteudo = layoutInflater.inflate(R.layout.dialogo_quantidade, FrameLayout(requireContext()), false)
 
         conteudo.findViewById<TextView>(R.id.titulo_dialogo).setText(argumentos.getInt(ARG_TITULO))
+        val maximo = argumentos.getInt(ARG_MAXIMO).coerceAtLeast(1)
         val seletor = Seletor(
             conteudo.findViewById(R.id.stepper_dialogo),
             inicial = 1,
-            maximo = argumentos.getInt(ARG_MAXIMO).coerceAtLeast(1)
+            maximo = maximo
         )
 
         conteudo.findViewById<View>(R.id.btn_salvar_dialogo).setOnClickListener {
+            if (!seletor.confirmarEntrada()) {
+                val digitado = seletor.valorDigitado()
+                val erro = if (digitado != null && digitado > maximo) {
+                    getString(R.string.quantidade_acima_estoque, maximo)
+                } else {
+                    getString(R.string.quantidade_positiva_inteira)
+                }
+                seletor.mostrarErro(erro)
+                return@setOnClickListener
+            }
             setFragmentResult(
                 argumentos.getString(ARG_CHAVE).orEmpty(),
                 Bundle().apply { putInt(RESULTADO, seletor.valor) }
@@ -43,14 +55,14 @@ class QuantidadeDialog : DialogFragment() {
 
         return Dialog(requireContext()).apply {
             setContentView(conteudo)
-            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         }
     }
 
     override fun onStart() {
         super.onStart()
         dialog?.window?.apply {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
             setGravity(Gravity.CENTER)
             setDimAmount(0.4f)
             addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)

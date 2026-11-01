@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -30,13 +31,14 @@ class AvaliacaoSecaoDialog : DialogFragment() {
         campoFeedback?.setText(savedInstanceState?.getString(STATE_COMMENT).orEmpty())
 
         val estrelas = (1..5).map { nota ->
-            conteudo.findViewById<TextView>(
+            conteudo.findViewById<ImageView>(
                 resources.getIdentifier("estrela_$nota", "id", requireContext().packageName)
             ).apply {
                 setOnClickListener { selecionarNota(nota, estrelasConteudo = conteudo) }
             }
         }
         atualizarEstrelas(estrelas)
+        atualizarResumoNota(conteudo)
         conteudo.findViewById<View>(R.id.btn_cancelar_avaliacao)
             .setOnClickListener {
                 publicarCancelamento()
@@ -65,12 +67,14 @@ class AvaliacaoSecaoDialog : DialogFragment() {
             .create()
 
         dialogo.setOnShowListener {
+            val densidade = resources.displayMetrics.density
+            val larguraDisponivel = resources.displayMetrics.widthPixels - (32 * densidade).toInt()
             dialogo.window?.setLayout(
-                (resources.displayMetrics.widthPixels * 0.94f).toInt().coerceAtMost(
-                    (600 * resources.displayMetrics.density).toInt()
-                ),
+                larguraDisponivel.coerceAtMost((440 * densidade).toInt()),
                 WindowManager.LayoutParams.WRAP_CONTENT
             )
+            dialogo.window?.setBackgroundDrawableResource(R.drawable.bg_dialogo)
+            dialogo.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
         dialogo.setOnCancelListener { publicarCancelamento() }
         return dialogo
@@ -85,21 +89,37 @@ class AvaliacaoSecaoDialog : DialogFragment() {
     private fun selecionarNota(nota: Int, estrelasConteudo: View) {
         notaSelecionada = nota
         atualizarEstrelas((1..5).map { indice ->
-            estrelasConteudo.findViewById(
+            estrelasConteudo.findViewById<ImageView>(
                 resources.getIdentifier("estrela_$indice", "id", requireContext().packageName)
             )
         })
+        atualizarResumoNota(estrelasConteudo)
     }
 
-    private fun atualizarEstrelas(estrelas: List<TextView>) {
+    private fun atualizarResumoNota(conteudo: View) {
+        val rotulo = conteudo.findViewById<TextView>(R.id.rotulo_nota_avaliacao)
+        if (notaSelecionada == 0) {
+            rotulo.visibility = View.GONE
+            return
+        }
+
+        val descricao = when (notaSelecionada) {
+            1 -> getString(R.string.avaliacao_muito_ruim)
+            2 -> getString(R.string.avaliacao_ruim)
+            3 -> getString(R.string.avaliacao_regular)
+            4 -> getString(R.string.avaliacao_bom)
+            else -> getString(R.string.avaliacao_excelente)
+        }
+        rotulo.text = getString(R.string.avaliacao_nota_resumo, notaSelecionada, descricao)
+        rotulo.visibility = View.VISIBLE
+    }
+
+    private fun atualizarEstrelas(estrelas: List<ImageView>) {
         estrelas.forEachIndexed { indice, estrela ->
             val selecionada = indice < notaSelecionada
-            estrela.text = if (selecionada) "★" else "☆"
-            estrela.setTextColor(
-                requireContext().getColor(
-                    if (selecionada) R.color.md_theme_primary
-                    else R.color.ceris_cinza_claro
-                )
+            estrela.setImageResource(
+                if (selecionada) R.drawable.ic_avaliacao_estrela_cheia
+                else R.drawable.ic_avaliacao_estrela_vazia
             )
         }
     }

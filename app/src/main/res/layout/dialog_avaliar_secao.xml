@@ -1,90 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp">
-
-    <TextView
-        style="@style/TituloSheet"
-        android:gravity="center"
-        android:text="@string/avaliacao_titulo" />
+    android:fillViewport="true"
+    android:overScrollMode="never">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView android:id="@+id/estrela_1" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_muito_ruim" android:text="☆" />
-        <TextView android:id="@+id/estrela_2" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_ruim" android:text="☆" />
-        <TextView android:id="@+id/estrela_3" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_regular" android:text="☆" />
-        <TextView android:id="@+id/estrela_4" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_bom" android:text="☆" />
-        <TextView android:id="@+id/estrela_5" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_excelente" android:text="☆" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="24dp">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/avaliacao_muito_ruim"
-            android:textColor="@color/md_theme_primary"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/avaliacao_excelente"
-            android:textColor="@color/md_theme_primary"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/avaliacao_ajude"
-        android:textColor="@color/md_theme_onSurface"
-        android:textSize="20sp" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:boxBackgroundMode="outline"
-        app:boxCornerRadiusBottomEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusTopStart="12dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/campo_feedback"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:gravity="top|start"
-            android:hint="@string/avaliacao_comentarios"
-            android:inputType="textCapSentences|textMultiLine"
-            android:maxLength="2000"
-            android:padding="12dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="@string/avaliacao_titulo"
+            android:textColor="@color/card_titulo"
+            android:textSize="22sp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_salvar_avaliacao"
-        style="@style/BotaoPrincipal"
-        android:layout_marginTop="16dp"
-        android:text="@string/avaliacao_salvar" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/montserrat"
+            android:lineSpacingExtra="2dp"
+            android:text="@string/avaliacao_subtitulo"
+            android:textColor="@color/ceris_cinza"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/btn_cancelar_avaliacao"
-        style="@style/LinkCancelar"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/avaliacao_cancelar" />
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="@string/avaliacao_pergunta"
+            android:textColor="@color/card_titulo"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView android:id="@+id/estrela_1" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_muito_ruim" android:src="@drawable/ic_avaliacao_estrela_vazia" />
+            <ImageView android:id="@+id/estrela_2" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_ruim" android:src="@drawable/ic_avaliacao_estrela_vazia" />
+            <ImageView android:id="@+id/estrela_3" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_regular" android:src="@drawable/ic_avaliacao_estrela_vazia" />
+            <ImageView android:id="@+id/estrela_4" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_bom" android:src="@drawable/ic_avaliacao_estrela_vazia" />
+            <ImageView android:id="@+id/estrela_5" style="@style/AvaliacaoEstrela" android:contentDescription="@string/avaliacao_excelente" android:src="@drawable/ic_avaliacao_estrela_vazia" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:paddingStart="12dp"
+                android:text="@string/avaliacao_muito_ruim"
+                android:textColor="@color/ceris_cinza"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:paddingEnd="12dp"
+                android:text="@string/avaliacao_excelente"
+                android:textColor="@color/ceris_cinza"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/rotulo_nota_avaliacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:textColor="@color/md_theme_primary"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/bg_avaliacao_feedback"
+            android:orientation="vertical"
+            android:paddingStart="14dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="@string/avaliacao_ajude"
+                android:textColor="@color/card_titulo"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/campo_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="@null"
+                android:gravity="top|start"
+                android:hint="@string/avaliacao_comentarios"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="2000"
+                android:paddingTop="8dp"
+                android:textColor="@color/card_titulo"
+                android:textColorHint="@color/ceris_cinza"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cancelar_avaliacao"
+                style="@style/BotaoContorno"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textColor="@color/card_titulo"
+                android:text="@string/avaliacao_cancelar"
+                app:strokeColor="@color/avaliacao_contorno"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_salvar_avaliacao"
+                style="@style/BotaoPrincipal"
+                android:layout_width="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1.25"
+                android:text="@string/avaliacao_salvar"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

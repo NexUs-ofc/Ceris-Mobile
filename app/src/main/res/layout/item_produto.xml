@@ -23,7 +23,7 @@
     app:cardBackgroundColor="@color/md_theme_surface"
     app:cardCornerRadius="@dimen/card_corner_radius"
     app:cardElevation="0dp"
-    app:strokeColor="@color/card_contorno"
+    app:strokeColor="@color/borda_card_prototipo"
     app:strokeWidth="@dimen/card_stroke_width">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +41,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/card_contorno"
+            app:strokeColor="@color/borda_card_prototipo"
             app:strokeWidth="@dimen/card_stroke_width">
 
             <ImageView

@@ -30,12 +30,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 
 /**
- * Confirmar dados do produto, aberto quando a camera le um codigo de barras.
+ * Confirmar dados do produto, aberto depois que a Open Food Facts encontra o código.
  *
- * Abre na hora com o que a pessoa precisa conferir: nome, validade e
- * quantidade. O resto do cadastro (marca, embalagem, categoria, foto) vem da
- * base aberta logo depois e segue para a Core sem aparecer na tela, como no
- * Figma. Sem a base, vale embalagem de 1 unidade e categoria "Outros".
+ * Recebe os dados encontrados antes de abrir, mostra nome, validade e
+ * quantidade, e registra os outros campos sem uma segunda consulta.
  */
 class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
 
@@ -64,7 +62,9 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gtin = requireArguments().getString(ARG_GTIN).orEmpty()
+        val argumentos = requireArguments()
+        gtin = argumentos.getString(ARG_GTIN).orEmpty()
+        encontrado = produtoDosArgumentos(argumentos)
         val sessao = SessionManager(requireContext())
         repository = CodigoBarrasRepository(
             baseAberta = OpenFoodFactsClient.api,
@@ -83,11 +83,10 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         confirmar.setOnClickListener { salvar() }
         view.findViewById<View>(R.id.btn_cancelar_codigo).setOnClickListener { dismiss() }
 
-        // Ate a base responder, o botao espera: salvar antes mandaria categoria
-        // e embalagem genericas para um produto que a base conhece.
-        confirmar.isEnabled = false
-        confirmar.setText(R.string.codigo_buscando)
-        repository.buscar(gtin) { achado -> view.post { preencher(achado) } }
+        confirmar.isEnabled = true
+        confirmar.setText(R.string.codigo_confirmar)
+        campoNome.setText(encontrado?.nome.orEmpty())
+        travar(campoNome)
     }
 
     override fun onStart() {
@@ -99,28 +98,21 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-    private fun preencher(achado: ProdutoEncontrado?) {
-        if (!isAdded) return
-        encontrado = achado
-        confirmar.isEnabled = true
-        confirmar.setText(R.string.codigo_confirmar)
-
-        // O nome que veio da base fica como esta, sem edicao. Sem o produto na
-        // base, o campo continua livre para a pessoa digitar.
-        val nome = achado?.nome ?: return
-        campoNome.setText(nome)
-        travar(campoNome)
-    }
-
     private fun travar(campo: EditText) {
         campo.keyListener = null
         campo.isFocusable = false
+        campo.isFocusableInTouchMode = false
+        campo.isClickable = false
         campo.isCursorVisible = false
         campo.isLongClickable = false
         campo.setTextIsSelectable(false)
     }
 
     private fun salvar() {
+        if (!quantidade.confirmarEntrada()) {
+            quantidade.mostrarErro(getString(R.string.quantidade_positiva_inteira))
+            return
+        }
         val base = encontrado
         val cadastro = CadastroPorCodigo.montar(
             gtin = gtin,
@@ -178,12 +170,42 @@ class CodigoBarrasBottomSheet : BottomSheetDialogFragment() {
     companion object {
         const val TAG = "CodigoBarrasBottomSheet"
         private const val ARG_GTIN = "gtin"
+        private const val ARG_NOME = "nome"
+        private const val ARG_MARCA = "marca"
+        private const val ARG_QUANTIDADE_EMBALAGEM = "quantidade_embalagem"
+        private const val ARG_TEM_QUANTIDADE_EMBALAGEM = "tem_quantidade_embalagem"
+        private const val ARG_UNIDADE = "unidade"
+        private const val ARG_IMAGEM_URL = "imagem_url"
+        private const val ARG_CATEGORIA = "categoria"
 
         private fun formatar(valor: Double): String =
             if (valor % 1.0 == 0.0) valor.toLong().toString() else valor.toString().replace('.', ',')
 
-        fun novo(gtin: String) = CodigoBarrasBottomSheet().apply {
-            arguments = Bundle().apply { putString(ARG_GTIN, gtin) }
+        fun novo(gtin: String, produto: ProdutoEncontrado) = CodigoBarrasBottomSheet().apply {
+            arguments = Bundle().apply {
+                putString(ARG_GTIN, gtin)
+                putString(ARG_NOME, produto.nome)
+                putString(ARG_MARCA, produto.marca)
+                putBoolean(ARG_TEM_QUANTIDADE_EMBALAGEM, produto.quantidadeEmbalagem != null)
+                putDouble(ARG_QUANTIDADE_EMBALAGEM, produto.quantidadeEmbalagem ?: 0.0)
+                putString(ARG_UNIDADE, produto.unidadeEmbalagem?.name)
+                putString(ARG_IMAGEM_URL, produto.imagemUrl)
+                putString(ARG_CATEGORIA, produto.categoria?.name)
+            }
         }
+
+        private fun produtoDosArgumentos(argumentos: Bundle) = ProdutoEncontrado(
+            nome = argumentos.getString(ARG_NOME),
+            marca = argumentos.getString(ARG_MARCA),
+            quantidadeEmbalagem = argumentos.getDouble(ARG_QUANTIDADE_EMBALAGEM)
+                .takeIf { argumentos.getBoolean(ARG_TEM_QUANTIDADE_EMBALAGEM) },
+            unidadeEmbalagem = argumentos.getString(ARG_UNIDADE)?.let { nome ->
+                UnidadeEmbalagem.entries.firstOrNull { it.name == nome }
+            },
+            imagemUrl = argumentos.getString(ARG_IMAGEM_URL),
+            categoria = argumentos.getString(ARG_CATEGORIA)?.let { nome ->
+                CategoriaAlimento.entries.firstOrNull { it.name == nome }
+            }
+        )
     }
 }

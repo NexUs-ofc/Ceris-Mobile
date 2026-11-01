@@ -33,6 +33,8 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
     private lateinit var registerBtn: Button
     private lateinit var voltarBtn: ImageView
     private lateinit var email: String
+    private var versaoBuscaCep = 0
+    private var ultimoCepConsultado: String? = null
     private val viewModel: RegisterViewModel by viewModels()
 
     companion object {
@@ -91,7 +93,13 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
             override fun afterTextChanged(s: android.text.Editable?) {
                 val cep = s.toString().onlyNumbers()
                 if (cep.length == 8) {
-                    fetchAddressByCEP(cep)
+                    if (cep != ultimoCepConsultado) {
+                        ultimoCepConsultado = cep
+                        fetchAddressByCEP(cep)
+                    }
+                } else {
+                    ultimoCepConsultado = null
+                    versaoBuscaCep++
                 }
             }
         })
@@ -145,15 +153,26 @@ class SetAddressActivity : AppCompatActivity(), RegisterViewModel.Listener {
     }
 
     private fun fetchAddressByCEP(cep: String) {
+        val versao = ++versaoBuscaCep
+        val ruaAntes = ruaInput.text.toString()
+        val bairroAntes = bairroInput.text.toString()
+        val cidadeAntes = cidadeInput.text.toString()
+        val estadoAntes = estadoInput.text.toString()
         viewModel.fetchAddressByCEP(
             cep = cep,
             onSuccess = { response ->
-                ruaInput.setText(response.logradouro)
-                bairroInput.setText(response.bairro)
-                cidadeInput.setText(response.localidade)
-                estadoInput.setText(response.uf)
+                if (isFinishing || isDestroyed || versao != versaoBuscaCep ||
+                    cepInput.text.toString().onlyNumbers() != cep
+                ) return@fetchAddressByCEP
+                if (ruaInput.text.toString() == ruaAntes) ruaInput.setText(response.logradouro)
+                if (bairroInput.text.toString() == bairroAntes) bairroInput.setText(response.bairro)
+                if (cidadeInput.text.toString() == cidadeAntes) cidadeInput.setText(response.localidade)
+                if (estadoInput.text.toString() == estadoAntes) estadoInput.setText(response.uf)
             },
             onError = { throwable ->
+                if (isFinishing || isDestroyed || versao != versaoBuscaCep ||
+                    cepInput.text.toString().onlyNumbers() != cep
+                ) return@fetchAddressByCEP
                 // A busca e pelo CEP: o aviso pertence ao campo do CEP.
                 cepLayout().mostrarErro(throwable.message)
             }

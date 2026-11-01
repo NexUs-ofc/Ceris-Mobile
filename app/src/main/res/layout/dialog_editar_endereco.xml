@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialogo"
+    android:fillViewport="true"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/sheet_padding">
+
+        <TextView
+            style="@style/TituloSheet"
+            android:text="@string/endereco_editar" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/box_cep_endereco"
+            style="@style/InputStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_l">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/campo_cep_endereco"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/field_height"
+                android:hint="@string/endereco_cep"
+                android:inputType="number"
+                android:maxLength="9"
+                android:imeOptions="actionNext"
+                android:textColor="@color/md_theme_onBackground"
+                android:textColorHint="@color/md_theme_hint"
+                android:textSize="@dimen/text_size_13" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/box_rua_endereco"
+            style="@style/InputStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/campo_rua_endereco"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/field_height"
+                android:hint="@string/endereco_rua"
+                android:inputType="textPostalAddress"
+                android:imeOptions="actionNext"
+                android:textColor="@color/md_theme_onBackground"
+                android:textColorHint="@color/md_theme_hint"
+                android:textSize="@dimen/text_size_13" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/box_numero_endereco"
+                style="@style/InputStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:layout_marginEnd="@dimen/spacing_xs"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/campo_numero_endereco"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:hint="@string/endereco_numero"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:textColor="@color/md_theme_onBackground"
+                    android:textColorHint="@color/md_theme_hint"
+                    android:textSize="@dimen/text_size_13" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/box_bairro_endereco"
+                style="@style/InputStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xs"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/campo_bairro_endereco"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:hint="@string/endereco_bairro"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:textColor="@color/md_theme_onBackground"
+                    android:textColorHint="@color/md_theme_hint"
+                    android:textSize="@dimen/text_size_13" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/box_cidade_endereco"
+                style="@style/InputStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:layout_marginEnd="@dimen/spacing_xs"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/campo_cidade_endereco"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:hint="@string/endereco_cidade"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:textColor="@color/md_theme_onBackground"
+                    android:textColorHint="@color/md_theme_hint"
+                    android:textSize="@dimen/text_size_13" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/box_estado_endereco"
+                style="@style/InputStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xs"
+                android:layout_marginTop="@dimen/spacing_s"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/campo_estado_endereco"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:hint="@string/endereco_estado"
+                    android:inputType="textCapCharacters"
+                    android:maxLength="2"
+                    android:imeOptions="actionDone"
+                    android:textColor="@color/md_theme_onBackground"
+                    android:textColorHint="@color/md_theme_hint"
+                    android:textSize="@dimen/text_size_13" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_salvar_endereco"
+            style="@style/BotaoPrincipal"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:text="@string/endereco_salvar" />
+
+        <TextView
+            android:id="@+id/btn_cancelar_edicao_endereco"
+            style="@style/LinkCancelar"
+            android:layout_marginTop="@dimen/spacing_s" />
+    </LinearLayout>
+</ScrollView>

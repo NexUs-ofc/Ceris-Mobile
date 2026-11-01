@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tablets em paisagem: preserva escala legível sem desperdiçar altura. -->
+<resources>
+    <dimen name="screen_margin_horizontal">28dp</dimen>
+    <dimen name="spacing_m">16dp</dimen>
+    <dimen name="spacing_l">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+    <dimen name="spacing_xxl">40dp</dimen>
+
+    <dimen name="nav_bar_height">82dp</dimen>
+    <dimen name="nav_icon_size">26dp</dimen>
+    <dimen name="nav_label_text">12sp</dimen>
+    <dimen name="nav_scan_size">64dp</dimen>
+    <dimen name="nav_scan_icon_size">24dp</dimen>
+    <dimen name="nav_cradle_margin">5dp</dimen>
+    <dimen name="nav_saliencia_raio">37dp</dimen>
+    <dimen name="nav_area_height">119dp</dimen>
+    <dimen name="nav_indicador_size">44dp</dimen>
+
+    <dimen name="entrada_topo">32dp</dimen>
+    <dimen name="address_top_margin">24dp</dimen>
+    <dimen name="address_section_gap">20dp</dimen>
+    <dimen name="address_button_gap">20dp</dimen>
+    <dimen name="loading_title_top">40dp</dimen>
+    <dimen name="loading_spinner_size">88dp</dimen>
+    <dimen name="loading_progress_size">100dp</dimen>
+    <dimen name="otp_top_margin">32dp</dimen>
+    <dimen name="perfil_margem_topo">32dp</dimen>
+
+    <dimen name="hero_image_height">240dp</dimen>
+    <dimen name="splash_logo_size">112dp</dimen>
+    <dimen name="splash_logo_top">20dp</dimen>
+    <dimen name="splash_tagline_top">16dp</dimen>
+    <dimen name="splash_tagline_max_width">520dp</dimen>
+    <dimen name="splash_title_size">56sp</dimen>
+
+    <dimen name="camera_controles_altura">72dp</dimen>
+    <dimen name="moldura_espaco_topo">64dp</dimen>
+    <dimen name="moldura_espaco_dica">40dp</dimen>
+    <dimen name="camera_modo_margin">20dp</dimen>
+    <dimen name="camera_modo_max_width">400dp</dimen>
+</resources>

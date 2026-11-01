@@ -12,6 +12,8 @@
 <resources>
 
     <dimen name="content_max_width">680dp</dimen>
+    <!-- A listagem de receitas usa seu próprio limite, alinhado ao conteúdo de tablet. -->
+    <dimen name="receita_content_max_width">680dp</dimen>
 
     <dimen name="field_width">560dp</dimen>
     <dimen name="field_height">76dp</dimen>
@@ -68,6 +70,11 @@
     <dimen name="card_elevation">3dp</dimen>
     <dimen name="card_image_height">220dp</dimen>
     <dimen name="hero_image_height">480dp</dimen>
+    <dimen name="splash_logo_size">180dp</dimen>
+    <dimen name="splash_logo_top">120dp</dimen>
+    <dimen name="splash_tagline_top">40dp</dimen>
+    <dimen name="splash_tagline_max_width">520dp</dimen>
+    <dimen name="splash_title_size">80sp</dimen>
     <dimen name="list_item_height">104dp</dimen>
     <dimen name="avatar_size">144dp</dimen>
 
@@ -140,6 +147,7 @@
     <dimen name="stepper_icone_size">18dp</dimen>
     <dimen name="icone_acao_size">32dp</dimen>
     <dimen name="icone_voltar_size">56dp</dimen>
+    <dimen name="icone_acao_alvo">56dp</dimen>
 
     <!-- Chatbot -->
     <dimen name="chat_header_altura">84dp</dimen>

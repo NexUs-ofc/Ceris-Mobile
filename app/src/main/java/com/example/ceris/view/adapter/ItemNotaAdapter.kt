@@ -35,9 +35,12 @@ class ItemNotaAdapter : RecyclerView.Adapter<ItemNotaAdapter.Card>() {
             .sortedBy { it.name.lowercase() }
             .associateBy(::rotulo)
         rotulos = porRotulo.keys.toTypedArray()
+        val removidos = itens.size
         itens.clear()
+        if (removidos > 0) notifyItemRangeRemoved(0, removidos)
+        if (novos.isEmpty()) return
         itens.addAll(novos)
-        notifyDataSetChanged()
+        notifyItemRangeInserted(0, novos.size)
     }
 
     override fun getItemCount() = itens.size
@@ -86,7 +89,8 @@ class ItemNotaAdapter : RecyclerView.Adapter<ItemNotaAdapter.Card>() {
                 stepper,
                 inicial = item.quantidade,
                 formato = { itemView.context.getString(R.string.produto_quantidade_unidade, it, item.unidade) },
-                aoMudar = { item.quantidade = it }
+                aoMudar = { item.quantidade = it },
+                aoValidar = { item.quantidadeValida = it }
             )
 
             mostrarValidade(item)

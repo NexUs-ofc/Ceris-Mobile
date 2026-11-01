@@ -80,7 +80,7 @@ class ListaComprasViewModel : ViewModel() {
         }
 
         // A Core valida @Positive: zero volta como 400 depois da ida a rede.
-        if (quantidade <= 0.0) {
+        if (!quantidade.isFinite() || quantidade <= 0.0) {
             listener.makeText("A quantidade precisa ser maior que zero.")
             return
         }

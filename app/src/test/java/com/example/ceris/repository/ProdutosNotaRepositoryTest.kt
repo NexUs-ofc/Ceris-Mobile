@@ -28,4 +28,25 @@ class ProdutosNotaRepositoryTest {
         val response = Gson().fromJson("""{"products":[{"code":"7891000100103","product_name":"Leite integral","product_quantity":1000,"product_quantity_unit":"ml","categories_tags":["en:milks"]}]}""", OffBusca::class.java)
         assertEquals("FOUND", ProdutosNotaRepository.choose("Leite integral", response.products).status)
     }
+
+    @Test fun nomeUnicoIgnoraPesoEUnidadeImpressosNaNota() {
+        val nesquik = milk.copy(
+            productName = "Bebida em pó NESQUIK",
+            brands = "Nestlé",
+            productQuantity = 400.0,
+            productQuantityUnit = "g",
+        )
+        val resultado = ProdutosNotaRepository.choose("NESQUIK 400 G UN", listOf(nesquik))
+        assertEquals("FOUND", resultado.status)
+        assertEquals("7891000100103", resultado.product?.gtin)
+    }
+
+    @Test fun nomeComVariosProdutosDeCodigoDiferenteContinuaAmbiguo() {
+        val nesquik = milk.copy(productName = "Bebida em pó NESQUIK", brands = "Nestlé")
+        val resultado = ProdutosNotaRepository.choose(
+            "NESQUIK 400 G",
+            listOf(nesquik, nesquik.copy(code = "3017620422003", productQuantity = 500.0)),
+        )
+        assertEquals("AMBIGUOUS", resultado.status)
+    }
 }

@@ -150,8 +150,8 @@
 
         <ImageButton
             android:id="@+id/btn_voltar"
-            android:layout_width="@dimen/icone_voltar_size"
-            android:layout_height="@dimen/icone_voltar_size"
+            android:layout_width="@dimen/icone_acao_alvo"
+            android:layout_height="@dimen/icone_acao_alvo"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/chat_voltar"
             android:padding="@dimen/spacing_s"
@@ -177,8 +177,8 @@
 
         <ImageButton
             android:id="@+id/btn_encerrar"
-            android:layout_width="@dimen/icone_voltar_size"
-            android:layout_height="@dimen/icone_voltar_size"
+            android:layout_width="@dimen/icone_acao_alvo"
+            android:layout_height="@dimen/icone_acao_alvo"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/chat_encerrar"
             android:padding="@dimen/spacing_s"
@@ -192,6 +192,7 @@
         <TextView
             android:id="@+id/nome_bot"
             style="@style/TituloTela"
+            android:textColor="@color/texto_titulo_prototipo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_m"

@@ -127,6 +127,10 @@ class LocaisFragment : Fragment(R.layout.fragment_locais), AlterarEnderecoDialog
         viewModel.selectSavedAddress()
     }
 
+    override fun enderecoSalvo() {
+        viewModel.selectSavedAddress()
+    }
+
     override fun onDestroyView() {
         view?.findViewById<RecyclerView>(R.id.lista_locais)?.adapter = null
         super.onDestroyView()

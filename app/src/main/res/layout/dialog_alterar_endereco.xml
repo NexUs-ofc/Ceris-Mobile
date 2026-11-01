@@ -45,6 +45,15 @@
         android:textColor="@color/ceris_cinza"
         android:textSize="@dimen/text_size_13" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_editar_endereco_salvo"
+        style="@style/BotaoContorno"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="@dimen/spacing_s"
+        android:text="@string/endereco_editar"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/lista_enderecos"
         android:layout_width="match_parent"

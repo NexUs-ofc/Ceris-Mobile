@@ -12,9 +12,10 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.example.ceris.R
 import com.example.ceris.api.ApiBaseUrl
-import com.example.ceris.api.LocaisAPI
 import com.example.ceris.api.RetrofitClient
+import com.example.ceris.api.ProfileAPI
 import com.example.ceris.local.SessionManager
+import com.example.ceris.model.dto.AddressDto
 import com.example.ceris.model.dto.ProfileResponse
 import com.example.ceris.repository.LocaisRepository
 import retrofit2.Call
@@ -26,9 +27,11 @@ class AlterarEnderecoDialog : DialogFragment() {
     interface Listener {
         fun usarLocalizacaoAtual()
         fun usarEnderecoSalvo()
+        fun enderecoSalvo()
     }
 
     private var profileCall: Call<ProfileResponse>? = null
+    private var enderecoAtual: AddressDto? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         inflater.inflate(R.layout.dialog_alterar_endereco, container, false)
@@ -40,6 +43,12 @@ class AlterarEnderecoDialog : DialogFragment() {
             dismiss()
         }
         view.findViewById<View>(R.id.btn_cancelar_endereco).setOnClickListener { dismiss() }
+        view.findViewById<View>(R.id.btn_editar_endereco_salvo).setOnClickListener {
+            if (childFragmentManager.findFragmentByTag(EditarEnderecoDialog.TAG) == null) {
+                EditarEnderecoDialog.novo(enderecoAtual)
+                    .show(childFragmentManager, EditarEnderecoDialog.TAG)
+            }
+        }
         carregarEnderecoSalvo(view)
     }
 
@@ -66,19 +75,29 @@ class AlterarEnderecoDialog : DialogFragment() {
             status.setText(R.string.endereco_salvo_indisponivel)
             return
         }
-        val api = RetrofitClient.getApiAutenticada(ApiBaseUrl.core, LocaisAPI::class.java)
-        profileCall = api.profile("Bearer ${session.accessToken}", session).also { call ->
+        val api = RetrofitClient.getApiAutenticada(ApiBaseUrl.core, ProfileAPI::class.java)
+        profileCall = api.buscar("Bearer ${session.accessToken}").also { call ->
             call.enqueue(object : Callback<ProfileResponse> {
                 override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
                     if (call.isCanceled || !sessionManager.isCurrent(session)) return
                     if (!response.isSuccessful) {
                         status.setText(R.string.endereco_salvo_falha)
+                        root.findViewById<com.google.android.material.button.MaterialButton>(R.id.btn_editar_endereco_salvo).apply {
+                            setText(R.string.endereco_novo)
+                            visibility = View.VISIBLE
+                        }
                         return
                     }
                     val profile = response.body()?.takeIf { it.id == session.profileId }
+                    enderecoAtual = profile?.address
                     val address = profile?.address
                     val label = LocaisRepository.enderecoCurto(address)
                     val currentRoot = view ?: return
+                    val editar = currentRoot.findViewById<View>(R.id.btn_editar_endereco_salvo)
+                    editar.visibility = View.VISIBLE
+                    (editar as? com.google.android.material.button.MaterialButton)?.setText(
+                        if (address == null) R.string.endereco_novo else R.string.endereco_editar
+                    )
                     if (label.isNullOrBlank()) {
                         status.setText(R.string.endereco_salvo_indisponivel)
                         return
@@ -100,8 +119,15 @@ class AlterarEnderecoDialog : DialogFragment() {
                 }
 
                 override fun onFailure(call: Call<ProfileResponse>, error: Throwable) {
-                    if (!call.isCanceled) view?.findViewById<TextView>(R.id.estado_endereco_salvo)
-                        ?.setText(R.string.endereco_salvo_falha)
+                    if (!call.isCanceled) view?.let { currentRoot ->
+                        currentRoot.findViewById<TextView>(R.id.estado_endereco_salvo)
+                            .setText(R.string.endereco_salvo_falha)
+                        currentRoot.findViewById<com.google.android.material.button.MaterialButton>(R.id.btn_editar_endereco_salvo)
+                            .apply {
+                                setText(R.string.endereco_novo)
+                                visibility = View.VISIBLE
+                            }
+                    }
                 }
             })
         }
@@ -111,6 +137,11 @@ class AlterarEnderecoDialog : DialogFragment() {
         profileCall?.cancel()
         profileCall = null
         super.onDestroyView()
+    }
+
+    fun aoSalvarEndereco() {
+        (parentFragment as? Listener)?.enderecoSalvo()
+        dismiss()
     }
 
     companion object {

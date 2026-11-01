@@ -15,12 +15,13 @@
     android:id="@+id/raiz_listas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/fundo_prototipo"
     tools:context=".view.fragment.ListasFragment">
 
     <TextView
         android:id="@+id/titulo_listas"
         style="@style/TituloTela"
+        android:textColor="@color/texto_titulo_prototipo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_xl"
@@ -41,7 +42,7 @@
         android:paddingStart="@dimen/screen_margin_horizontal"
         android:paddingEnd="@dimen/screen_margin_horizontal"
         android:text="@string/listas_subtitulo"
-        android:textColor="@color/md_secundary_text"
+        android:textColor="@color/ceris_cinza"
         android:textSize="@dimen/text_size_14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +91,7 @@
         android:paddingStart="@dimen/screen_margin_horizontal"
         android:paddingEnd="@dimen/screen_margin_horizontal"
         android:text="@string/listas_vazia"
-        android:textColor="@color/md_secundary_text"
+        android:textColor="@color/ceris_cinza"
         android:textSize="@dimen/text_size_14"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/lista_listas"

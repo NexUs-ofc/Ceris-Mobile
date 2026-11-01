@@ -56,7 +56,7 @@ class ChatViewModel : ViewModel() {
     private var passoDaEspera = 0
 
     interface Listener {
-        fun respostaRecebida(texto: String)
+        fun respostaRecebida(texto: String, respostasRecomendadas: List<String>?)
 
         fun aguardando(aguardando: Boolean)
 
@@ -133,7 +133,15 @@ class ChatViewModel : ViewModel() {
             onSuccess = { resposta ->
                 sessionId = resposta.sessionId ?: sessionId
                 trocarEspera(false)
-                listener.respostaRecebida(resposta.resposta)
+                listener.respostaRecebida(
+                    resposta.resposta,
+                    resposta.respostasRecomendadas
+                        ?.asSequence()
+                        ?.map(String::trim)
+                        ?.filter(String::isNotEmpty)
+                        ?.take(3)
+                        ?.toList()
+                )
             },
             onError = { statusCode, errorBody ->
                 trocarEspera(false)

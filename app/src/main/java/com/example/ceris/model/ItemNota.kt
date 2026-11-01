@@ -17,5 +17,6 @@ data class ItemNota(
     var incluir: Boolean,
     /** A leitura ficou em duvida: a tela destaca para a pessoa conferir. */
     val conferir: Boolean,
-    val produtoEncontrado: com.example.ceris.model.dto.FoodLookupProduct? = null
+    val produtoEncontrado: com.example.ceris.model.dto.FoodLookupProduct? = null,
+    var quantidadeValida: Boolean = true
 )

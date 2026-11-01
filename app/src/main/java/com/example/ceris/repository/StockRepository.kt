@@ -8,7 +8,6 @@ import com.example.ceris.model.Produto
 import com.example.ceris.model.SituacaoProduto
 import com.example.ceris.model.dto.FoodResponse
 import com.example.ceris.model.dto.StockItemResponse
-import com.example.ceris.util.unidadeNaTela
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -113,7 +112,10 @@ class StockRepository(
         validade = validade?.let { SimpleDateFormat("dd/MM", Locale("pt", "BR")).format(it) }.orEmpty(),
         situacao = situacao(validade),
         imagemUrl = item.foodImageUrl?.trim()?.takeIf { it.isNotEmpty() },
-        unidade = unidadeNaTela(item.unitOfMeasure) ?: "un",
+        // `quantity` é a contagem de embalagens criada por /api/foods. O
+        // `unitOfMeasure` da Core descreve o conteúdo (p.ex. 370 g de Nescau),
+        // não a unidade da contagem do estoque.
+        unidade = "un",
         categoria = categoria,
         marca = item.productBrand?.takeIf { it.isNotBlank() },
         foodId = item.foodId

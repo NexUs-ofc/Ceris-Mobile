@@ -47,4 +47,23 @@ class RevisaoNotaTest {
         assertEquals(3, request.quantity)
         assertEquals("2027-01-01", request.expiryDate)
     }
+
+    @Test fun quantidadePonderadaDaNotaViraContagemDePacotes() {
+        val chocolate = produto.copy(name = "Nescau", packageQuantity = 400.0, unitOfMeasure = "g")
+        val notaPonderada = listOf(ReceiptItem("NESCAU 400 G", quantity = 800.0, unit = "g"))
+        val revisao = revisarNota(notaPonderada, FoodLookupResponse(listOf(FoodLookupMatch(0, "FOUND", chocolate))))
+
+        assertEquals(2, revisao.itens.single().quantidade)
+        assertEquals("un", revisao.itens.single().unidade)
+    }
+
+    @Test fun itensSemCorrespondenciaIncluemNomeParaAvisoVisivel() {
+        val revisao = revisarNota(nota, FoodLookupResponse(listOf(
+            FoodLookupMatch(0, "UNAVAILABLE"), FoodLookupMatch(1, "NOT_FOUND"),
+        )))
+
+        assertEquals(listOf("LEITE INTEGRAL", "SEM CORRESPONDENCIA"), revisao.nomesIgnorados)
+        assertEquals(2, revisao.ignorados)
+        assertEquals(1, revisao.indisponiveis)
+    }
 }
