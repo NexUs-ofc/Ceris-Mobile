@@ -7,9 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.core.content.ContextCompat
 import com.example.ceris.R
 import com.example.ceris.model.ListaCompra
-import com.example.ceris.view.utils.CalendarioValidade
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
 /**
@@ -37,7 +37,6 @@ class ListaAdapter(
         private val nome: TextView = itemView.findViewById(R.id.txt_nome_lista)
         private val itens: TextView = itemView.findViewById(R.id.txt_itens)
         private val categoria: TextView = itemView.findViewById(R.id.txt_categoria)
-        private val data: TextView = itemView.findViewById(R.id.txt_data_lista)
         private val percentual: TextView = itemView.findViewById(R.id.txt_percentual)
         private val valor: TextView = itemView.findViewById(R.id.txt_valor)
         private val barra: LinearProgressIndicator = itemView.findViewById(R.id.barra_progresso)
@@ -48,14 +47,17 @@ class ListaAdapter(
             nome.text = lista.nome
             itens.text = contexto.getString(R.string.lista_itens, lista.quantidadeItens)
             categoria.text = contexto.getString(R.string.lista_categoria, lista.categoria)
-            val dataFormatada = CalendarioValidade.formatar(lista.data, "dd/MM/yyyy")
-            data.text = dataFormatada?.let { contexto.getString(R.string.lista_data_card, it) }.orEmpty()
-            data.visibility = if (dataFormatada == null) View.GONE else View.VISIBLE
             percentual.text = contexto.getString(R.string.lista_percentual, lista.progresso)
             valor.text = lista.valorTotal
 
             // Sem animação: numa lista reciclada ela animaria do valor do item
             // anterior, que não tem relação com este.
+            barra.setIndicatorColor(
+                ContextCompat.getColor(
+                    contexto,
+                    if (lista.progresso == 0) R.color.progresso_trilho else R.color.md_theme_primary
+                )
+            )
             barra.setProgressCompat(lista.progresso, false)
 
             itemView.setOnClickListener { aoTocar(lista) }

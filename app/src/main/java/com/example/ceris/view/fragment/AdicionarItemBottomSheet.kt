@@ -70,10 +70,16 @@ class AdicionarItemBottomSheet : BottomSheetDialogFragment() {
 
     private fun confirmar() {
         val ouvinte = activity as? Listener ?: return
+        val quantidadeDigitada = campoQuantidade.text.toString().replace(',', '.').toDoubleOrNull()
+        if (quantidadeDigitada == null || !quantidadeDigitada.isFinite() || quantidadeDigitada <= 0.0) {
+            campoQuantidade.error = getString(R.string.quantidade_positiva)
+            campoQuantidade.requestFocus()
+            return
+        }
 
         ouvinte.aoConfirmarItem(
             nome = campoNome.text.toString(),
-            quantidade = lerQuantidade(),
+            quantidade = quantidadeDigitada,
             unidade = UnidadeMedida.porRotulo(campoUnidade.text.toString()),
             valor = Moeda.interpretar(campoValor.text.toString())
         )

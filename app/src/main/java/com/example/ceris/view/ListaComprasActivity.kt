@@ -144,6 +144,9 @@ class ListaComprasActivity :
 
         concluidos.text = getString(R.string.lista_concluidos, detalhe.concluidos, detalhe.total)
         percentual.text = getString(R.string.lista_percentual, detalhe.progresso)
+        barra.setIndicatorColor(
+            getColor(if (detalhe.progresso == 0) R.color.progresso_trilho else R.color.md_theme_primary)
+        )
         barra.setProgressCompat(detalhe.progresso, true)
 
         val vazia = detalhe.itens.isEmpty()

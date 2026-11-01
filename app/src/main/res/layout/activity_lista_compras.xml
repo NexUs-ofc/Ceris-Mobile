@@ -15,7 +15,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/fundo_prototipo"
     tools:context=".view.ListaComprasActivity">
 
     <!--
@@ -40,6 +40,7 @@
     <TextView
         android:id="@+id/txt_titulo"
         style="@style/TituloTela"
+        android:textColor="@color/texto_titulo_prototipo"
         android:layout_width="wrap_content"
         app:layout_constraintWidth_default="wrap"
         app:layout_constrainedWidth="true"
@@ -96,7 +97,7 @@
         android:layout_marginTop="@dimen/spacing_xs"
         android:layout_marginEnd="@dimen/screen_margin_horizontal"
         android:text="@string/lista_detalhe_subtitulo"
-        android:textColor="@color/md_secundary_text"
+        android:textColor="@color/ceris_cinza"
         android:textSize="@dimen/text_size_14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/txt_titulo"
@@ -122,7 +123,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_semibold"
             app:fontFamily="@font/montserrat_semibold"
-            android:textColor="@color/md_theme_onBackground"
+            android:textColor="@color/card_titulo"
             android:textSize="@dimen/text_size_13"
             app:layout_constraintEnd_toStartOf="@id/txt_percentual"
             app:layout_constraintHorizontal_bias="0"
@@ -220,7 +221,7 @@
         android:fontFamily="@font/montserrat_semibold"
         app:fontFamily="@font/montserrat_semibold"
         android:text="@string/lista_total_estimado"
-        android:textColor="@color/md_theme_onBackground"
+        android:textColor="@color/card_titulo"
         android:textSize="@dimen/text_size_15"
         app:layout_constraintBottom_toTopOf="@id/btn_adicionar_item"
         app:layout_constraintEnd_toStartOf="@id/txt_total"

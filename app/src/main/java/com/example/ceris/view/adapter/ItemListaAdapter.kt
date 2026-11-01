@@ -92,7 +92,7 @@ class ItemListaAdapter(
 
             val cor = ContextCompat.getColor(
                 contexto,
-                if (item.marcado) R.color.lista_item_concluido else R.color.md_theme_onBackground
+                if (item.marcado) R.color.lista_item_concluido else R.color.card_titulo
             )
             nome.setTextColor(cor)
             valor.setTextColor(cor)
