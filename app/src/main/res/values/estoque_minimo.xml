@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="estoque_minimo_configurar">Configurar estoque mínimo</string>
+    <string name="estoque_minimo_titulo">Defina uma quantidade mínima para esse produto no seu estoque!</string>
+    <string name="estoque_minimo_carregando">Carregando configuração…</string>
+    <string name="estoque_minimo_salvando">Salvando…</string>
+    <string name="estoque_minimo_salvo">Estoque mínimo salvo!</string>
+    <string name="estoque_minimo_removido">Configuração de estoque mínimo removida!</string>
+    <string name="estoque_minimo_tentar_novamente">Tentar novamente</string>
+    <string name="estoque_minimo_resposta_invalida">Não foi possível carregar a configuração. Tente novamente.</string>
+</resources>

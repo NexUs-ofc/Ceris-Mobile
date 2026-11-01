@@ -30,6 +30,8 @@ fun renderLocais(
     view.findViewById<View>(R.id.lista_locais).visibility = if (content) View.VISIBLE else View.GONE
     val loading = state.status in setOf(LocaisStatus.IDLE, LocaisStatus.LOADING)
     view.findViewById<View>(R.id.carregando_locais).visibility = if (loading) View.VISIBLE else View.GONE
+    view.findViewById<View>(R.id.img_locais_vazio).visibility =
+        if (state.status == LocaisStatus.EMPTY) View.VISIBLE else View.GONE
     view.findViewById<View>(R.id.estado_locais).visibility = if (content) View.GONE else View.VISIBLE
     view.findViewById<TextView>(R.id.mensagem_locais).setText(
         when (state.status) {

@@ -57,11 +57,23 @@
 
                 <TextView
                     style="@style/TituloTela"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginStart="@dimen/spacing_s"
                     android:text="@string/detalhe_produto_titulo"
                     android:textColor="@color/card_titulo" />
+
+                <ImageView
+                    android:id="@+id/btn_detalhe_configuracao"
+                    android:layout_width="@dimen/icone_voltar_size"
+                    android:layout_height="@dimen/icone_voltar_size"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/estoque_minimo_configurar"
+                    android:focusable="true"
+                    android:padding="@dimen/spacing_s"
+                    android:src="@drawable/ic_estoque_configuracao"
+                    app:tint="@color/md_theme_primary" />
 
             </LinearLayout>
 

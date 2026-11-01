@@ -32,7 +32,7 @@ class Seletor(
 
     private fun mudar(passo: Int) {
         val antes = valor
-        valor = antes + passo
+        valor = (antes.toLong() + passo).coerceIn(minimo.toLong(), maximo.toLong()).toInt()
         if (valor != antes) aoMudar(valor)
     }
 }

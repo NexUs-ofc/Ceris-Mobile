@@ -18,7 +18,9 @@ data class Produto(
     /** Do catalogo da Core. Nulo quando o catalogo nao respondeu. */
     val categoria: String? = null,
     /** Marca do produto na Core. Usada para achar a tabela nutricional. */
-    val marca: String? = null
+    val marca: String? = null,
+    /** Identificador do alimento no catalogo; diferente do id do lote. */
+    val foodId: Int? = null
 )
 
 /**
