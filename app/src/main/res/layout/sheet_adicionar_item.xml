@@ -32,14 +32,10 @@
 
         <TextView
             android:id="@+id/titulo_sheet"
+            style="@style/TituloSheet"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_l"
-            android:fontFamily="@font/huninn"
-            app:fontFamily="@font/huninn"
             android:text="@string/item_form_titulo"
-            android:textColor="@color/md_theme_onBackground"
-            android:textSize="@dimen/text_size_20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/alca" />

@@ -157,6 +157,17 @@
             android:layout_height="@dimen/fab_secundario_size"
             android:contentDescription="@string/locais_carregando" />
 
+        <ImageView
+            android:id="@+id/img_locais_vazio"
+            android:layout_width="@dimen/ilustracao_size"
+            android:layout_height="@dimen/ilustracao_size"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/coelho_curioso"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/mensagem_locais"
             android:layout_width="match_parent"
