@@ -18,6 +18,7 @@ import com.example.ceris.model.dto.StockItemUpdateRequest
 import com.example.ceris.util.mensagemDeErro
 import com.example.ceris.util.mensagemDeFalha
 import com.example.ceris.view.fragment.QuantidadeDialog
+import com.example.ceris.view.fragment.EstoqueMinimoDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,6 +57,15 @@ class DetalheProdutoActivity : AppCompatActivity() {
         }
 
         findViewById<ImageView>(R.id.btn_detalhe_voltar).setOnClickListener { finish() }
+        findViewById<View>(R.id.btn_detalhe_configuracao).apply {
+            val foodId = intent.getIntExtra(EXTRA_FOOD_ID, 0)
+            visibility = if (foodId > 0) View.VISIBLE else View.GONE
+            setOnClickListener {
+                if (supportFragmentManager.findFragmentByTag(EstoqueMinimoDialog.TAG) == null) {
+                    EstoqueMinimoDialog.novo(foodId).show(supportFragmentManager, EstoqueMinimoDialog.TAG)
+                }
+            }
+        }
         quantidade = intent.getIntExtra(EXTRA_QUANTIDADE, 0)
         preencher()
 
@@ -285,6 +295,7 @@ class DetalheProdutoActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_ID = "id"
+        private const val EXTRA_FOOD_ID = "food_id"
         private const val EXTRA_NOME = "nome"
         private const val CHAVE_CONSUMO = "consumo"
         private const val CHAVE_DESCARTE = "descarte"
@@ -302,6 +313,7 @@ class DetalheProdutoActivity : AppCompatActivity() {
         fun intent(contexto: Context, produto: Produto): Intent =
             Intent(contexto, DetalheProdutoActivity::class.java)
                 .putExtra(EXTRA_ID, produto.id)
+                .putExtra(EXTRA_FOOD_ID, produto.foodId ?: 0)
                 .putExtra(EXTRA_NOME, produto.nome)
                 .putExtra(EXTRA_CATEGORIA, produto.categoria)
                 .putExtra(EXTRA_QUANTIDADE, produto.quantidade)

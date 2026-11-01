@@ -1,7 +1,10 @@
 package com.example.ceris.api
 
+import com.example.ceris.local.SessionSnapshot
 import com.example.ceris.model.dto.FoodRegistrationRequest
 import com.example.ceris.model.dto.FoodResponse
+import com.example.ceris.model.dto.MinimumQuantityRequest
+import com.example.ceris.model.dto.PantryProductSettingResponse
 import com.example.ceris.model.dto.StockItemRequest
 import com.example.ceris.model.dto.StockItemResponse
 import com.example.ceris.model.dto.StockItemUpdateRequest
@@ -12,11 +15,28 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Tag
 
 // Bearer, como as listas: a Core tira a casa dona do estoque do subject do JWT.
 interface StockAPI {
+
+    @GET("/api/stock/settings")
+    fun configuracoes(
+        @Header("Authorization") autorizacao: String,
+        @Tag sessao: SessionSnapshot,
+    ): Call<List<PantryProductSettingResponse>>
+
+    /** A mesma rota cria ou altera o minimo do alimento, compartilhado pelos lotes. */
+    @PUT("/api/stock/settings/{foodId}")
+    fun configurarMinimo(
+        @Header("Authorization") autorizacao: String,
+        @Path("foodId") foodId: Int,
+        @Body configuracao: MinimumQuantityRequest,
+        @Tag sessao: SessionSnapshot,
+    ): Call<PantryProductSettingResponse>
 
     @POST("/api/foods/batch")
     fun registrarLote(

@@ -104,7 +104,7 @@ class Seletor(
 
     private fun mudar(passo: Int) {
         val antes = valor
-        valor = antes + passo
+        valor = (antes.toLong() + passo).coerceIn(minimo.toLong(), maximo.toLong()).toInt()
         texto.error = null
         aoValidar(true)
         if (valor != antes) aoMudar(valor)

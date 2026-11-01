@@ -82,6 +82,10 @@ class LocaisLayoutTest {
                     )
                     root.layout(0, 0, width, height)
                     assertEquals(if (state.status == LocaisStatus.CONTENT) View.VISIBLE else View.GONE, list.visibility)
+                    assertEquals(
+                        if (state.status == LocaisStatus.EMPTY) View.VISIBLE else View.GONE,
+                        root.findViewById<View>(R.id.img_locais_vazio).visibility,
+                    )
                     if (state.status == LocaisStatus.CONTENT) {
                         val card = requireNotNull(list.findViewHolderForAdapterPosition(0)).itemView
                         assertEquals("450 m", card.findViewById<TextView>(R.id.selo_distancia).text.toString())

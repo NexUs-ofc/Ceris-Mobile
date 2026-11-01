@@ -117,7 +117,8 @@ class StockRepository(
         // não a unidade da contagem do estoque.
         unidade = "un",
         categoria = categoria,
-        marca = item.productBrand?.takeIf { it.isNotBlank() }
+        marca = item.productBrand?.takeIf { it.isNotBlank() },
+        foodId = item.foodId
     )
 
     private fun ordem(situacao: SituacaoProduto) = when (situacao) {
