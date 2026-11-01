@@ -47,7 +47,8 @@ class CodigoBarrasRepositoryTest {
                 responder(
                     troca, 200,
                     "{\"status\":1,\"product\":{\"product_name\":\"Leite Condensado\",\"brands\":\"Nestlé, Moça\"," +
-                        "\"product_quantity\":395,\"product_quantity_unit\":\"g\",\"image_front_url\":\"$foto\"}}"
+                        "\"product_quantity\":395,\"product_quantity_unit\":\"g\",\"categories_tags\":[\"en:beverages\"]," +
+                        "\"image_front_url\":\"$foto\"}}"
                 )
             } else {
                 responder(troca, 404, "{\"status\":0,\"status_verbose\":\"product not found\"}")
@@ -158,6 +159,13 @@ class CodigoBarrasRepositoryTest {
         val produto = listarCards().single()
         assertEquals("Leite Condensado", produto.nome)
         assertNull(produto.imagemUrl)
+    }
+
+    @Test
+    fun quantidadeDeEmbalagensNoEstoqueContinuaEmUnidades() {
+        respostaCore = 200 to """{"id":9,"foodId":3,"foodName":"Nescau","unitOfMeasure":"g","quantity":2}"""
+
+        assertEquals("un", listarCards().single().unidade)
     }
 
     private fun listarCards(): List<Produto> {

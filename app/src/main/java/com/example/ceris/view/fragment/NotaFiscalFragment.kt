@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
+import android.view.Surface
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
@@ -34,9 +35,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ceris.R
+import com.example.ceris.api.openfoodfacts.OpenFoodFactsClient
 import com.example.ceris.local.SessionManager
 import com.example.ceris.model.ItemNota
 import com.example.ceris.model.dto.FoodResponse
+import com.example.ceris.repository.CodigoBarrasRepository
+import com.example.ceris.repository.ResultadoBuscaCodigo
 import com.example.ceris.view.MainActivity
 import com.example.ceris.view.adapter.ItemNotaAdapter
 import com.example.ceris.view.utils.MascaraLeituraView
@@ -44,6 +48,7 @@ import com.example.ceris.viewmodel.NotaFiscalViewModel
 import com.example.ceris.viewmodel.NotaFiscalViewModel.Estado
 import com.example.ceris.model.CadastroPorCodigo
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -82,6 +87,7 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     private var cameraProvider: ProcessCameraProvider? = null
     private var captura: ImageCapture? = null
     private var camera: Camera? = null
+    private var versaoCamera = 0
 
     private var lenteTraseira = true
     private var flashLigado = false
@@ -109,6 +115,12 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
 
     /** Cadastro aberto: a camera para de ler para nao abrir outro por cima. */
     @Volatile private var cadastroAberto = false
+
+    /** Evita consultas duplicadas enquanto a API responde e toasts repetidos no mesmo código. */
+    @Volatile private var codigoEmBusca: String? = null
+    @Volatile private var versaoBuscaCodigo = 0
+    private var codigoSuprimido: String? = null
+    private var ultimoCodigoDetectadoEm = 0L
 
     /** JPEG e rotacao fora da thread principal: a foto inteira pesa megas. */
     private lateinit var trabalho: ExecutorService
@@ -185,6 +197,9 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     }
 
     override fun onDestroyView() {
+        versaoCamera++
+        versaoBuscaCodigo++
+        codigoEmBusca = null
         cameraProvider?.unbindAll()
         cameraProvider = null
         captura = null
@@ -204,6 +219,8 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
         super.onHiddenChanged(hidden)
 
         if (hidden) {
+            versaoBuscaCodigo++
+            codigoEmBusca = null
             desligarCamera()
         } else if (viewModel.estado == Estado.CAMERA) {
             selecionarCodigoDeBarras()
@@ -255,19 +272,32 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     }
 
     private fun ligarCamera() {
+        val previewAtual = preview
+        val versaoAtual = ++versaoCamera
+        val rotacaoAlvo = previewAtual.display?.rotation ?: Surface.ROTATION_0
         val futuro = ProcessCameraProvider.getInstance(requireContext())
 
         futuro.addListener({
-            if (!isAdded || isHidden || viewModel.estado != Estado.CAMERA) return@addListener
+            if (
+                !isAdded ||
+                isHidden ||
+                versaoAtual != versaoCamera ||
+                view?.findViewById<PreviewView>(R.id.preview) !== previewAtual ||
+                viewModel.estado != Estado.CAMERA
+            ) return@addListener
 
             val provider = futuro.get()
             cameraProvider = provider
 
-            val previa = Preview.Builder().build().also { it.surfaceProvider = preview.surfaceProvider }
+            val previa = Preview.Builder()
+                .setTargetRotation(rotacaoAlvo)
+                .build()
+                .also { it.surfaceProvider = previewAtual.surfaceProvider }
 
             // Qualidade acima de rapidez: o OCR erra mais em foto tremida e
             // comprimida do que a pessoa perde esperando meio segundo.
             val foto = ImageCapture.Builder()
+                .setTargetRotation(rotacaoAlvo)
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
                 .build()
             captura = foto
@@ -275,6 +305,7 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
             // Os quadros do preview passam pelo reconhecedor: e ele que diz se a
             // nota ja esta inteira e parada na moldura, para tirar a foto sozinho.
             val analise = ImageAnalysis.Builder()
+                .setTargetRotation(rotacaoAlvo)
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
                 .also { it.setAnalyzer(trabalho, ::analisarQuadro) }
@@ -298,6 +329,7 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     }
 
     private fun desligarCamera() {
+        versaoCamera++
         cameraProvider?.unbindAll()
         captura = null
         camera = null
@@ -308,6 +340,9 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     private fun aplicarModo(codigo: Boolean) {
         modoCodigo = codigo
         cadastroAberto = false
+        versaoBuscaCodigo++
+        codigoEmBusca = null
+        codigoSuprimido = null
         disparoAutomatico = false
         centradaDesde = 0L
         mascara.mudarModo(nota = !codigo)
@@ -334,8 +369,9 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
      * leitura local e instantanea; sem codigo, manda como nota.
      */
     private fun lerDaGaleria(uri: Uri) {
-        if (viewModel.estado != Estado.CAMERA || cadastroAberto) return
+        if (viewModel.estado != Estado.CAMERA || cadastroAberto || codigoEmBusca != null) return
         val contexto = context ?: return
+        codigoSuprimido = null
 
         val entrada = runCatching { InputImage.fromFilePath(contexto, uri) }.getOrElse {
             makeText(getString(R.string.nota_falha_foto))
@@ -366,15 +402,56 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     }
 
     /**
-     * Primeiro codigo valido do quadro abre o cadastro. O digito verificador
-     * filtra leitura pela metade, que a camera faz com o produto em movimento.
+     * Consulta a Open Food Facts pelo primeiro código válido. Só abre o cadastro
+     * quando há um produto identificado; GTIN inválido é descartado pelo dígito verificador.
      */
     private fun achouCodigo(codigos: List<String>) {
-        if (cadastroAberto || !isAdded) return
-        val gtin = codigos.firstOrNull(CadastroPorCodigo::gtinValido) ?: return
+        val agora = SystemClock.elapsedRealtime()
+        val gtin = codigos.firstOrNull(CadastroPorCodigo::gtinValido)
+        if (gtin == null) {
+            if (agora - ultimoCodigoDetectadoEm >= TEMPO_PARA_LIBERAR_CODIGO_MS) codigoSuprimido = null
+            return
+        }
 
-        cadastroAberto = true
-        CodigoBarrasBottomSheet.novo(gtin).show(childFragmentManager, CodigoBarrasBottomSheet.TAG)
+        ultimoCodigoDetectadoEm = agora
+        if (cadastroAberto || codigoEmBusca != null || codigoSuprimido == gtin || !isAdded) return
+
+        val versaoAtual = ++versaoBuscaCodigo
+        codigoEmBusca = gtin
+        CodigoBarrasRepository.consultarProduto(OpenFoodFactsClient.api, gtin) { resultado ->
+            val vistaAtual = view
+            if (vistaAtual == null) {
+                if (versaoBuscaCodigo == versaoAtual) codigoEmBusca = null
+                return@consultarProduto
+            }
+
+            vistaAtual.post {
+                if (versaoBuscaCodigo != versaoAtual || codigoEmBusca != gtin) return@post
+                codigoEmBusca = null
+                if (!isAdded || isHidden || !modoCodigo || viewModel.estado != Estado.CAMERA) return@post
+
+                when (resultado) {
+                    is ResultadoBuscaCodigo.Encontrado -> {
+                        codigoSuprimido = gtin
+                        cadastroAberto = true
+                        CodigoBarrasBottomSheet.novo(gtin, resultado.produto)
+                            .show(childFragmentManager, CodigoBarrasBottomSheet.TAG)
+                    }
+                    ResultadoBuscaCodigo.NaoEncontrado -> {
+                        codigoSuprimido = gtin
+                        avisarCodigo(getString(R.string.codigo_nao_encontrado))
+                    }
+                    ResultadoBuscaCodigo.FalhaConsulta -> {
+                        codigoSuprimido = gtin
+                        avisarCodigo(getString(R.string.codigo_busca_falhou))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun avisarCodigo(mensagem: String) {
+        context?.let { Toast.makeText(it, mensagem, Toast.LENGTH_SHORT).show() }
     }
 
     override fun aoFecharCadastroCodigo(salvou: Boolean) {
@@ -393,7 +470,7 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
         val midia = quadro.image
 
         if (midia == null || analisando || viewModel.estado != Estado.CAMERA ||
-            (modoCodigo && cadastroAberto) || (!modoCodigo && disparoAutomatico)
+            (modoCodigo && (cadastroAberto || codigoEmBusca != null)) || (!modoCodigo && disparoAutomatico)
         ) {
             quadro.close()
             return
@@ -538,9 +615,17 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
         context?.let { Toast.makeText(it, message, Toast.LENGTH_LONG).show() }
     }
 
-    override fun produtosNaoEncontrados(quantidade: Int, indisponiveis: Int) {
+    override fun produtosNaoEncontrados(nomes: List<String>, indisponiveis: Int) {
+        val quantidade = nomes.size
         val mensagem = resources.getQuantityString(R.plurals.nota_produtos_ignorados, quantidade, quantidade)
-        makeText(if (indisponiveis > 0) "$mensagem ${getString(R.string.nota_busca_parcial)}" else mensagem)
+        val exemplos = nomes.take(5).joinToString(separator = "\n") { "• ${it.take(80)}" }
+        val mais = if (quantidade > 5) "\n… e mais ${quantidade - 5}" else ""
+        val parcial = if (indisponiveis > 0) "\n\n${getString(R.string.nota_busca_parcial)}" else ""
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.nota_produtos_ignorados_titulo)
+            .setMessage("$mensagem\n\n$exemplos$mais$parcial")
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
     }
 
     override fun buscaIndisponivel() {
@@ -574,5 +659,8 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
 
         /** Tempo parada e centralizada antes de tirar a foto sozinha. */
         const val DISPARO_APOS_MS = 1_200L
+
+        /** Aguarda o barcode sumir da câmera antes de permitir nova busca. */
+        const val TEMPO_PARA_LIBERAR_CODIGO_MS = 1_200L
     }
 }

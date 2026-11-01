@@ -33,7 +33,7 @@ class NotaFiscalViewModel : ViewModel() {
 
         fun salvo(salvos: Int, falhas: Int)
 
-        fun produtosNaoEncontrados(quantidade: Int, indisponiveis: Int)
+        fun produtosNaoEncontrados(nomes: List<String>, indisponiveis: Int)
 
         fun buscaIndisponivel()
 
@@ -89,7 +89,7 @@ class NotaFiscalViewModel : ViewModel() {
                                 listener.itensLidos(nota.store, revisao.itens, emptyList())
                             }
                             if (revisao.ignorados > 0) {
-                                listener.produtosNaoEncontrados(revisao.ignorados, revisao.indisponiveis)
+                                listener.produtosNaoEncontrados(revisao.nomesIgnorados, revisao.indisponiveis)
                             }
                         }
                     },
@@ -120,6 +120,15 @@ class NotaFiscalViewModel : ViewModel() {
 
         if (escolhidos.isEmpty()) {
             listener.makeText("Marque ao menos um produto para adicionar.")
+            return
+        }
+
+        val quantidadeInvalida = escolhidos.count { !it.quantidadeValida || it.quantidade <= 0 }
+        if (quantidadeInvalida > 0) {
+            listener.makeText(
+                if (quantidadeInvalida == 1) "Corrija a quantidade do item marcado antes de continuar."
+                else "Corrija as quantidades dos itens marcados antes de continuar."
+            )
             return
         }
 

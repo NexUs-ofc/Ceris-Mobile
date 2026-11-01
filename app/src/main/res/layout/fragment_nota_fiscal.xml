@@ -15,7 +15,7 @@
     android:id="@+id/raiz_nota"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/fundo_prototipo"
     tools:context=".view.fragment.NotaFiscalFragment">
 
     <!-- Camera -->
@@ -186,7 +186,7 @@
         android:id="@+id/camada_lendo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/md_theme_background"
+        android:background="@color/fundo_prototipo"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/screen_margin_horizontal"

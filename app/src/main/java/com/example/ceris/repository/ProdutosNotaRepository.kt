@@ -81,11 +81,22 @@ class ProdutosNotaRepository(private val api: OpenFoodFactsAPI) {
         }
         private fun normalize(value: String) = Normalizer.normalize(value.lowercase(java.util.Locale.ROOT), Normalizer.Form.NFD)
             .replace(Regex("\\p{M}+"), "").replace(Regex("[^a-z0-9 ]"), " ").trim()
+        private val palavrasIgnoradas = setOf(
+            "un", "und", "unid", "unidade", "unidades", "unit", "units", "pc", "pcs",
+            "kg", "kgs", "g", "gr", "grama", "gramas", "mg", "ml", "l", "lt", "litro", "litros",
+            "cl", "dl", "oz", "do", "da", "de", "em", "com", "para", "pct", "pacote", "embalagem",
+        )
+
+        /** Tamanho e unidade impressos no cupom não identificam o nome do alimento. */
         private fun words(value: String) = normalize(value).split(Regex("\\s+"))
-            .filter { (it.length >= 3 || it.all(Char::isDigit) && it.isNotEmpty()) && it !in setOf("un", "und", "unid", "kg", "gr", "ml", "lt", "de", "do", "da") }
+            .filter { token ->
+                token.length >= 3 && token !in palavrasIgnoradas &&
+                    !token.all(Char::isDigit) &&
+                    !token.matches(Regex("\\d+(?:g|gr|kg|mg|ml|l|lt|cl|dl|oz)"))
+            }
         internal fun choose(name: String, products: List<OffProduto>): FoodLookupMatch {
             val requested = words(name)
-            if (requested.size < 2) return FoodLookupMatch(0, "NOT_FOUND")
+            if (requested.isEmpty()) return FoodLookupMatch(0, "NOT_FOUND")
             val matches = products.mapNotNull { product ->
                 val candidate = FoodLookupProduct(
                     product.code, product.productName?.trim(), product.brands?.split(",")?.firstOrNull()?.trim(),

@@ -13,7 +13,7 @@ data class Produto(
     val validade: String,
     val situacao: SituacaoProduto,
     val imagemUrl: String? = null,
-    /** Como a Core manda: "un", "kg", "l"... Sem ela, 3 kg viraria "3 un". */
+    /** Contagem de embalagens no estoque; o peso/volume fica no cadastro do alimento. */
     val unidade: String = "un",
     /** Do catalogo da Core. Nulo quando o catalogo nao respondeu. */
     val categoria: String? = null,

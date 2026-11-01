@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Scanner (Figma > Protótipos > qr code e nota fiscal): um fragment so, em tres
+    camadas que se alternam.
+
+    camada_camera  - preview com a moldura e o resto escurecido. Codigo de
+                     barras e lido sozinho; a nota sai pelo botao central da
+                     barra (ou sozinha, parada na frente da camera).
+    camada_lendo   - espera da leitura da nota.
+    camada_revisao - "Confira os produtos": itens lidos para marcar e conferir.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/raiz_nota"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fundo_prototipo"
+    tools:context=".view.fragment.NotaFiscalFragment">
+
+    <!-- Camera -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/camada_camera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ceris_black">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/preview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/controles_camera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:scaleType="fitCenter" />
+
+        <com.example.ceris.view.utils.MascaraLeituraView
+            android:id="@+id/mascara"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/preview"
+            app:layout_constraintEnd_toEndOf="@id/preview"
+            app:layout_constraintStart_toStartOf="@id/preview"
+            app:layout_constraintTop_toTopOf="@id/preview" />
+
+        <!-- Os dois jeitos de ler: cada um com a sua moldura. -->
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/grupo_modo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/camera_modo_margin"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/camera_modo_margin"
+            app:checkedButton="@id/modo_codigo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/preview"
+            app:layout_constraintWidth_max="@dimen/camera_modo_max_width"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/modo_nota"
+                style="@style/BotaoModoCamera"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:minWidth="0dp"
+                android:paddingStart="@dimen/spacing_s"
+                android:paddingEnd="@dimen/spacing_s"
+                android:text="@string/modo_nota" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/modo_codigo"
+                style="@style/BotaoModoCamera"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:minWidth="0dp"
+                android:paddingStart="@dimen/spacing_s"
+                android:paddingEnd="@dimen/spacing_s"
+                android:text="@string/modo_codigo" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <!-- Instrucao do modo nota, logo abaixo da moldura alta. -->
+        <TextView
+            android:id="@+id/dica"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_margin_horizontal"
+            android:layout_marginEnd="@dimen/screen_margin_horizontal"
+            android:layout_marginBottom="@dimen/spacing_m"
+            android:background="@drawable/bg_dica_camera"
+            android:gravity="center"
+            android:paddingStart="@dimen/spacing_m"
+            android:paddingTop="@dimen/spacing_s"
+            android:paddingEnd="@dimen/spacing_m"
+            android:paddingBottom="@dimen/spacing_s"
+            android:text="@string/nota_dica"
+            android:textColor="@color/ceris_white"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintBottom_toBottomOf="@id/preview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+        <ImageButton
+            android:id="@+id/btn_flash"
+            android:layout_width="@dimen/camera_flash"
+            android:layout_height="@dimen/camera_flash"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/spacing_m"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/camera_flash"
+            android:padding="@dimen/spacing_s"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_menu_zap_off"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/preview"
+            app:tint="@color/ceris_white" />
+
+        <TextView
+            android:id="@+id/sem_permissao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_margin_horizontal"
+            android:layout_marginEnd="@dimen/screen_margin_horizontal"
+            android:gravity="center"
+            android:text="@string/nota_sem_permissao"
+            android:textColor="@color/ceris_white"
+            android:textSize="@dimen/text_size_15"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/preview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/preview" />
+
+        <!-- Faixa preta de baixo: galeria a esquerda, trocar camera a direita. -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/controles_camera"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/camera_controles_altura"
+            android:paddingStart="@dimen/screen_margin_horizontal"
+            android:paddingEnd="@dimen/screen_margin_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/btn_galeria"
+                android:layout_width="@dimen/camera_botao"
+                android:layout_height="@dimen/camera_botao"
+                android:background="@color/ceris_deep_400"
+                android:contentDescription="@string/camera_galeria"
+                android:padding="@dimen/spacing_m"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_menu_image"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/FormaCirculo"
+                app:strokeColor="@color/ceris_white"
+                app:strokeWidth="@dimen/botao_contorno"
+                app:tint="@color/ceris_white" />
+
+            <ImageButton
+                android:id="@+id/btn_trocar_camera"
+                android:layout_width="@dimen/camera_botao"
+                android:layout_height="@dimen/camera_botao"
+                android:background="@drawable/bg_botao_camera"
+                android:contentDescription="@string/camera_trocar"
+                android:padding="@dimen/spacing_m"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_menu_switch_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/ceris_cinza" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Lendo / salvando -->
+    <LinearLayout
+        android:id="@+id/camada_lendo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/fundo_prototipo"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/screen_margin_horizontal"
+        android:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:indicatorColor="@color/md_theme_primary" />
+
+        <TextView
+            android:id="@+id/txt_andamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_l"
+            android:gravity="center"
+            android:textColor="@color/md_theme_onBackground"
+            android:textSize="@dimen/text_size_15"
+            tools:text="Lendo a nota…" />
+
+    </LinearLayout>
+
+    <!-- Revisao: "Confira os produtos" -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/camada_revisao"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/screen_margin_horizontal"
+        android:paddingEnd="@dimen/screen_margin_horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/titulo_revisao"
+            style="@style/TituloTela"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/nota_revisao_titulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+        <TextView
+            android:id="@+id/subtitulo_revisao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:text="@string/nota_revisao_subtitulo"
+            android:textColor="@color/ceris_cinza"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintEnd_toEndOf="@id/titulo_revisao"
+            app:layout_constraintStart_toStartOf="@id/titulo_revisao"
+            app:layout_constraintTop_toBottomOf="@id/titulo_revisao" />
+
+        <TextView
+            android:id="@+id/txt_quantos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_m"
+            android:textColor="@color/ceris_cinza"
+            android:textSize="@dimen/text_size_13"
+            app:layout_constraintEnd_toEndOf="@id/titulo_revisao"
+            app:layout_constraintStart_toStartOf="@id/titulo_revisao"
+            app:layout_constraintTop_toBottomOf="@id/subtitulo_revisao"
+            tools:text="2 produtos para conferir" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lista_itens_nota"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_s"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/spacing_s"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/btn_adicionar_estoque"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_quantos"
+            app:layout_constraintWidth_max="@dimen/content_max_width"
+            tools:listitem="@layout/item_nota" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_adicionar_estoque"
+            style="@style/BotaoPrincipal"
+            android:layout_width="0dp"
+            android:text="@string/nota_adicionar"
+            app:layout_constraintBottom_toTopOf="@id/btn_descartar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_max="@dimen/content_max_width" />
+
+        <TextView
+            android:id="@+id/btn_descartar"
+            style="@style/LinkCancelar"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:layout_marginBottom="@dimen/spacing_s"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
