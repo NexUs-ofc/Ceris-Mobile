@@ -7,12 +7,9 @@
     android:padding="20dp">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/TituloSheet"
         android:gravity="center"
-        android:text="@string/avaliacao_titulo"
-        android:textColor="@color/md_theme_onSurface"
-        android:textSize="24sp" />
+        android:text="@string/avaliacao_titulo" />
 
     <LinearLayout
         android:layout_width="match_parent"
