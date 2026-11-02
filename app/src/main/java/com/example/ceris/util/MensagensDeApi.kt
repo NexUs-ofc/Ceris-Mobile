@@ -16,19 +16,27 @@ import javax.net.ssl.SSLException
 
 // Repetir este `when` em cada ViewModel faria as mensagens divergirem.
 fun mensagemDeErro(statusCode: Int, errorBody: String?): String {
-    val doServidor = ApiError.parse(errorBody)?.readableMessage()
+    val erro = ApiError.parse(errorBody)
+    val doServidor = erro?.readableMessage()?.takeIf {
+        it.isNotBlank() && !Regex(
+            "(?i)\\b(invalid api key|bad request|not found|internal server error|unauthorized|forbidden|unprocessable entity|too many requests|service unavailable|gateway timeout|exception|traceback|must match|request failed)\\b"
+        ).containsMatchIn(it)
+    }
 
     return when (statusCode) {
-        400 -> doServidor?.let { "Dados inválidos:\n$it" }
-            ?: "Dados inválidos. Confira os campos e tente novamente."
-        // Nem todo 401 e de sessao: o ms-ia responde 401 com
-        // {"detail":"Invalid API key"} quando a chave do app nao esta na
-        // lista dele. Dizer "sessao expirada" ali manda a pessoa refazer o
-        // login para um problema que o login nao resolve.
-        401 -> doServidor ?: "Sessão expirada. Entre novamente."
-        403 -> doServidor ?: "Você não tem acesso a esta lista."
-        404 -> doServidor ?: "Essa lista não existe mais."
-        else -> doServidor ?: "Erro $statusCode. Algo deu errado, tente novamente!"
+        400 -> doServidor ?: "Confira os dados informados e tente novamente."
+        401 -> if (erro?.readableMessage()?.contains("invalid api key", ignoreCase = true) == true) {
+            "O serviço está temporariamente indisponível. Tente novamente em instantes."
+        } else {
+            "Sua sessão expirou. Entre novamente para continuar."
+        }
+        403 -> "Você não tem permissão para realizar esta ação."
+        404 -> doServidor ?: "Este conteúdo não está mais disponível. Atualize a tela e tente novamente."
+        409 -> doServidor ?: "Os dados foram alterados. Atualize a tela e tente novamente."
+        422 -> "Confira os dados informados e tente novamente."
+        429 -> "O serviço está ocupado. Aguarde um pouco e tente novamente."
+        in 500..599 -> "O serviço está temporariamente indisponível. Tente novamente em instantes."
+        else -> doServidor ?: "Não foi possível concluir agora. Tente novamente em instantes."
     }
 }
 
@@ -89,33 +97,33 @@ fun mensagemDeFalha(throwable: Throwable): String {
         // servidor" (provado no TempoLimiteTest).
         throwable is SocketTimeoutException ||
             (throwable is InterruptedIOException && throwable.message == "timeout") ->
-            "O servidor demorou para responder. Tente de novo."
+            "O serviço demorou para responder. Tente novamente."
 
         throwable.temNaCadeia(UnknownHostException::class.java) ->
-            "Sem conexão, ou o endereço da API mudou."
+            "Confira sua conexão com a internet e tente novamente."
 
         throwable.temNaCadeia(ConnectException::class.java) ->
-            "Servidor fora do ar. Não foi possível conectar."
+            "Não foi possível conectar ao serviço. Tente novamente em instantes."
 
         throwable.temNaCadeia(UnknownServiceException::class.java) ->
-            "A API está em http e esta versão só aceita https."
+            "Não foi possível estabelecer uma conexão segura. Tente novamente mais tarde."
 
         throwable.temNaCadeia(SSLException::class.java) ->
-            "Falha de segurança na conexão com o servidor."
+            "Não foi possível estabelecer uma conexão segura. Tente novamente mais tarde."
 
         // O servidor aceitou a conexão e desligou sem responder nada. É o que
         // um balanceador de pé sem nenhum backend saudável atrás faz.
         throwable.temNaCadeia(EOFException::class.java, ProtocolException::class.java) ->
-            "O servidor não respondeu. O serviço parece estar fora do ar."
+            "O serviço não respondeu. Tente novamente em instantes."
 
         // "Connection reset", "Software caused connection abort": o socket foi
         // derrubado no meio, do outro lado.
         throwable.temNaCadeia(SocketException::class.java) ->
-            "A conexão foi interrompida pelo servidor."
+            "A conexão foi interrompida. Confira sua internet e tente novamente."
 
-        throwable is IOException -> "A conexão com o servidor caiu. Tente de novo."
+        throwable is IOException -> "Não foi possível concluir por causa da conexão. Tente novamente."
 
-        else -> "Um erro inesperado aconteceu: ${throwable.message}"
+        else -> "Algo deu errado. Tente novamente em instantes."
     }
 
     // Detalhes tecnicos pertencem ao Logcat. Colocar o nome da excecao no

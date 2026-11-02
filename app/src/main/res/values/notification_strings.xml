@@ -4,8 +4,8 @@
     <string name="canal_eventos">Eventos próximos</string>
     <string name="canal_lojas">Lojas próximas</string>
     <string name="notificacao_privada">Você recebeu um novo aviso.</string>
-    <string name="notificacao_link_invalido">Não foi possível abrir esta notificação.</string>
-    <string name="notificacao_outra_conta">Esta notificação pertence a outra conta. Entre com a conta que recebeu o aviso.</string>
+    <string name="notificacao_link_invalido">Este aviso não está mais disponível. Abra o Ceris e confira suas notificações.</string>
+    <string name="notificacao_outra_conta">Este aviso pertence a outra conta. Entre na conta que o recebeu para continuar.</string>
     <string name="notificacao_voltar_estoque">Voltar ao estoque</string>
     <string name="notificacao_voltar_locais">Voltar para locais</string>
     <string name="notificacao_voltar_inicio">Voltar ao início</string>

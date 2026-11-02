@@ -130,8 +130,7 @@ class ChatRepository(
             t.cause is com.google.gson.stream.MalformedJsonException
 
     class RespostaCortada : IOException(
-        "O servidor encerrou a resposta do chat antes de concluir. " +
-            "Tente novamente em instantes."
+        "A resposta não chegou completa. Envie sua mensagem novamente."
     )
 
     private fun autorizacao(): String? =

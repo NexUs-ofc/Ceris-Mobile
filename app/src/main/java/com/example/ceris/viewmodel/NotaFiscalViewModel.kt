@@ -75,7 +75,7 @@ class NotaFiscalViewModel : ViewModel() {
                 if (nota.items.isEmpty()) {
                     pararAndamento()
                     mudar(Estado.CAMERA)
-                    listener.makeText("Nenhum produto foi reconhecido. Tente novamente com a nota inteira.")
+                    listener.makeText("Não encontrei produtos. Enquadre a nota inteira e tente novamente.")
                     return@ler
                 }
                 repository.buscarProdutos(
@@ -119,15 +119,15 @@ class NotaFiscalViewModel : ViewModel() {
         val escolhidos = itens.filter { it.incluir }
 
         if (escolhidos.isEmpty()) {
-            listener.makeText("Marque ao menos um produto para adicionar.")
+            listener.makeText("Selecione pelo menos um produto para adicionar ao estoque.")
             return
         }
 
         val quantidadeInvalida = escolhidos.count { !it.quantidadeValida || it.quantidade <= 0 }
         if (quantidadeInvalida > 0) {
             listener.makeText(
-                if (quantidadeInvalida == 1) "Corrija a quantidade do item marcado antes de continuar."
-                else "Corrija as quantidades dos itens marcados antes de continuar."
+                if (quantidadeInvalida == 1) "Confira a quantidade do produto selecionado antes de continuar."
+                else "Confira as quantidades dos produtos selecionados antes de continuar."
             )
             return
         }
@@ -135,8 +135,8 @@ class NotaFiscalViewModel : ViewModel() {
         val semProduto = escolhidos.count { it.alimentoId == null && it.produtoEncontrado?.valido() != true }
         if (semProduto > 0) {
             listener.makeText(
-                if (semProduto == 1) "Escolha o produto de 1 item marcado, ou desmarque-o."
-                else "Escolha o produto de $semProduto itens marcados, ou desmarque-os."
+                if (semProduto == 1) "Escolha o produto deste item ou desmarque-o para continuar."
+                else "Escolha um produto para cada item ou desmarque os que não deseja adicionar."
             )
             return
         }

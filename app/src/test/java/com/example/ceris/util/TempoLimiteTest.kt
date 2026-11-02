@@ -60,7 +60,7 @@ class TempoLimiteTest {
         assertTrue("veio ${falha.javaClass.name}", falha is InterruptedIOException)
 
         assertEquals(
-            "O servidor demorou para responder. Tente de novo.",
+            "O serviço demorou para responder. Tente novamente.",
             mensagemDeFalha(falha).lineSequence().first()
         )
     }

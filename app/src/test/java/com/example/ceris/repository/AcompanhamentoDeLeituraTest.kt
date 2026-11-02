@@ -149,7 +149,7 @@ class AcompanhamentoDeLeituraTest {
 
         assertTrue(falha is AcompanhamentoDeLeitura.LeituraDemorou)
         assertEquals(
-            "A leitura está demorando mais que o normal. Tente de novo em instantes.",
+            "A leitura está demorando mais que o normal. Tente novamente em instantes.",
             mensagemDeFalha(falha!!).lineSequence().first()
         )
     }

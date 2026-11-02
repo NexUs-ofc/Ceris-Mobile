@@ -102,7 +102,7 @@ class AddressLoadingActivity : AppCompatActivity(), RegisterViewModel.Listener {
             }
 
             override fun registrationRequired(dados: com.example.ceris.model.dto.GoogleRegistrationRequiredResponse) {
-                makeText("Cadastro ja esta em andamento.")
+                makeText("Seu cadastro já está sendo processado. Aguarde um instante.")
             }
         }
 

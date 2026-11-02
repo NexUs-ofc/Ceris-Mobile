@@ -78,7 +78,7 @@ class ResetPasswordOtpActivity : AppCompatActivity(), RecoverPasswordViewModel.L
 
         resendButton.setOnClickListener {
             val target = email ?: return@setOnClickListener
-            Toast.makeText(this, "Enviando um novo código...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Solicitando um novo código…", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, ForgotPasswordLoadingActivity::class.java)
             intent.putExtra(ForgotPasswordLoadingActivity.EXTRA_EMAIL, target)
             startActivity(intent)
@@ -118,7 +118,7 @@ class ResetPasswordOtpActivity : AppCompatActivity(), RecoverPasswordViewModel.L
     }
 
     override fun makeText(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     override fun operationCompleted() {

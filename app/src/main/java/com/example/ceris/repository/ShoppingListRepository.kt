@@ -257,9 +257,11 @@ class ShoppingListRepository(
         val valorTotal: Double get() = itens.sumOf { it.valor }
     }
 
-    class ItemSemIdentificador : IllegalStateException("Este item pode ser apenas consultado.")
+    class ItemSemIdentificador : IllegalStateException(
+        "Não foi possível atualizar este item. Atualize a lista e tente novamente."
+    )
 
-    class SemSessao : IllegalStateException("Sessão expirada. Entre novamente.")
+    class SemSessao : IllegalStateException("Sua sessão expirou. Entre novamente para continuar.")
 
     private fun autorizacao(): String? =
         sessionManager.getString(SessionKeys.ACCESS_TOKEN, "")

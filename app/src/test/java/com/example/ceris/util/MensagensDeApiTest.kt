@@ -11,10 +11,15 @@ import java.net.UnknownHostException
 class MensagensDeApiTest {
 
     @Test
-    fun erro_401_usa_a_frase_do_servidor_e_so_sem_ela_fala_em_sessao() {
-        // ms-ia recusando a chave do app: refazer o login nao resolve.
-        assertEquals("Invalid API key", mensagemDeErro(401, "{\"detail\":\"Invalid API key\"}"))
-        assertEquals("Sessão expirada. Entre novamente.", mensagemDeErro(401, null))
+    fun erro_401_nao_exibe_detalhe_tecnico_do_servidor() {
+        assertEquals(
+            "O serviço está temporariamente indisponível. Tente novamente em instantes.",
+            mensagemDeErro(401, "{\"detail\":\"Invalid API key\"}")
+        )
+        assertEquals(
+            "Sua sessão expirou. Entre novamente para continuar.",
+            mensagemDeErro(401, null)
+        )
     }
 
     @Test
@@ -23,18 +28,21 @@ class MensagensDeApiTest {
             "Leitura não encontrada. Envie a nota de novo.",
             mensagemDeErro(404, "{\"detail\":\"Leitura não encontrada. Envie a nota de novo.\"}")
         )
-        assertEquals("Essa lista não existe mais.", mensagemDeErro(404, "pagina html"))
+        assertEquals(
+            "Este conteúdo não está mais disponível. Atualize a tela e tente novamente.",
+            mensagemDeErro(404, "pagina html")
+        )
     }
 
     @Test
     fun falha_de_rede_aponta_o_lugar_certo() {
         fun primeiraLinha(t: Throwable) = mensagemDeFalha(t).lineSequence().first()
 
-        assertEquals("Sem conexão, ou o endereço da API mudou.", primeiraLinha(UnknownHostException("ceris")))
-        assertEquals("Servidor fora do ar. Não foi possível conectar.", primeiraLinha(ConnectException("recusada")))
+        assertEquals("Confira sua conexão com a internet e tente novamente.", primeiraLinha(UnknownHostException("ceris")))
+        assertEquals("Não foi possível conectar ao serviço. Tente novamente em instantes.", primeiraLinha(ConnectException("recusada")))
         // Conexao aceita e fechada sem resposta: e o servidor, nao a internet do aparelho.
         assertEquals(
-            "O servidor não respondeu. O serviço parece estar fora do ar.",
+            "O serviço não respondeu. Tente novamente em instantes.",
             primeiraLinha(IOException("unexpected end of stream", EOFException()))
         )
     }

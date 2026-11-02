@@ -22,22 +22,9 @@ data class ApiError(
     val fields: Map<String, String>? = null
 ) {
     fun readableMessage(): String? {
-        val fieldMessages = fields
-            ?.entries
-            ?.joinToString("\n") { "${it.key}: ${it.value}" }
-            ?.takeIf { it.isNotBlank() }
-
-        // O ms-ia manda a frase pronta em `detalhe`/`erro` e o texto cru do
-        // provedor em `mensagem_do_provedor`. Sem os tres, um 429 de cota do
-        // Groq chegava na tela como "Erro 429. Algo deu errado".
-        val doProvedor = mensagemDoProvedor?.takeIf { it.isNotBlank() }
-        val principal = fieldMessages ?: message ?: detail ?: detalhe ?: erro ?: code
-
-        if (principal == null) {
-            return doProvedor
-        }
-
-        return if (doProvedor == null) principal else principal + "\n" + doProvedor
+        return sequenceOf(message, detail, detalhe, erro)
+            .firstOrNull { !it.isNullOrBlank() }
+            ?.trim()
     }
 
     companion object {

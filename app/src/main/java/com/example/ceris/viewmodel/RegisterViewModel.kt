@@ -7,7 +7,6 @@ import com.example.ceris.api.AuthAPI
 import com.example.ceris.api.RetrofitClient
 import com.example.ceris.api.ViaCEPAPI
 import com.example.ceris.local.SessionManager
-import com.example.ceris.model.dto.ApiError
 import com.example.ceris.model.dto.PasswordRegisterDTO
 import com.example.ceris.model.dto.PasswordRegisterResponse
 import com.example.ceris.model.dto.ViaCEPResponse
@@ -52,7 +51,7 @@ class RegisterViewModel: ViewModel() {
 
     ) {
         if (!isAllValid(familyName, email, password)) {
-            listener.makeText("Preencha todos os campos!")
+            listener.makeText("Preencha todos os campos para continuar.")
             return
         }
 
@@ -87,7 +86,7 @@ class RegisterViewModel: ViewModel() {
             campos.add(password)
         }
         if (!isAllValid(*campos.toTypedArray())) {
-            listener.makeText("Preencha todos os campos!")
+            listener.makeText("Preencha todos os campos para continuar.")
             return false
         }
 
@@ -98,7 +97,7 @@ class RegisterViewModel: ViewModel() {
         }
 
         if (cep == null || !CEP_REGEX.matches(cep)) {
-            listener.makeText("CEP inválido. Digite os 8 números do CEP.")
+            listener.makeText("Informe um CEP válido com 8 números.")
             return false
         }
 
@@ -129,7 +128,7 @@ class RegisterViewModel: ViewModel() {
 
     fun startRegistrationWithPassword() {
         if (! this.passwordRegisterDTO.isAllNotNull()) {
-            listener.makeText("Preencha todas as informações!")
+            listener.makeText("Confira os dados do cadastro e tente novamente.")
             return
         }
         val req = this.passwordRegisterDTO.toRequest()
@@ -140,8 +139,8 @@ class RegisterViewModel: ViewModel() {
                 this.authRepository.saveRegistrationId(response.registrationId)
                 listener.operationCompleted()
             },
-            onError = { statusCode, errorBody ->
-                listener.makeText(errorMessageFor(statusCode, errorBody))
+            onError = { statusCode, _ ->
+                listener.makeText(errorMessageFor(statusCode))
             },
             onFailure = { throwable ->
                 listener.makeText(mensagemDeFalha(throwable))
@@ -154,7 +153,7 @@ class RegisterViewModel: ViewModel() {
         val registrationId = this.authRepository.getRegistrationId()
 
         if (!isAllValid(otpCode, registrationId)) {
-            listener.makeText("O código deve ser preenchido corretamente")
+            listener.makeText("Digite os 6 números do código de verificação.")
             return
         }
 
@@ -169,11 +168,11 @@ class RegisterViewModel: ViewModel() {
                 this.authRepository.saveTokens(response.accessToken, response.refreshToken)
                 listener.operationCompleted()
             },
-            onError = { statusCode, errorBody ->
+            onError = { statusCode, _ ->
                 val text = when (statusCode) {
-                    422 -> "Código inválido ou expirado!"
-                    401 -> "Acesso negado!"
-                    else -> errorMessageFor(statusCode, errorBody)
+                    422 -> "Este código é inválido ou expirou. Confira e tente novamente."
+                    401 -> "Não foi possível validar o código. Solicite outro e tente novamente."
+                    else -> errorMessageFor(statusCode)
                 }
                 listener.makeText(text)
             },
@@ -183,16 +182,12 @@ class RegisterViewModel: ViewModel() {
         )
     }
 
-    private fun errorMessageFor(statusCode: Int, errorBody: String?): String {
-        val serverMessage = ApiError.parse(errorBody)?.readableMessage()
+    private fun errorMessageFor(statusCode: Int): String {
         return when (statusCode) {
-            400 -> serverMessage?.let { "Dados inválidos:\n$it" }
-                ?: "Dados inválidos. Confira os campos e tente novamente."
-            401 -> "Acesso negado!"
-            409 -> serverMessage ?: "E-mail já cadastrado. Faça login."
-            422 -> serverMessage?.let { "Os campos devem ser preenchidos corretamente!\n$it" }
-                ?: "Os campos devem ser preenchidos corretamente!"
-            else -> "Erro: $statusCode Algo deu errado, tente novamente!"
+            400, 422 -> "Confira os dados do cadastro e tente novamente."
+            401 -> "Não foi possível validar seus dados. Tente novamente."
+            409 -> "Este e-mail já está cadastrado. Entre na sua conta ou recupere a senha."
+            else -> "Não foi possível concluir o cadastro. Tente novamente em instantes."
         }
     }
 

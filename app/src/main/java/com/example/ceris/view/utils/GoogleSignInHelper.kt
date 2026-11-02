@@ -66,7 +66,7 @@ object GoogleSignInHelper {
                 Resultado.Sucesso(google.idToken)
             } else {
                 Log.e(TAG, "Credencial de tipo inesperado: ${credencial.type}")
-                Resultado.Erro("Não foi possível ler a credencial do Google.")
+            Resultado.Erro("Não foi possível acessar sua conta Google. Tente novamente.")
             }
         } catch (e: GetCredentialCancellationException) {
             Log.i(TAG, "Seleção de conta Google cancelada pelo usuário")
@@ -79,7 +79,7 @@ object GoogleSignInHelper {
             )
         } catch (e: GetCredentialException) {
             Log.e(TAG, "Falha ao obter credencial do Google: ${e.type}", e)
-            Resultado.Erro("Não foi possível entrar com o Google: ${e.type}")
+            Resultado.Erro("Não foi possível concluir o acesso com o Google. Tente novamente.")
         } catch (e: Exception) {
             // A credencial pode ter sido escolhida com sucesso e ainda assim
             // falhar ao ser convertida (por exemplo, token/claims inesperados).

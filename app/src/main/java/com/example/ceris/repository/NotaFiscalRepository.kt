@@ -36,7 +36,7 @@ class NotaFiscalRepository(
 
     /** Proxy na frente do ms-ia respondendo pagina HTML em vez do JSON da leitura. */
     class LeituraCortada : IOException(
-        "O servidor respondeu com uma página de erro em vez da leitura. Tente de novo."
+        "Não foi possível ler a nota agora. Tente novamente em instantes."
     )
 
     private val principal = Handler(Looper.getMainLooper())
