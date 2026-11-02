@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Scanner (Figma > Protótipos > qr code e nota fiscal): um fragment so, em tres
-    camadas que se alternam.
-
-    camada_camera  - preview com a moldura e o resto escurecido. Codigo de
-                     barras e lido sozinho; a nota sai pelo botao central da
-                     barra (ou sozinha, parada na frente da camera).
-    camada_lendo   - espera da leitura da nota.
-    camada_revisao - "Confira os produtos": itens lidos para marcar e conferir.
--->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
