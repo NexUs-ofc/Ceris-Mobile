@@ -114,13 +114,13 @@ class AcompanhamentoDeLeituraTest {
     }
 
     @Test
-    fun erro_da_leitura_chega_com_a_frase_do_servidor() {
+    fun erro_da_leitura_mostra_mensagem_clara_ao_usuario() {
         consultas = listOf(200 to """{"pedido_id":"p1","status":"erro","codigo":422,"detalhe":"A imagem não parece ser uma nota fiscal."}""")
 
         assertTrue(rodar())
 
         assertEquals(422, erro!!.first)
-        assertEquals("A imagem não parece ser uma nota fiscal.", mensagemDeErro(erro!!.first, erro!!.second))
+        assertEquals("Confira os dados informados e tente novamente.", mensagemDeErro(erro!!.first, erro!!.second))
     }
 
     @Test
