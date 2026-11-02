@@ -182,6 +182,9 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
             val chip = layoutInflater.inflate(R.layout.item_chat_sugestao, container, false) as TextView
             chip.apply {
                 text = resposta
+                maxWidth = resources.displayMetrics.widthPixels -
+                    (resources.getDimensionPixelSize(R.dimen.screen_margin_horizontal) * 2)
+                ellipsize = android.text.TextUtils.TruncateAt.END
                 setOnClickListener {
                     enviar(resposta)
                 }
