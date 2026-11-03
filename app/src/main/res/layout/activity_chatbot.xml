@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Cerita (Figma > Protótipos > V1 > Chatbot).
-
-    O cabeçalho fica colado no topo e meio transparente: o padrão do fundo
-    continua aparecendo por baixo dele e as mensagens somem atrás ao rolar. Por
-    isso a lista começa atrás do cabeçalho, com paddingTop do tamanho dele e
-    clipToPadding desligado — e não embaixo dele.
-
-    O fundo é o background da raiz, e não uma ImageView: assim ele cobre a tela
-    inteira, por baixo do cabeçalho e das barras do sistema, sem sobrar faixa
-    nas pontas. O vetor vinha com um clip-path que cortava os 17% da direita —
-    aberto para a largura toda, senão a estampa parava no meio do caminho.
--->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -32,10 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--
-        Atalhos do Figma. Ficam acima do campo e somem depois da primeira
-        resposta da pessoa, por isso vivem fora da lista.
-    -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lista_mensagens"
         android:layout_width="0dp"
@@ -136,7 +119,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Por último no XML para ficar por cima da lista que rola sob ele. -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cabecalho"
         android:layout_width="0dp"

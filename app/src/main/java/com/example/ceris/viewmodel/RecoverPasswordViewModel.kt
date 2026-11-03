@@ -6,7 +6,6 @@ import com.example.ceris.api.ApiBaseUrl
 import com.example.ceris.api.AuthAPI
 import com.example.ceris.api.RetrofitClient
 import com.example.ceris.local.SessionManager
-import com.example.ceris.model.dto.ApiError
 import com.example.ceris.model.dto.ForgotPasswordRequest
 import com.example.ceris.model.dto.ResetPasswordRequest
 import com.example.ceris.model.dto.VerifyPasswordResetRequest
@@ -78,8 +77,8 @@ class RecoverPasswordViewModel : ViewModel() {
                 this.authRepository.saveResetId(response.resetId)
                 listener.operationCompleted()
             },
-            onError = { statusCode, errorBody ->
-                listener.makeText(errorMessageFor(statusCode, errorBody))
+            onError = { statusCode, _ ->
+                listener.makeText(errorMessageFor(statusCode))
             },
             onFailure = { throwable ->
                 listener.makeText(mensagemDeFalha(throwable))
@@ -96,7 +95,7 @@ class RecoverPasswordViewModel : ViewModel() {
 
         val resetId = this.authRepository.getResetId()
         if (resetId.isEmpty()) {
-            listener.makeText("Sessão de recuperação expirada. Solicite um novo código.")
+            listener.makeText("A recuperação expirou. Solicite um novo código para continuar.")
             return
         }
 
@@ -106,8 +105,8 @@ class RecoverPasswordViewModel : ViewModel() {
                 this.authRepository.saveResetTicket(response.resetTicket)
                 listener.operationCompleted()
             },
-            onError = { statusCode, errorBody ->
-                listener.makeText(errorMessageFor(statusCode, errorBody))
+            onError = { statusCode, _ ->
+                listener.makeText(errorMessageFor(statusCode))
             },
             onFailure = { throwable ->
                 listener.makeText(mensagemDeFalha(throwable))
@@ -124,7 +123,7 @@ class RecoverPasswordViewModel : ViewModel() {
 
         val resetTicket = this.authRepository.getResetTicket()
         if (resetTicket.isEmpty()) {
-            listener.makeText("Sessão de recuperação expirada. Solicite um novo código.")
+            listener.makeText("A recuperação expirou. Solicite um novo código para continuar.")
             return
         }
 
@@ -136,8 +135,8 @@ class RecoverPasswordViewModel : ViewModel() {
             onSuccess = {
                 listener.operationCompleted()
             },
-            onError = { statusCode, errorBody ->
-                listener.makeText(errorMessageFor(statusCode, errorBody))
+            onError = { statusCode, _ ->
+                listener.makeText(errorMessageFor(statusCode))
             },
             onFailure = { throwable ->
                 listener.makeText(mensagemDeFalha(throwable))
@@ -168,13 +167,12 @@ class RecoverPasswordViewModel : ViewModel() {
         return null
     }
 
-    private fun errorMessageFor(statusCode: Int, errorBody: String?): String {
-        val serverMessage = ApiError.parse(errorBody)?.readableMessage()
+    private fun errorMessageFor(statusCode: Int): String {
         return when (statusCode) {
-            400 -> serverMessage?.let { "Dados inválidos:\n$it" }
-                ?: "Dados inválidos. Confira os campos e tente novamente."
-            401 -> "Código inválido ou expirado. Verifique e tente novamente."
-            else -> "Erro: $statusCode Algo deu errado, tente novamente!"
+            400, 422 -> "Confira os dados informados e tente novamente."
+            401 -> "Este código não é válido ou expirou. Confira e tente novamente."
+            429 -> "Muitas tentativas. Aguarde um pouco antes de solicitar outro código."
+            else -> "Não foi possível concluir a recuperação agora. Tente novamente em instantes."
         }
     }
 }

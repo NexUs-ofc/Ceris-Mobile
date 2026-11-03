@@ -22,19 +22,6 @@ import com.example.ceris.view.adapter.MensagemChat
 import com.example.ceris.view.utils.hideNavigationBar
 import com.example.ceris.viewmodel.ChatViewModel
 
-/**
- * Cerita.
- *
- * A tela monta a conversa de abertura do Figma, manda o que a pessoa escreve
- * para o ms-ia e some com os atalhos depois do primeiro envio.
- *
- * A espera aparece no subtítulo do cabeçalho, que já existia, em vez de um
- * balão "digitando": balão falso entraria na lista e teria de ser removido
- * depois, e ao girar a tela voltaria como mensagem de verdade.
- *
- * O inset de baixo vai no campo de envio, e não na raiz: com padding na raiz o
- * fundo estampado pararia antes da borda da tela.
- */
 class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
 
     private lateinit var lista: RecyclerView
@@ -124,12 +111,7 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
         }
     }
 
-    /**
-     * A barra do sistema empurra só o rodapé.
-     *
-     * O cabeçalho pega o inset de cima como padding próprio para continuar
-     * colado no topo, com o desenho dele indo até debaixo da barra de status.
-     */
+    /** Aplica os insets das barras do sistema ao cabeçalho e ao campo de envio. */
     private fun aplicarInsets() {
         val cabecalho = findViewById<View>(R.id.cabecalho)
         val barra = findViewById<View>(R.id.barra_envio)
@@ -170,8 +152,7 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
             return
         }
 
-        // Só limpa depois de aceita: recusada por tamanho ou por falta de
-        // configuração, o que a pessoa escreveu continua lá para ela corrigir.
+        // Preserve o texto se o envio falhar.
         if (enviar(texto)) {
             campo.text?.clear()
         }
@@ -182,8 +163,7 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
             return false
         }
 
-        // Os atalhos são de primeira conversa: depois que a pessoa fala, quem
-        // conduz é ela.
+        // Os atalhos iniciais desaparecem após o primeiro envio.
         sugestoes.visibility = View.GONE
 
         lista.scrollToPosition(adapter.acrescentar(MensagemChat.DeQuemUsa(texto)))
@@ -202,6 +182,9 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
             val chip = layoutInflater.inflate(R.layout.item_chat_sugestao, container, false) as TextView
             chip.apply {
                 text = resposta
+                maxWidth = resources.displayMetrics.widthPixels -
+                    (resources.getDimensionPixelSize(R.dimen.screen_margin_horizontal) * 2)
+                ellipsize = android.text.TextUtils.TruncateAt.END
                 setOnClickListener {
                     enviar(resposta)
                 }
@@ -215,10 +198,7 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
         situacao.text = texto
     }
 
-    /**
-     * Encerra a conversa e limpa a tela. O servidor usa isso para resumir o
-     * que foi dito, entao vale mesmo quando a pessoa so quer recomecar.
-     */
+    /** Encerra a conversa atual antes de sair da tela. */
     private fun sairDaTela() {
         sairDepoisDaAvaliacao = true
         resetarDepoisDoFechamento = false

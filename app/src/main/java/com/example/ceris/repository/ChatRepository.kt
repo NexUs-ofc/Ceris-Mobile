@@ -121,9 +121,8 @@ class ChatRepository(
     }
 
     /**
-     * O corte de 30s do DisCloud chega como pagina HTML com status 200, entao
-     * o Gson quebra no primeiro caractere em vez de a chamada dar timeout.
-     * Sem isto a pessoa ve "erro inesperado: Use JsonReader.setLenient".
+     * Se o servidor/proxy devolver HTML em vez do JSON esperado, o Gson falha
+     * antes de o OkHttp conseguir apresentar um timeout legível.
      */
     private fun respostaNaoEraJson(t: Throwable): Boolean =
         t is com.google.gson.JsonParseException ||
@@ -131,8 +130,7 @@ class ChatRepository(
             t.cause is com.google.gson.stream.MalformedJsonException
 
     class RespostaCortada : IOException(
-        "A Cerita demorou mais de 30 segundos e o servidor cortou a resposta. " +
-            "Tente uma pergunta mais direta."
+        "A resposta não chegou completa. Envie sua mensagem novamente."
     )
 
     private fun autorizacao(): String? =

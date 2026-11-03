@@ -123,7 +123,7 @@ class EmailVerificationActivity : AppCompatActivity(), RegisterViewModel.Listene
     }
 
     override fun makeText(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT)
+        Toast.makeText(this, message, Toast.LENGTH_LONG)
             .show()
     }
 

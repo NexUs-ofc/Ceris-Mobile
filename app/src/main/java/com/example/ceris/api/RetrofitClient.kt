@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    // O proxy do DisCloud corta em 30s e devolve uma pagina HTML de erro com
-    // status 200. Passar disso nao adianta: so atrasa o inevitavel.
-    private const val LEITURA_DEMORADA_SEGUNDOS = 45L
+    // O backend no Render pode executar o fluxo do chat por ate 60s. Deixe
+    // margem para persistencia, rede e serializacao antes de encerrar a chamada.
+    private const val LEITURA_DEMORADA_SEGUNDOS = 85L
 
     private val retrofitInstances = mutableMapOf<String, Retrofit>()
 
@@ -76,8 +76,8 @@ object RetrofitClient {
     }
 
     /**
-     * Cliente do chat. A Cerita passa por varios nos e demora mais que as
-     * outras rotas, mas quem manda no teto e o DisCloud, que corta em 30s.
+     * Cliente do chat. A Cerita passa por varios nos e pode usar o orçamento
+     * de 60s do fluxo no Render; o timeout do cliente mantém uma margem.
      */
     private val httpClientDemorado: OkHttpClient by lazy {
         httpClient.newBuilder()

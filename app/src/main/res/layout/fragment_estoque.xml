@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Tela Inicial - estoque (Figma > Protótipos > V1 > Tela Inicial, node 625:1236).
-
-    A navegação é um bloco único no fim da tela: o botão de scan é filho dela,
-    não um elemento ancorado por cima.
-
-    Adaptação: o conteúdo cresce até content_max_width e centraliza, e a grade
-    de produtos passa de 1 para 2 colunas no tablet. A barra segue de largura
-    total nos dois, como no design.
--->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -94,17 +84,6 @@
             app:layout_constraintTop_toBottomOf="@id/campo_busca"
             app:layout_constraintWidth_max="@dimen/content_max_width">
 
-            <!--
-                Comeca e termina junto com o campo de busca: o scroll nao tem
-                padding proprio, entao a borda do primeiro chip cai na mesma
-                linha vertical da borda do campo acima.
-
-                O espacamento preenche a sobra. Medido com a Montserrat real:
-                os quatro rotulos somam 261dp e o padding interno 64dp; numa
-                tela de 393dp sobram 36dp, que divididos pelos tres vaos dao
-                os 12dp daqui. Sem layout_gravity, que dava deslocamento
-                negativo e cortava as pontas.
-            -->
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/grupo_filtros"
                 android:layout_width="wrap_content"

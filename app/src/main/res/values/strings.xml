@@ -31,7 +31,7 @@
     <string name="produto_quantidade_unidade">%1$d %2$s</string>
     <string name="produto_sem_validade">Sem validade</string>
     <string name="nota_sem_permissao">Para ler a nota, o Ceris precisa da câmera. Libere o acesso nas configurações do aparelho.</string>
-    <string name="nota_falha_foto">Não foi possível tirar a foto. Tente de novo.</string>
+    <string name="nota_falha_foto">Não foi possível tirar a foto. Tente novamente.</string>
     <string name="nota_salvando">Adicionando ao estoque…</string>
     <string name="nota_revisao_titulo">Confira os produtos</string>
     <string name="nota_revisao_subtitulo">Escolha os produtos correspondentes e confira as quantidades e validades.</string>
@@ -64,25 +64,25 @@
     <string name="codigo_confirmar">Confirmar e Salvar</string>
     <string name="codigo_cancelar">Cancelar escaneamento</string>
     <string name="codigo_buscando">Buscando o produto…</string>
-    <string name="codigo_nao_encontrado">Produto alimentício não encontrado na Open Food Facts.</string>
-    <string name="codigo_busca_falhou">Não foi possível consultar o produto. Verifique a conexão e tente novamente.</string>
+    <string name="codigo_nao_encontrado">Não encontrei esse alimento. Confira o código de barras e tente novamente.</string>
+    <string name="codigo_busca_falhou">Não foi possível buscar o alimento agora. Confira sua conexão e tente novamente.</string>
     <string name="codigo_salvando">Salvando…</string>
     <string name="codigo_salvo">%1$s adicionado ao estoque.</string>
-    <string name="nota_nada_salvo">Nenhum produto foi adicionado. Tente de novo.</string>
-    <string name="nota_salvos_com_falha">%1$d adicionados, %2$d não foram salvos.</string>
+    <string name="nota_nada_salvo">Nenhum produto foi adicionado. Confira os itens selecionados e tente novamente.</string>
+    <string name="nota_salvos_com_falha">Itens adicionados: %1$d. Não adicionados: %2$d. Revise a nota e tente novamente.</string>
     <plurals name="nota_itens_lidos">
         <item quantity="one">%d produto para conferir</item>
         <item quantity="other">%d produtos para conferir</item>
     </plurals>
     <plurals name="nota_salvos">
-        <item quantity="one">%d produto adicionado ao estoque</item>
-        <item quantity="other">%d produtos adicionados ao estoque</item>
+        <item quantity="one">%d produto adicionado ao estoque.</item>
+        <item quantity="other">%d produtos adicionados ao estoque.</item>
     </plurals>
     <string name="estoque_sem_resultado">Nada encontrado com esse filtro.</string>
 
     <!-- Tela de Locais -->
     <string name="google_login_nao_configurado">Login com Google indisponível: configure o GOOGLE_WEB_CLIENT_ID.</string>
-    <string name="google_login_credencial_invalida">Não foi possível ler a credencial do Google. Tente novamente.</string>
+    <string name="google_login_credencial_invalida">Não foi possível acessar sua conta Google. Tente novamente.</string>
     <string name="google_login_sem_credencial">O Google não retornou uma credencial. Confira sua conta Google no aparelho e tente novamente.</string>
     <string name="google_login_falha">Não foi possível entrar com o Google. Confira sua conexão e tente novamente.</string>
     <string name="google_login_interrompido">A entrada com Google foi interrompida. Toque no Google para tentar novamente.</string>
@@ -138,7 +138,7 @@
     <string name="mercado_distancia">Distância</string>
     <string name="mercado_distancia_valor">%1$s km de você</string>
     <string name="mercado_como_chegar">Como chegar • Ver no mapa</string>
-    <string name="mercado_sem_mapa">Nenhum app de mapas instalado.</string>
+    <string name="mercado_sem_mapa">Não há um app de mapas instalado. Instale um para ver a rota.</string>
     <!-- Receitas -->
     <string name="receitas_titulo">Receitas salvas</string>
     <string name="receita_tempo_icone">Tempo de preparo</string>
@@ -259,9 +259,9 @@ Tente novamente ou volte ao início.</string>
     <string name="perfil_termos_texto">O Ceris é um projeto acadêmico do Instituto J&amp;F. As sugestões da Cerita, as validades estimadas e as tabelas nutricionais são aproximações: confira sempre a embalagem antes de consumir.</string>
     <string name="perfil_sobre_texto">Ceris: monitorar seu estoque nunca ficou tão fácil. Feito pela equipe NexUs, 2º ano TECH.</string>
     <string name="chat_encerrar">Encerrar conversa</string>
-    <string name="chat_encerrada">Conversa encerrada. Pode começar de novo.</string>
-    <string name="chat_aguarde_resposta">Aguarde a Cerita terminar a resposta antes de sair.</string>
-    <string name="chat_falha_encerrar">Não consegui fechar a seção agora. Tente novamente.</string>
+    <string name="chat_encerrada">Conversa encerrada. Você já pode começar outra.</string>
+    <string name="chat_aguarde_resposta">Aguarde a resposta terminar para encerrar a conversa.</string>
+    <string name="chat_falha_encerrar">Não foi possível encerrar a conversa agora. Tente novamente.</string>
     <string name="chat_digitando">digitando…</string>
     <string name="chat_situacao">Online · pronta para ajudar</string>
     <string name="chat_avatar">Foto da Cerita</string>
@@ -279,7 +279,7 @@ Tente novamente ou volte ao início.</string>
     <string name="avaliacao_salvar">Enviar avaliação</string>
     <string name="avaliacao_cancelar">Agora não</string>
     <string name="avaliacao_nota_resumo">%1$d de 5 · %2$s</string>
-    <string name="avaliacao_escolha_nota">Escolha uma nota de 1 a 5 estrelas.</string>
+    <string name="avaliacao_escolha_nota">Escolha uma nota antes de enviar sua avaliação.</string>
     <string name="avaliacao_falhou">Não foi possível enviar a avaliação. A seção já está fechada.</string>
     <string name="chat_hoje">HOJE</string>
     <string name="chat_campo_hint">Digite sua mensagem…</string>
@@ -310,8 +310,8 @@ Tente novamente ou volte ao início.</string>
     <string name="detalhe_consumidas_titulo">Quantas unidades foram consumidas</string>
     <string name="detalhe_descartadas_titulo">Quantas unidades foram descartadas</string>
     <string name="detalhe_baixa_salvar">Salvar</string>
-    <string name="detalhe_baixa_consumido">%1$d %2$s marcado como consumido.</string>
-    <string name="detalhe_baixa_descartado">%1$d %2$s descartado.</string>
+    <string name="detalhe_baixa_consumido">Consumo registrado: %1$d %2$s. Estoque atualizado.</string>
+    <string name="detalhe_baixa_descartado">Descarte registrado: %1$d %2$s. Estoque atualizado.</string>
     <string name="chat_abertura">Oi! Posso ajudar a planejar compras, sugerir receitas ou conferir o que falta no estoque.</string>
     <string name="stepper_menos">-</string>
     <string name="stepper_mais">+</string>

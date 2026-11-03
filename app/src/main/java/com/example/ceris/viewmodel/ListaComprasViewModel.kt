@@ -54,7 +54,7 @@ class ListaComprasViewModel : ViewModel() {
         val titulo = nome?.trim().orEmpty()
 
         if (titulo.isEmpty()) {
-            listener.makeText("Dê um nome para a lista.")
+            listener.makeText("Digite um nome para sua lista.")
             return
         }
 
@@ -75,13 +75,13 @@ class ListaComprasViewModel : ViewModel() {
         val item = nome?.trim().orEmpty()
 
         if (item.isEmpty()) {
-            listener.makeText("Informe o nome do item.")
+            listener.makeText("Digite o nome do item para adicioná-lo à lista.")
             return
         }
 
         // A Core valida @Positive: zero volta como 400 depois da ida a rede.
         if (!quantidade.isFinite() || quantidade <= 0.0) {
-            listener.makeText("A quantidade precisa ser maior que zero.")
+            listener.makeText("Informe uma quantidade maior que zero.")
             return
         }
 

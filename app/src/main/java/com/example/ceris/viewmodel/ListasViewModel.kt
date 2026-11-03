@@ -52,7 +52,7 @@ class ListasViewModel : ViewModel() {
         val titulo = nome?.trim().orEmpty()
 
         if (titulo.isEmpty()) {
-            listener.makeText("Dê um nome para a lista.")
+            listener.makeText("Digite um nome para sua lista.")
             return
         }
 

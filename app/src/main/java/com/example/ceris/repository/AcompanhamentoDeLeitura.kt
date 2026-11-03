@@ -31,7 +31,7 @@ class AcompanhamentoDeLeitura(
 
     /** Passou do limite sem ficar pronta. */
     class LeituraDemorou : IOException(
-        "A leitura está demorando mais que o normal. Tente de novo em instantes."
+        "A leitura está demorando mais que o normal. Tente novamente em instantes."
     )
 
     @Volatile

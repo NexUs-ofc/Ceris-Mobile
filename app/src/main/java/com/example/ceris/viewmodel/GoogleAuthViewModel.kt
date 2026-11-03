@@ -7,7 +7,6 @@ import com.example.ceris.api.RetrofitClient
 import com.example.ceris.local.SessionManager
 import com.example.ceris.model.Address
 import com.example.ceris.model.Channel
-import com.example.ceris.model.dto.ApiError
 import com.example.ceris.model.dto.GoogleAuthenticateRequest
 import com.example.ceris.model.dto.GoogleAuthenticateResponse
 import com.example.ceris.model.dto.GoogleRegistrationRequest
@@ -45,7 +44,7 @@ class GoogleAuthViewModel : ViewModel() {
      */
     fun authenticateWithGoogle(idToken: String?) {
         if (idToken.isNullOrBlank()) {
-            listener.makeText("Não foi possível obter as credenciais do Google.")
+            listener.makeText("Não foi possível concluir o acesso com o Google. Tente novamente.")
             listener.googleSignInFinished()
             return
         }
@@ -76,7 +75,7 @@ class GoogleAuthViewModel : ViewModel() {
                         listener.registrationRequired(cadastro)
                     }
 
-                    else -> listener.makeText("Resposta inesperada do servidor de autenticação.")
+                    else -> listener.makeText("O acesso não foi concluído. Tente novamente em instantes.")
                 }
             },
             onError = { statusCode, errorBody ->
@@ -92,10 +91,10 @@ class GoogleAuthViewModel : ViewModel() {
                         this.authRepository.saveGoogleTicket(cadastro.googleTicket)
                         listener.registrationRequired(cadastro)
                     } else {
-                        listener.makeText(errorMessageFor(statusCode, errorBody))
+                        listener.makeText(errorMessageFor(statusCode))
                     }
                 } else {
-                    listener.makeText(errorMessageFor(statusCode, errorBody))
+                    listener.makeText(errorMessageFor(statusCode))
                 }
             },
             onFailure = { throwable ->
@@ -116,7 +115,7 @@ class GoogleAuthViewModel : ViewModel() {
         val googleTicket = this.authRepository.getGoogleTicket()
 
         if (googleTicket.isBlank()) {
-            listener.makeText("Sessão do Google expirada. Entre novamente.")
+            listener.makeText("Esta etapa do cadastro expirou. Comece novamente pelo Google.")
             return
         }
 
@@ -135,9 +134,9 @@ class GoogleAuthViewModel : ViewModel() {
                 this.authRepository.saveTokens(sessao.accessToken, sessao.refreshToken)
                 listener.loggedIn()
             },
-            onError = { statusCode, errorBody ->
+            onError = { statusCode, _ ->
                 listener.googleSignInFinished()
-                listener.makeText(errorMessageFor(statusCode, errorBody))
+                listener.makeText(errorMessageFor(statusCode))
             },
             onFailure = { throwable ->
                 listener.googleSignInFinished()
@@ -146,15 +145,13 @@ class GoogleAuthViewModel : ViewModel() {
         )
     }
 
-    private fun errorMessageFor(statusCode: Int, errorBody: String?): String {
-        val serverMessage = ApiError.parse(errorBody)?.readableMessage()
+    private fun errorMessageFor(statusCode: Int): String {
         return when (statusCode) {
-            400 -> serverMessage?.let { "Dados inválidos:\n$it" }
-                ?: "Dados inválidos. Confira os campos e tente novamente."
-            401 -> "Credenciais do Google inválidas ou expiradas."
-            403 -> serverMessage ?: "Acesso negado. Conta inativa ou sem permissão para este canal."
-            409 -> serverMessage ?: "Já existe uma conta com esse e-mail. Entre com sua senha."
-            else -> "Erro: $statusCode Algo deu errado, tente novamente!"
+            400 -> "Confira os dados do cadastro e tente novamente."
+            401 -> "Não foi possível validar sua conta Google. Tente novamente."
+            403 -> "Sua conta não tem acesso ao app. Entre em contato com o suporte."
+            409 -> "Já existe uma conta com esse e-mail. Entre com sua senha ou recupere o acesso."
+            else -> "Não foi possível concluir o acesso com o Google. Tente novamente em instantes."
         }
     }
 }

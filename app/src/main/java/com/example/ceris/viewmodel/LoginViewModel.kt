@@ -7,7 +7,6 @@ import com.example.ceris.api.AuthAPI
 import com.example.ceris.api.RetrofitClient
 import com.example.ceris.local.SessionManager
 import com.example.ceris.model.Channel
-import com.example.ceris.model.dto.ApiError
 import com.example.ceris.model.dto.PasswordLoginRequest
 import com.example.ceris.repository.AuthRepository
 import com.example.ceris.util.mensagemDeFalha
@@ -75,8 +74,8 @@ class LoginViewModel : ViewModel() {
                 this.authRepository.saveTokens(response.accessToken, response.refreshToken)
                 listener.operationCompleted()
             },
-            onError = { statusCode, errorBody ->
-                listener.makeText(errorMessageFor(statusCode, errorBody))
+            onError = { statusCode, _ ->
+                listener.makeText(errorMessageFor(statusCode))
             },
             onFailure = { throwable ->
                 listener.makeText(mensagemDeFalha(throwable))
@@ -94,14 +93,12 @@ class LoginViewModel : ViewModel() {
         return null
     }
 
-    private fun errorMessageFor(statusCode: Int, errorBody: String?): String {
-        val serverMessage = ApiError.parse(errorBody)?.readableMessage()
+    private fun errorMessageFor(statusCode: Int): String {
         return when (statusCode) {
-            400 -> serverMessage?.let { "Dados inválidos:\n$it" }
-                ?: "Dados inválidos. Confira os campos e tente novamente."
-            401 -> "E-mail ou senha inválidos."
-            403 -> serverMessage ?: "Acesso negado. Conta inativa ou sem permissão para este canal."
-            else -> "Erro: $statusCode Algo deu errado, tente novamente!"
+            400 -> "Confira o e-mail e a senha e tente novamente."
+            401 -> "E-mail ou senha inválidos. Confira os dados e tente novamente."
+            403 -> "Sua conta não tem acesso ao app. Entre em contato com o suporte."
+            else -> "Não foi possível entrar agora. Tente novamente em instantes."
         }
     }
 

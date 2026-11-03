@@ -58,7 +58,7 @@ class ResetPasswordLoadingActivity : AppCompatActivity(), RecoverPasswordViewMod
     }
 
     override fun operationCompleted() {
-        Toast.makeText(this, "Senha redefinida! Faça login com a nova senha.", Toast.LENGTH_LONG)
+        Toast.makeText(this, "Senha redefinida. Entre com sua nova senha.", Toast.LENGTH_LONG)
             .show()
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

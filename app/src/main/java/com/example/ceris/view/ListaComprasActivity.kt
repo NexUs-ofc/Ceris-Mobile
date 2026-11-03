@@ -69,7 +69,7 @@ class ListaComprasActivity :
         val listaId = intent.getStringExtra(EXTRA_LISTA_ID)
 
         if (listaId.isNullOrBlank()) {
-            makeText("Não foi possível abrir a lista.")
+            makeText("Não foi possível abrir esta lista. Atualize a tela e tente novamente.")
             finish()
             return
         }

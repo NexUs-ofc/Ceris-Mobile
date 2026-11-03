@@ -451,7 +451,7 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
     }
 
     private fun avisarCodigo(mensagem: String) {
-        context?.let { Toast.makeText(it, mensagem, Toast.LENGTH_SHORT).show() }
+        context?.let { Toast.makeText(it, mensagem, Toast.LENGTH_LONG).show() }
     }
 
     override fun aoFecharCadastroCodigo(salvou: Boolean) {
