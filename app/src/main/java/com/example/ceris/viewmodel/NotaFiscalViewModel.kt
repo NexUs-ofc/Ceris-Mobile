@@ -33,7 +33,12 @@ class NotaFiscalViewModel : ViewModel() {
 
         fun salvo(salvos: Int, falhas: Int)
 
-        fun produtosNaoEncontrados(nomes: List<String>, indisponiveis: Int)
+        fun produtosNaoEncontrados(
+            nomes: List<String>,
+            indisponiveis: Int,
+            avisos: List<String>,
+            descartados: List<String>,
+        )
 
         fun buscaIndisponivel()
 
@@ -79,7 +84,7 @@ class NotaFiscalViewModel : ViewModel() {
                     return@ler
                 }
                 repository.buscarProdutos(
-                    nota.items.map { it.name },
+                    nota.items,
                     sucesso = { resposta ->
                         if (atual == leitura) {
                             pararAndamento()
@@ -89,7 +94,14 @@ class NotaFiscalViewModel : ViewModel() {
                                 listener.itensLidos(nota.store, revisao.itens, emptyList())
                             }
                             if (revisao.ignorados > 0) {
-                                listener.produtosNaoEncontrados(revisao.nomesIgnorados, revisao.indisponiveis)
+                                listener.produtosNaoEncontrados(
+                                    revisao.nomesNaoEncontrados,
+                                    revisao.indisponiveis,
+                                    nota.warnings,
+                                    nota.discarded,
+                                )
+                            } else if (nota.warnings.isNotEmpty() || nota.discarded.isNotEmpty()) {
+                                listener.produtosNaoEncontrados(emptyList(), 0, nota.warnings, nota.discarded)
                             }
                         }
                     },

@@ -51,6 +51,8 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.Linha>() {
         return mensagens.lastIndex
     }
 
+    fun mensagens(): List<MensagemChat> = mensagens.toList()
+
     override fun getItemViewType(position: Int): Int = when (mensagens[position]) {
         is MensagemChat.DaCerita -> CERITA
         is MensagemChat.DeQuemUsa -> QUEM_USA

@@ -105,9 +105,7 @@ class StockRepository(
 
     private fun paraCard(item: StockItemResponse, validade: Date?, categoria: String?) = Produto(
         id = item.id.toString(),
-        nome = listOfNotNull(item.foodName, item.productBrand)
-            .joinToString(" ")
-            .ifBlank { "Produto sem nome" },
+        nome = nomeDoProduto(item.foodName, item.productBrand),
         quantidade = item.quantity,
         validade = validade?.let { SimpleDateFormat("dd/MM", Locale("pt", "BR")).format(it) }.orEmpty(),
         situacao = situacao(validade),
@@ -120,6 +118,20 @@ class StockRepository(
         marca = item.productBrand?.takeIf { it.isNotBlank() },
         foodId = item.foodId
     )
+
+    /** Evita repetir a marca quando a Core já a inclui no nome do alimento. */
+    private fun nomeDoProduto(nome: String?, marca: String?): String {
+        val alimento = nome?.trim().orEmpty().replace(Regex("\\s+"), " ")
+        val marcaLimpa = marca?.trim().orEmpty().replace(Regex("\\s+"), " ")
+        return when {
+            alimento.isBlank() && marcaLimpa.isBlank() -> "Produto sem nome"
+            alimento.isBlank() -> marcaLimpa
+            marcaLimpa.isBlank() -> alimento
+            alimento.equals(marcaLimpa, ignoreCase = true) -> alimento
+            alimento.endsWith(marcaLimpa, ignoreCase = true) -> alimento
+            else -> "$alimento $marcaLimpa"
+        }
+    }
 
     private fun ordem(situacao: SituacaoProduto) = when (situacao) {
         SituacaoProduto.VENCIDO -> 0

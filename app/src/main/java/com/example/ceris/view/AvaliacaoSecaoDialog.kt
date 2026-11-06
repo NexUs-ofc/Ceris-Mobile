@@ -147,7 +147,7 @@ class AvaliacaoSecaoDialog : DialogFragment() {
         private const val STATE_RATING = "state_nota"
         private const val STATE_COMMENT = "state_feedback"
 
-        fun nova(sessionId: String) = AvaliacaoSecaoDialog().apply {
+        fun nova(sessionId: String?) = AvaliacaoSecaoDialog().apply {
             arguments = Bundle().apply { putString(ARG_SESSION, sessionId) }
         }
     }

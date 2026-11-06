@@ -29,6 +29,16 @@ class ProdutosNotaRepositoryTest {
         assertEquals("FOUND", ProdutosNotaRepository.choose("Leite integral", response.products).status)
     }
 
+    @Test fun jsonDaNotaPreservaEanETextoOriginalParaIdentificacao() {
+        val item = Gson().fromJson(
+            """{"name":"PAP H PERSONAL VIP","raw_text":"PAP H PERSONAL VIP","ean":"7891150039001","ean_candidates":[],"quantity":1,"unit":"un","unit_price":31.9}""",
+            com.example.ceris.model.dto.ReceiptItem::class.java,
+        )
+        assertEquals("7891150039001", item.ean)
+        assertEquals("PAP H PERSONAL VIP", item.rawText)
+        assertEquals(31.9, item.unitPrice!!, 0.0)
+    }
+
     @Test fun nomeUnicoIgnoraPesoEUnidadeImpressosNaNota() {
         val nesquik = milk.copy(
             productName = "Bebida em pó NESQUIK",
@@ -39,6 +49,18 @@ class ProdutosNotaRepositoryTest {
         val resultado = ProdutosNotaRepository.choose("NESQUIK 400 G UN", listOf(nesquik))
         assertEquals("FOUND", resultado.status)
         assertEquals("7891000100103", resultado.product?.gtin)
+    }
+
+    @Test fun nomeDeUmTokenPodeEncontrarItemSemEanEContinuaAmbiguoSeDuplicado() {
+        val batata = milk.copy(
+            productName = "Batata inglesa",
+            brands = "",
+            categoriesTags = listOf("en:vegetables"),
+        )
+        assertEquals("FOUND", ProdutosNotaRepository.choose("BATATA", listOf(batata)).status)
+        assertEquals("AMBIGUOUS", ProdutosNotaRepository.choose(
+            "BATATA", listOf(batata, batata.copy(code = "3017620422003")),
+        ).status)
     }
 
     @Test fun nomeComVariosProdutosDeCodigoDiferenteContinuaAmbiguo() {

@@ -44,12 +44,19 @@ class ChatViewModel : ViewModel() {
     val temSessao: Boolean
         get() = sessionId != null
 
+    val sessionIdAtual: String?
+        get() = sessionId
+
     val estaAguardando: Boolean
         get() = aguardando
 
     /** Barra envio em cima de envio: a conversa tem de manter a ordem. */
     private var aguardando = false
     private var encerrando = false
+    private var enviosBloqueados = false
+    private var respostaEmAndamentoAoBloquear = false
+    private var avaliacaoPendente: SectionFeedbackRequest? = null
+    private var fecharAoReceberResposta = false
 
     private val relogio = Handler(Looper.getMainLooper())
 
@@ -74,6 +81,10 @@ class ChatViewModel : ViewModel() {
      */
     fun encerrarSessao(aoTerminar: (String?, Boolean) -> Unit) {
         if (encerrando) return
+        if (enviosBloqueados && respostaEmAndamentoAoBloquear) {
+            fecharAoReceberResposta = true
+            return
+        }
         val id = sessionId
 
         if (id == null) {
@@ -88,15 +99,27 @@ class ChatViewModel : ViewModel() {
     }
 
     /** Sends the optional score after the server has already closed the section. */
-    fun avaliarSessao(id: String, nota: Int, feedback: String?, aoTerminar: () -> Unit) {
-        repository.encerrar(
-            sessionId = id,
-            avaliacao = SectionFeedbackRequest(
-                nota,
-                feedback?.trim()?.takeIf(String::isNotEmpty)
-            ),
-            aoTerminar = { _ -> aoTerminar() }
+    fun avaliarSessao(id: String?, nota: Int, feedback: String?, aoTerminar: () -> Unit) {
+        val avaliacao = SectionFeedbackRequest(
+            nota,
+            feedback?.trim()?.takeIf(String::isNotEmpty)
         )
+        val idDaSessao = id ?: sessionId
+        when {
+            enviosBloqueados && respostaEmAndamentoAoBloquear -> {
+                avaliacaoPendente = avaliacao
+                aoTerminar()
+            }
+            idDaSessao != null -> {
+                if (encerrando) return aoTerminar()
+                encerrando = true
+                repository.encerrar(idDaSessao, avaliacao) { _ ->
+                    encerrando = false
+                    aoTerminar()
+                }
+            }
+            else -> aoTerminar()
+        }
     }
 
     fun init(sessionManager: SessionManager) {
@@ -113,7 +136,7 @@ class ChatViewModel : ViewModel() {
     fun enviar(texto: String): Boolean {
         val mensagem = texto.trim()
 
-        if (mensagem.isEmpty() || aguardando) {
+        if (mensagem.isEmpty() || aguardando || enviosBloqueados) {
             return false
         }
 
@@ -132,28 +155,77 @@ class ChatViewModel : ViewModel() {
             sessionId = sessionId,
             onSuccess = { resposta ->
                 sessionId = resposta.sessionId ?: sessionId
-                trocarEspera(false)
-                listener.respostaRecebida(
-                    resposta.resposta,
-                    resposta.respostasRecomendadas
-                        ?.asSequence()
-                        ?.map(String::trim)
-                        ?.filter(String::isNotEmpty)
-                        ?.take(3)
-                        ?.toList()
-                )
+                if (enviosBloqueados) {
+                    aguardando = false
+                    relogio.removeCallbacksAndMessages(null)
+                    respostaEmAndamentoAoBloquear = false
+                    val avaliacao = avaliacaoPendente.also { avaliacaoPendente = null }
+                    val sessao = sessionId
+                    if (avaliacao != null && sessao != null) {
+                        encerrando = true
+                        repository.encerrar(sessao, avaliacao) { _ -> encerrando = false }
+                    } else if (fecharAoReceberResposta) {
+                        fecharAoReceberResposta = false
+                        encerrarSessao { _, _ -> }
+                    }
+                } else {
+                    trocarEspera(false)
+                    listener.respostaRecebida(
+                        resposta.resposta,
+                        resposta.respostasRecomendadas
+                            ?.asSequence()
+                            ?.map(String::trim)
+                            ?.filter(String::isNotEmpty)
+                            ?.take(3)
+                            ?.toList()
+                    )
+                }
             },
             onError = { statusCode, errorBody ->
-                trocarEspera(false)
-                listener.makeText(mensagemDeErro(statusCode, errorBody))
+                if (!enviosBloqueados) {
+                    trocarEspera(false)
+                    listener.makeText(mensagemDeErro(statusCode, errorBody))
+                } else {
+                    respostaEmAndamentoAoBloquear = false
+                    val avaliacao = avaliacaoPendente.also { avaliacaoPendente = null }
+                    val sessao = sessionId
+                    if (avaliacao != null && sessao != null) {
+                        encerrando = true
+                        repository.encerrar(sessao, avaliacao) { _ -> encerrando = false }
+                    } else if (fecharAoReceberResposta) {
+                        fecharAoReceberResposta = false
+                        encerrarSessao { _, _ -> }
+                    }
+                }
             },
             onFailure = { falha ->
-                trocarEspera(false)
-                listener.makeText(mensagemDeFalha(falha))
+                if (!enviosBloqueados) {
+                    trocarEspera(false)
+                    listener.makeText(mensagemDeFalha(falha))
+                } else {
+                    respostaEmAndamentoAoBloquear = false
+                    val avaliacao = avaliacaoPendente.also { avaliacaoPendente = null }
+                    val sessao = sessionId
+                    if (avaliacao != null && sessao != null) {
+                        encerrando = true
+                        repository.encerrar(sessao, avaliacao) { _ -> encerrando = false }
+                    } else if (fecharAoReceberResposta) {
+                        fecharAoReceberResposta = false
+                        encerrarSessao { _, _ -> }
+                    }
+                }
             }
         )
 
         return true
+    }
+
+    /** Impede que qualquer toque ou callback inicie outra mensagem durante a saída. */
+    fun bloquearEnvios() {
+        respostaEmAndamentoAoBloquear = aguardando
+        enviosBloqueados = true
+        aguardando = false
+        relogio.removeCallbacksAndMessages(null)
     }
 
     private fun trocarEspera(esperando: Boolean) {

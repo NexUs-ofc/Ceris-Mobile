@@ -3,6 +3,7 @@ package com.example.ceris.repository
 import com.example.ceris.api.openfoodfacts.OpenFoodFactsAPI
 import com.example.ceris.model.CadastroPorCodigo
 import com.example.ceris.model.CategoriaAlimento
+import com.example.ceris.model.dto.ReceiptItem
 import com.example.ceris.model.dto.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -12,12 +13,118 @@ import java.text.Normalizer
 /** Busca publica por nome, sem Bearer, antes da confirmacao. Nunca grava produtos. */
 class ProdutosNotaRepository(private val api: OpenFoodFactsAPI) {
     private var sequence = 0L
-    private var active: Call<OffBusca>? = null
+    private val active = mutableListOf<Call<*>>()
 
     fun cancelar() {
         sequence++
-        active?.cancel()
-        active = null
+        active.forEach { it.cancel() }
+        active.clear()
+    }
+
+    /** Prioriza o GTIN extraído do cupom; nome de nota costuma ser abreviado e a busca textual tem limite menor. */
+    fun buscarItens(items: List<ReceiptItem>, done: (FoodLookupResponse) -> Unit) {
+        cancelar()
+        val current = sequence
+        if (items.isEmpty()) return done(FoodLookupResponse())
+        val results = arrayOfNulls<FoodLookupMatch>(items.size)
+        var remaining = items.size
+
+        fun finish(index: Int, match: FoodLookupMatch) {
+            if (current != sequence) return
+            results[index] = match.copy(index = index)
+            remaining--
+            if (remaining == 0) {
+                active.clear()
+                done(FoodLookupResponse(results.mapNotNull { it }))
+            }
+        }
+
+        items.forEachIndexed { index, item ->
+            val codes = (listOfNotNull(item.ean) + item.eanCandidates).filter(CadastroPorCodigo::gtinValido).distinct()
+            when (codes.size) {
+                0 -> buscarNome(item.name, index, current, ::finish)
+                1 -> buscarCodigo(codes.single(), item.name, index, current, ::finish)
+                else -> buscarNome(item.name, index, current, ::finish)
+            }
+        }
+    }
+
+    private fun buscarCodigo(
+        code: String,
+        name: String,
+        index: Int,
+        current: Long,
+        finish: (Int, FoodLookupMatch) -> Unit,
+    ) {
+        val cached = synchronized(cache) { cache["gtin:$code"]?.takeIf { it.first > System.currentTimeMillis() }?.second }
+        if (cached != null) return finish(index, cached)
+        val call = api.produto(code)
+        active += call
+        call.enqueue(object : Callback<OffProdutoResposta> {
+            override fun onResponse(call: Call<OffProdutoResposta>, response: Response<OffProdutoResposta>) {
+                if (current != sequence || call.isCanceled) return
+                val detalhe = response.body()?.takeIf { response.isSuccessful && it.status == 1 }?.product
+                val produto = detalhe?.let {
+                    FoodLookupProduct(
+                        gtin = code,
+                        name = it.productName?.trim(),
+                        productBrand = it.brands?.split(",")?.firstOrNull()?.trim(),
+                        foodImageUrl = it.imageFrontUrl?.takeIf { url -> url.startsWith("https://") && url.length <= 500 },
+                        packageQuantity = it.productQuantity,
+                        unitOfMeasure = it.productQuantityUnit?.lowercase(java.util.Locale.ROOT)?.trim(),
+                        gpcCode = CadastroPorCodigo.categoriaDaBase(it.categoriesTags)?.gpc,
+                    ).takeIf(FoodLookupProduct::valido)
+                }
+                if (produto != null) {
+                    val match = FoodLookupMatch(index, "FOUND", produto)
+                    synchronized(cache) { cache["gtin:$code"] = (System.currentTimeMillis() + 600_000) to match }
+                    finish(index, match)
+                } else if (!response.isSuccessful && (response.code() == 429 || response.code() >= 500)) {
+                    finish(index, FoodLookupMatch(index, "UNAVAILABLE"))
+                } else {
+                    buscarNome(name, index, current, finish)
+                }
+            }
+
+            override fun onFailure(call: Call<OffProdutoResposta>, t: Throwable) {
+                if (!call.isCanceled && current == sequence) finish(index, FoodLookupMatch(index, "UNAVAILABLE"))
+            }
+        })
+    }
+
+    private fun buscarNome(
+        name: String,
+        index: Int,
+        current: Long,
+        finish: (Int, FoodLookupMatch) -> Unit,
+    ) {
+        if (current != sequence) return
+        val key = normalize(name)
+        val cached = synchronized(cache) { cache[key]?.takeIf { it.first > System.currentTimeMillis() }?.second }
+        if (cached != null) return finish(index, cached)
+        if (words(name).isEmpty()) return finish(index, FoodLookupMatch(index, "NOT_FOUND"))
+        if (!reserve()) return finish(index, FoodLookupMatch(index, "UNAVAILABLE"))
+        val call = api.buscarPorNome(name, campos = FIELDS, tamanho = 20)
+        active += call
+        call.enqueue(object : Callback<OffBusca> {
+            override fun onResponse(call: Call<OffBusca>, response: Response<OffBusca>) {
+                if (current != sequence || call.isCanceled) return
+                if (!response.isSuccessful || response.body() == null) {
+                    if (response.code() == 429) synchronized(cache) { blockedUntil = System.currentTimeMillis() + 60_000 }
+                    finish(index, FoodLookupMatch(index, "UNAVAILABLE"))
+                    return
+                }
+                val match = choose(name, response.body()!!.products.orEmpty())
+                synchronized(cache) {
+                    if (cache.size >= 500) cache.clear()
+                    cache[key] = (System.currentTimeMillis() + 600_000) to match
+                }
+                finish(index, match)
+            }
+            override fun onFailure(call: Call<OffBusca>, t: Throwable) {
+                if (!call.isCanceled && current == sequence) finish(index, FoodLookupMatch(index, "UNAVAILABLE"))
+            }
+        })
     }
 
     fun buscar(names: List<String>, done: (FoodLookupResponse) -> Unit) {
@@ -28,7 +135,7 @@ class ProdutosNotaRepository(private val api: OpenFoodFactsAPI) {
         val deadline = System.currentTimeMillis() + 60_000
         fun next(index: Int) {
             if (current != sequence) return
-            if (index == names.size) { active = null; done(FoodLookupResponse(results)); return }
+            if (index == names.size) { active.clear(); done(FoodLookupResponse(results)); return }
             val name = names[index].trim()
             val key = normalize(name)
             fun deliver(match: FoodLookupMatch) {
@@ -40,12 +147,12 @@ class ProdutosNotaRepository(private val api: OpenFoodFactsAPI) {
             val cached = synchronized(cache) { cache[key]?.takeIf { it.first > System.currentTimeMillis() }?.second }
             val previous = batch[key] ?: cached
             if (previous != null) { deliver(previous); return }
-            if (words(name).size < 2) { deliver(FoodLookupMatch(index, "NOT_FOUND")); return }
+            if (words(name).isEmpty()) { deliver(FoodLookupMatch(index, "NOT_FOUND")); return }
             if (System.currentTimeMillis() >= deadline || !reserve()) {
                 deliver(FoodLookupMatch(index, "UNAVAILABLE")); return
             }
             val call = api.buscarPorNome(name, campos = FIELDS, tamanho = 20)
-            active = call
+            active += call
             call.enqueue(object : Callback<OffBusca> {
                 override fun onResponse(call: Call<OffBusca>, response: Response<OffBusca>) {
                     if (current != sequence || call.isCanceled) return

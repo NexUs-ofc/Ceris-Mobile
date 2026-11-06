@@ -15,7 +15,7 @@ class RevisaoNotaTest {
         assertEquals(1, result.itens.size)
         assertEquals(1, result.ignorados)
         assertEquals(0, result.indisponiveis)
-        assertEquals("LEITE INTEGRAL", result.itens.single().nomeNaNota)
+        assertEquals("Leite integral", result.itens.single().nomeNaNota)
         assertEquals(2, result.itens.single().quantidade)
         assertEquals("un", result.itens.single().unidade)
         assertEquals(1000.0, result.itens.single().produtoEncontrado!!.packageQuantity!!, 0.0)
@@ -28,6 +28,7 @@ class RevisaoNotaTest {
         assertTrue(result.itens.isEmpty())
         assertEquals(2, result.ignorados)
         assertEquals(1, result.indisponiveis)
+        assertEquals(listOf("LEITE INTEGRAL"), result.nomesNaoEncontrados)
         assertTrue(revisarNota(nota, FoodLookupResponse(listOf(
             FoodLookupMatch(0, "FOUND", produto), FoodLookupMatch(0, "FOUND", produto),
         ))).itens.isEmpty())

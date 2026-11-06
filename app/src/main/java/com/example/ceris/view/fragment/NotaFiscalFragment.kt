@@ -615,15 +615,38 @@ class NotaFiscalFragment : Fragment(R.layout.fragment_nota_fiscal), NotaFiscalVi
         context?.let { Toast.makeText(it, message, Toast.LENGTH_LONG).show() }
     }
 
-    override fun produtosNaoEncontrados(nomes: List<String>, indisponiveis: Int) {
+    override fun produtosNaoEncontrados(
+        nomes: List<String>,
+        indisponiveis: Int,
+        avisos: List<String>,
+        descartados: List<String>,
+    ) {
         val quantidade = nomes.size
-        val mensagem = resources.getQuantityString(R.plurals.nota_produtos_ignorados, quantidade, quantidade)
+        val partes = mutableListOf<String>()
+        if (quantidade > 0) {
+            partes += resources.getQuantityString(R.plurals.nota_produtos_ignorados, quantidade, quantidade)
+        }
+        if (indisponiveis > 0) {
+            partes += resources.getQuantityString(R.plurals.nota_busca_indisponivel_itens, indisponiveis, indisponiveis)
+        }
         val exemplos = nomes.take(5).joinToString(separator = "\n") { "• ${it.take(80)}" }
         val mais = if (quantidade > 5) "\n… e mais ${quantidade - 5}" else ""
-        val parcial = if (indisponiveis > 0) "\n\n${getString(R.string.nota_busca_parcial)}" else ""
+        if (exemplos.isNotEmpty()) partes += exemplos + mais
+        if (avisos.isNotEmpty()) partes += avisos.take(3).joinToString("\n") { "• ${it.take(220)}" }
+        if (descartados.isNotEmpty()) {
+            val amostra = descartados.take(5).joinToString("\n") { "• ${it.take(80)}" }
+            val restante = if (descartados.size > 5) "\n… e mais ${descartados.size - 5}" else ""
+            partes += getString(R.string.nota_itens_descartados, descartados.size) + "\n" + amostra + restante
+        }
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.nota_produtos_ignorados_titulo)
-            .setMessage("$mensagem\n\n$exemplos$mais$parcial")
+            .setTitle(
+                when {
+                    quantidade > 0 -> R.string.nota_produtos_ignorados_titulo
+                    indisponiveis > 0 -> R.string.nota_busca_indisponivel_titulo
+                    else -> R.string.nota_revisar_aviso_titulo
+                }
+            )
+            .setMessage(partes.joinToString("\n\n"))
             .setPositiveButton(android.R.string.ok, null)
             .show()
     }

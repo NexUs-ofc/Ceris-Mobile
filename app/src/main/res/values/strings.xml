@@ -282,6 +282,8 @@ Tente novamente ou volte ao início.</string>
     <string name="avaliacao_escolha_nota">Escolha uma nota antes de enviar sua avaliação.</string>
     <string name="avaliacao_falhou">Não foi possível enviar a avaliação. A seção já está fechada.</string>
     <string name="chat_hoje">HOJE</string>
+    <string name="chat_historico_anterior">CONVERSA ANTERIOR</string>
+    <string name="chat_nova_conversa">NOVA CONVERSA</string>
     <string name="chat_campo_hint">Digite sua mensagem…</string>
     <string name="chat_enviar">Enviar mensagem</string>
     <string name="chat_sugestao_receita">Receita mais rápida</string>
@@ -349,7 +351,13 @@ Tente novamente ou volte ao início.</string>
         <item quantity="other">Não consegui identificar %d produtos com segurança. Eles não foram listados; cadastre manualmente ou escaneie os códigos de barras.</item>
     </plurals>
     <string name="nota_produtos_ignorados_titulo">Confira os produtos não identificados</string>
-    <string name="nota_busca_parcial">Parte da busca está temporariamente indisponível.</string>
+    <string name="nota_busca_indisponivel_titulo">Busca de produtos indisponível</string>
+    <string name="nota_revisar_aviso_titulo">Confira a leitura da nota</string>
+    <string name="nota_itens_descartados">%1$d itens foram separados e não serão adicionados ao estoque de alimentos.</string>
+    <plurals name="nota_busca_indisponivel_itens">
+        <item quantity="one">Não foi possível consultar %d produto agora. Ele não foi marcado como não encontrado.</item>
+        <item quantity="other">Não foi possível consultar %d produtos agora. Eles não foram marcados como não encontrados.</item>
+    </plurals>
     <string name="nota_busca_indisponivel">A busca de produtos está indisponível. Tente novamente ou cadastre manualmente pelo código de barras. Nenhum item foi adicionado.</string>
     <string name="cadastro_endereco_titulo">Seu endereço</string>
     <string name="endereco_subtitulo">Vamos encontrar mercados perto de você</string>

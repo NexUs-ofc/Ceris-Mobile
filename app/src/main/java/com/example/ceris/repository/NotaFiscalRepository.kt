@@ -106,12 +106,12 @@ class NotaFiscalRepository(
     private val busca = ProdutosNotaRepository(com.example.ceris.api.openfoodfacts.OpenFoodFactsClient.api)
 
     fun buscarProdutos(
-        nomes: List<String>,
+        itens: List<com.example.ceris.model.dto.ReceiptItem>,
         sucesso: (com.example.ceris.model.dto.FoodLookupResponse) -> Unit,
         falha: (Throwable) -> Unit,
     ) {
         val sessao = sessionManager.snapshot() ?: return falha(ShoppingListRepository.SemSessao())
-        busca.buscar(nomes) { resposta ->
+        busca.buscarItens(itens) { resposta ->
             if (sessionManager.isCurrent(sessao)) sucesso(resposta)
             else falha(ShoppingListRepository.SemSessao())
         }

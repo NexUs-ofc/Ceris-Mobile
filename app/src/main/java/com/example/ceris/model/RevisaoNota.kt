@@ -10,6 +10,7 @@ data class RevisaoNota(
     val ignorados: Int,
     val indisponiveis: Int,
     val nomesIgnorados: List<String> = emptyList(),
+    val nomesNaoEncontrados: List<String> = emptyList(),
 )
 
 /** Índices preservam repetidos e ordem da nota; nunca casam um produto por posição de resposta. */
@@ -20,7 +21,7 @@ fun revisarNota(originais: List<ReceiptItem>, lookup: FoodLookupResponse): Revis
         val produto = resultado.product?.takeIf { resultado.status == "FOUND" && it.valido() }
             ?: return@mapIndexedNotNull null
         ItemNota(
-            nomeNaNota = item.name, alimentoId = null,
+            nomeNaNota = produto.name?.takeIf { it.isNotBlank() } ?: item.name, alimentoId = null,
             alimentoNome = listOfNotNull(produto.name, produto.productBrand,
                 "${produto.packageQuantity} ${produto.unitOfMeasure}").joinToString(" · "),
             quantidade = quantidadeDeEmbalagens(item, produto),
@@ -29,16 +30,22 @@ fun revisarNota(originais: List<ReceiptItem>, lookup: FoodLookupResponse): Revis
             incluir = true, conferir = true, produtoEncontrado = produto,
         )
     }
-    val nomesIgnorados = originais.mapIndexedNotNull { index, item ->
+    val naoEncontrados = originais.mapIndexedNotNull { index, item ->
         val result = porIndice[index]?.singleOrNull()
         val produto = result?.product?.takeIf { result.status == "FOUND" && it.valido() }
-        item.name.takeIf { produto == null }
+        item.name.takeIf { produto == null && result != null && result.status != "UNAVAILABLE" }
     }
     val indisponiveis = originais.indices.count { index ->
         val result = porIndice[index]?.singleOrNull()
         result == null || result.status == "UNAVAILABLE"
     }
-    return RevisaoNota(itens, nomesIgnorados.size, indisponiveis, nomesIgnorados)
+    val ignorados = originais.size - itens.size
+    val nomesIgnorados = originais.mapIndexedNotNull { index, item ->
+        val result = porIndice[index]?.singleOrNull()
+        val produto = result?.product?.takeIf { result.status == "FOUND" && it.valido() }
+        (item.rawText?.trim()?.takeIf { it.isNotEmpty() } ?: item.name).takeIf { produto == null }
+    }
+    return RevisaoNota(itens, ignorados, indisponiveis, nomesIgnorados, naoEncontrados)
 }
 
 /** Converte a linha ponderada da nota para a contagem inteira de pacotes do estoque. */

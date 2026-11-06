@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ceris.R
 import com.example.ceris.local.SessionManager
+import com.example.ceris.local.ChatHistoryStore
 import com.example.ceris.view.adapter.ChatAdapter
 import com.example.ceris.view.adapter.MensagemChat
 import com.example.ceris.view.utils.hideNavigationBar
@@ -31,11 +32,13 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
     private lateinit var situacao: TextView
 
     private val adapter = ChatAdapter()
+    private lateinit var historico: ChatHistoryStore
 
     private val viewModel: ChatViewModel by viewModels()
     private var sairDepoisDaAvaliacao = false
     private var resetarDepoisDoFechamento = false
     private var fechamentoEmCurso = false
+    private var saidaSolicitada = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +56,9 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
 
         viewModel.listener = this
         viewModel.init(SessionManager(this))
+        historico = ChatHistoryStore(this)
+        saidaSolicitada = savedInstanceState?.getBoolean(STATE_EXIT_REQUESTED) ?: false
+        if (saidaSolicitada) viewModel.bloquearEnvios()
         sairDepoisDaAvaliacao = savedInstanceState?.getBoolean(STATE_EXIT_AFTER_RATING) ?: false
         resetarDepoisDoFechamento = savedInstanceState?.getBoolean(STATE_RESET_AFTER_CLOSE) ?: false
 
@@ -61,24 +67,23 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
         ) { _, resultado ->
             val id = resultado.getString(AvaliacaoSecaoDialog.KEY_SESSION)
             val salvar = resultado.getBoolean(AvaliacaoSecaoDialog.KEY_SAVE)
-            if (salvar && id != null) {
+            if (salvar) {
                 val nota = resultado.getInt(AvaliacaoSecaoDialog.KEY_RATING)
                 val feedback = resultado.getString(AvaliacaoSecaoDialog.KEY_COMMENT)
                 viewModel.avaliarSessao(id, nota, feedback) {
                     if (sairDepoisDaAvaliacao) finish()
                 }
+                if (saidaSolicitada) finish()
+            } else if (saidaSolicitada) {
+                viewModel.encerrarSessao { _, _ -> }
+                finish()
             } else if (sairDepoisDaAvaliacao) {
                 finish()
             }
         }
 
         lista.adapter = adapter
-        adapter.trocar(
-            listOf(
-                MensagemChat.Divisor(getString(R.string.chat_hoje)),
-                MensagemChat.DaCerita(getString(R.string.chat_abertura))
-            )
-        )
+        mostrarConversaSalva()
 
         findViewById<View>(R.id.btn_voltar).setOnClickListener { sairDaTela() }
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -109,6 +114,7 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
                 enviar((atalho as TextView).text.toString())
             }
         }
+        if (saidaSolicitada) desativarEnvio()
     }
 
     /** Aplica os insets das barras do sistema ao cabeçalho e ao campo de envio. */
@@ -142,6 +148,7 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean(STATE_EXIT_AFTER_RATING, sairDepoisDaAvaliacao)
         outState.putBoolean(STATE_RESET_AFTER_CLOSE, resetarDepoisDoFechamento)
+        outState.putBoolean(STATE_EXIT_REQUESTED, saidaSolicitada)
         super.onSaveInstanceState(outState)
     }
 
@@ -159,6 +166,7 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
     }
 
     private fun enviar(texto: String): Boolean {
+        if (saidaSolicitada) return false
         if (!viewModel.enviar(texto)) {
             return false
         }
@@ -167,11 +175,14 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
         sugestoes.visibility = View.GONE
 
         lista.scrollToPosition(adapter.acrescentar(MensagemChat.DeQuemUsa(texto)))
+        salvarHistorico()
         return true
     }
 
     override fun respostaRecebida(texto: String, respostasRecomendadas: List<String>?) {
+        if (saidaSolicitada || isFinishing) return
         lista.scrollToPosition(adapter.acrescentar(MensagemChat.DaCerita(texto)))
+        salvarHistorico()
         mostrarSugestoes(respostasRecomendadas.orEmpty())
     }
 
@@ -198,11 +209,28 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
         situacao.text = texto
     }
 
-    /** Encerra a conversa atual antes de sair da tela. */
+    /** Abre a avaliação de imediato; API e encerramento não bloqueiam a saída. */
     private fun sairDaTela() {
-        sairDepoisDaAvaliacao = true
+        if (saidaSolicitada) return
+        saidaSolicitada = true
         resetarDepoisDoFechamento = false
-        fecharSecao()
+        desativarEnvio()
+        val estavaAguardando = viewModel.estaAguardando
+        viewModel.bloquearEnvios()
+        salvarHistorico()
+        val sessionId = viewModel.sessionIdAtual
+        if (sessionId != null || estavaAguardando) {
+            AvaliacaoSecaoDialog.nova(sessionId)
+                .show(supportFragmentManager, "avaliacao_saida")
+        } else {
+            finish()
+        }
+    }
+
+    private fun desativarEnvio() {
+        campo.isEnabled = false
+        btnEnviar.isEnabled = false
+        findViewById<View>(R.id.btn_voltar).isEnabled = false
     }
 
     private fun fecharSecao() {
@@ -237,14 +265,38 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
     }
 
     private fun limparConversa() {
-            adapter.trocar(
-                listOf(
-                    MensagemChat.Divisor(getString(R.string.chat_hoje)),
-                    MensagemChat.DaCerita(getString(R.string.chat_abertura))
-                )
-            )
-            sugestoes.visibility = View.VISIBLE
-            makeText(getString(R.string.chat_encerrada))
+        mostrarConversaSalva()
+        sugestoes.visibility = View.VISIBLE
+        makeText(getString(R.string.chat_encerrada))
+    }
+
+    private fun salvarHistorico() {
+        historico.save(adapter.mensagens().mapNotNull { mensagem ->
+            when (mensagem) {
+                is MensagemChat.DeQuemUsa -> ChatHistoryStore.ChatHistoryMessage("user", mensagem.texto)
+                is MensagemChat.DaCerita -> ChatHistoryStore.ChatHistoryMessage("assistant", mensagem.texto)
+                is MensagemChat.Divisor -> null
+            }
+        })
+    }
+
+    private fun mostrarConversaSalva() {
+        val salvas = historico.load()
+        val linhas = buildList {
+            if (salvas.isEmpty()) {
+                add(MensagemChat.Divisor(getString(R.string.chat_hoje)))
+                add(MensagemChat.DaCerita(getString(R.string.chat_abertura)))
+            } else {
+                add(MensagemChat.Divisor(getString(R.string.chat_historico_anterior)))
+                salvas.forEach { mensagem ->
+                    add(if (mensagem.type == "user") MensagemChat.DeQuemUsa(mensagem.text)
+                    else MensagemChat.DaCerita(mensagem.text))
+                }
+                add(MensagemChat.Divisor(getString(R.string.chat_nova_conversa)))
+            }
+        }
+        adapter.trocar(linhas)
+        lista.scrollToPosition(adapter.itemCount - 1)
     }
 
     override fun aguardando(aguardando: Boolean) {
@@ -259,5 +311,6 @@ class ChatbotActivity : AppCompatActivity(), ChatViewModel.Listener {
     private companion object {
         const val STATE_EXIT_AFTER_RATING = "chat_exit_after_rating"
         const val STATE_RESET_AFTER_CLOSE = "chat_reset_after_close"
+        const val STATE_EXIT_REQUESTED = "chat_exit_requested"
     }
 }
